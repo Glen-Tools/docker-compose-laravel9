@@ -1,0 +1,67 @@
+version: '3'
+services:
+  
+  #PHP Service
+  cdn:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    # image: digitalocean.com/php
+    container_name: cdn
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: cdn
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./cdn_client/:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./php/fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    networks:
+      - app-network
+
+  #Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8023:80"
+    volumes:
+      - ./cdn_client/:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    image: mariadb:10.6
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "!QAZ2wsx"
+      MARIADB_USER: Gary
+      MARIADB_PASSWORD: Ab123456
+      MYSQL_DATABASE: cdn
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./db/config/mysql_conf:/etc/mysql/conf.d
+      - ./db/config/mysql_init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  dbdata:
+    driver: local
