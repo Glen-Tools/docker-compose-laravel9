@@ -12,6 +12,9 @@ RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 # RUN chown -R www:www /usr/local/var/log
 # RUN chown -R www:www /usr/local/etc/php-fpm.d
 
+# php-redis
+RUN printf "\n \n" | pecl install redis && docker-php-ext-enable redis
+
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \

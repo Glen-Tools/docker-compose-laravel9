@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +17,6 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::get('/test/{id}', function (Request $request,$id) {
     return phpinfo();
@@ -36,5 +35,7 @@ Route::post('/test/{id}', function (Request $request,$id) {
 Route::post('/testjson', function (Request $request) {
     $data= $request->all();
     // dd($data);
-    return response()->json($data);
+    Cache::put("json","123456",600);
+    $value = Cache::get('json');
+    return response()->json($value);
 });

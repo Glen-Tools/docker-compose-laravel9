@@ -13,13 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('user', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->timestamp('password_update_time')->nullable();
+            $table->boolean('status')->comment("狀態(開,關)");
+            $table->integer('user_type')->comment("管理者=1,一般使用者=2");
+            $table->string('login_ip')->nullable();
+            $table->timestamp('login_time')->nullable();
+            $table->integer('remark')->nullable()->comment("備註");
             $table->timestamps();
         });
     }
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('user');
     }
 };
