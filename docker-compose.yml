@@ -1,6 +1,6 @@
 version: '3'
 services:
-  
+
   #PHP Service
   cdn:
     build:
@@ -18,6 +18,10 @@ services:
       - ./cdn_client/:/var/www
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
       - ./php/fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    command:
+      - /bin/bash 
+      - -c 
+      - composer install
     networks:
       - app-network
 
@@ -54,6 +58,21 @@ services:
       - dbdata:/var/lib/mysql/
       - ./db/config/mysql_conf:/etc/mysql/conf.d
       - ./db/config/mysql_init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+  #Redis
+  redis:
+    image: redis:7.0
+    container_name: redis
+    restart: always
+    ports:
+      - 6377:6379
+    expose:
+      - "6379"
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis.conf
+    command: redis-server /usr/local/etc/redis.conf
     networks:
       - app-network
 
