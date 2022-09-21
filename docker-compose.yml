@@ -8,7 +8,12 @@ services:
       dockerfile: Dockerfile
     # image: digitalocean.com/php
     container_name: cdn
-    restart: unless-stopped
+    healthcheck:
+      test: php-fpm -t
+    depends_on:
+      - redis
+      - db
+    # restart: unless-stopped
     tty: true
     environment:
       SERVICE_NAME: cdn
@@ -21,21 +26,31 @@ services:
     command:
       - /bin/bash 
       - -c 
-      - composer install
+      - | 
+        composer install
+        php-fpm
+    # tail -f /dev/null
     networks:
       - app-network
 
   #Nginx
   nginx:
-    image: nginx:alpine
+    image: nginx:latest
     container_name: nginx
-    restart: unless-stopped
+    depends_on:
+      cdn:
+        condition: service_healthy
+    # restart: unless-stopped
     tty: true
     ports:
       - "8023:80"
+    environment:
+      # - NGINX_HOST=foobar.com
+      - NGINX_PORT=80
     volumes:
       - ./cdn_client/:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/log/:/var/log/nginx/
     networks:
       - app-network
 

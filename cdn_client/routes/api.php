@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,8 @@ Route::post('/test/{id}', function (Request $request,$id) {
     $data = json_decode($data);
     $data->id=$id;
     // dd($data);
+
+    Log::debug(print_r($data, true));
     return response()->json($data);
 });
 

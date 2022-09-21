@@ -1,2 +1,3 @@
 db/db_dump
 cdn_client/composer
+nginx/log
