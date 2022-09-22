@@ -1,10 +1,15 @@
 <?php
 
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
+use PHPUnit\TextUI\XmlConfiguration\Groups;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,25 +22,31 @@ use Illuminate\Support\Facades\Redis;
 |
 */
 
-
-Route::get('/test/{id}', function (Request $request,$id) {
-    return phpinfo();
-});
-
-Route::post('/test/{id}', function (Request $request,$id) {
-    $data = $request->getContent();
-    $data = json_decode($data);
-    $data->id=$id;
-    // dd($data);
-
-    Log::debug(print_r($data, true));
-    return response()->json($data);
-});
-
 Route::post('/testjson', function (Request $request) {
-    $data= $request->all();
-    // dd($data);
-    Cache::put("json","123456",600);
+    $data = $request->all();
+    dd($data);
+    Log::debug(print_r($data, true));
+    Cache::put("json", "123456", 600);
     $value = Cache::get('json');
     return response()->json($value);
+});
+
+
+Route::prefix('v1')->group(function () {
+
+    Route::resource('user', UserController::class);
+    Route::resource('role', RoleController::class);
+    Route::resource('menu', MenuController::class);
+
+    // Route::get('/users', function () {
+    //     // Matches The "/admin/users" URL
+    // })->scopeBindings();
+
+    // group jwt驗證
+    // Route::middleware()->group(function () {
+        // Route::get('/users', function () {
+        //     // Matches The "/admin/users" URL
+        // })->scopeBindings();;
+    // });
+
 });

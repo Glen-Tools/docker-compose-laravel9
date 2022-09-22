@@ -13,16 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user', function (Blueprint $table) {
+        Schema::create('menu', function (Blueprint $table) {
             $table->id();
-            $table->string('name',50);
-            $table->string('email',100)->unique();
-            $table->string('password',50);
-            $table->timestamp('password_update_time')->nullable();
+            $table->string('name',100)->unique()->comment("唯一名稱");
+            $table->string('key',150)->unique()->comment("唯一key");
+            $table->string('url',500)->comment("網址");
+            $table->string('feature',10)->comment("功能(T=標題、P=頁面、F=按鍵功能)");
             $table->boolean('status')->comment("狀態(開,關)")->default(1);
-            $table->smallInteger('user_type')->comment("管理者=1,一般使用者=2");
-            $table->string('login_ip',20)->nullable();
-            $table->timestamp('login_time')->nullable();
+            $table->integer('parent')->comment("父類(id)")->default(0);
+            $table->integer('weight')->nullable()->comment("權重(優先順序 重=高)");
             $table->string('remark',5000)->nullable()->comment("備註");
             $table->timestamps();
         });
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('menu');
     }
 };
