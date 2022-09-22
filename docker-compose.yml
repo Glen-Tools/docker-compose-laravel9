@@ -29,6 +29,7 @@ services:
       - | 
         composer install
         composer remove laravel/sanctum
+        composer require barryvdh/laravel-debugbar --dev
         php-fpm
     # tail -f /dev/null
     networks:
