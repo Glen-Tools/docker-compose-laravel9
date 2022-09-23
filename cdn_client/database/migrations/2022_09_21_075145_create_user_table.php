@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name',50);
             $table->string('email',100)->unique();
-            $table->string('password',50);
+            $table->string('password',100);
             $table->timestamp('password_update_time')->nullable();
             $table->boolean('status')->comment("狀態(開,關)")->default(1);
             $table->smallInteger('user_type')->comment("管理者=1,一般使用者=2");
