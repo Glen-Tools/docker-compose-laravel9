@@ -13,7 +13,7 @@ services:
     depends_on:
       - redis
       - db
-    restart: unless-stopped
+    # restart: unless-stopped
     tty: true
     environment:
       SERVICE_NAME: cdn
@@ -21,18 +21,20 @@ services:
     working_dir: /var/www
     volumes:
       - ./cdn_client/:/var/www
+      - ./laravel_env_volume/.env:/var/www/.env
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
       - ./php/fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
     command:
-      - /bin/bash 
-      - -c 
-      - | 
+      - /bin/bash
+      - -c
+      - |
         composer install
         composer remove laravel/sanctum
-        composer require barryvdh/laravel-debugbar --dev
-        composer dumpautoload
+        php artisan migrate
         php-fpm
-    # tail -f /dev/null
+      # composer dumpautoload
+      # composer require barryvdh/laravel-debugbar --dev
+      # tail -f /dev/null
     networks:
       - app-network
 
@@ -99,3 +101,7 @@ networks:
 volumes:
   dbdata:
     driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './db/db_dump'
