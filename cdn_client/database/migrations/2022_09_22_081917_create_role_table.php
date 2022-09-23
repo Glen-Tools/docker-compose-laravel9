@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('role', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name',100)->unique()->comment("唯一名稱");
             $table->string('key',150)->unique()->comment("唯一key");

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('menu', function (Blueprint $table) {
+        Schema::create('menus', function (Blueprint $table) {
             $table->id();
             $table->string('name',100)->unique()->comment("唯一名稱");
             $table->string('key',150)->unique()->comment("唯一key");
