@@ -11,8 +11,6 @@ class InputUserDto
     protected $user_type;
     protected $remark;
 
-
-
     public function __construct($name, $email, $password, $status, $user_type, $remark = "")
     {
         $this->name = $name;
