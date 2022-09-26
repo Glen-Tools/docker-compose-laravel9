@@ -1,4 +1,4 @@
-FROM php:8.0.23-fpm-bullseye
+FROM php:8.1.11RC1-fpm-bullseye
 
 # Copy composer.lock and composer.json
 # COPY composer.lock composer.json /var/www/
