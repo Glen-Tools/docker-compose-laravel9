@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\InputRoleDto;
+use App\Dto\OutputResponseDto;
 use App\Models\Role;
+use App\Services\RoleService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
@@ -35,7 +40,32 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //取得api data
+        $data = $request->all();
+
+        //驗證
+        $validator = Validator::make($data, [
+            'name' => 'required|unique:roles|max:100',
+            'key' => 'required|unique:roles|max:150',
+            'status' => 'required|boolean',
+            'remark' => 'max:5000'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $roleDto = new InputRoleDto(
+            $data["name"],
+            $data["key"],
+            $data["status"],
+            $data["weight"],
+            $data["remark"] ?? "",
+        );
+
+        $this->roleService->create($roleDto);
+        $responseDto = new OutputResponseDto();
+        return response()->json($responseDto);
     }
 
     /**
