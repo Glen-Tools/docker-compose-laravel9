@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Dto\InputUserDto;
-use App\Dto\OutputResponseDto;
-use App\Models\User;
+use App\Dto\OutputUserListDto;
+use App\Services\ResponseService;
 use App\Services\UserService;
+use App\Services\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -14,10 +15,17 @@ class UserController extends Controller
 {
 
     private $userService;
+    private $utilService;
+    private $responseService;
 
-    public function __construct(UserService $userService)
-    {
+    public function __construct(
+        UserService $userService,
+        UtilService $utilService,
+        ResponseService $responseService
+    ) {
         $this->userService = $userService;
+        $this->utilService = $utilService;
+        $this->responseService = $responseService;
     }
 
     /**
@@ -25,9 +33,20 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //取得api data
+        $data = $request->query();
+
+        //頁數初始化
+        $pageManagement = $this->utilService->initPage($data ?? null);
+
+        //取得List, page
+        $userList = $this->userService->getUserList($pageManagement);
+        $userPage = $this->userService->getUserPage($pageManagement);
+
+        $outputUserListDto = new OutputUserListDto($userList, $userPage);
+        return $this->responseService->responseJson($outputUserListDto);
     }
 
     /**
@@ -74,8 +93,7 @@ class UserController extends Controller
         );
 
         $this->userService->create($userDto);
-        $responseDto = new OutputResponseDto();
-        return response()->json($responseDto);
+        return $this->responseService->responseJson();
     }
 
     /**
@@ -86,7 +104,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = $this->userService->getUser($id);
+        return $this->responseService->responseJson($data);
     }
 
     /**
@@ -120,6 +139,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->userService->deleteUserById($id);
+        return $this->responseService->responseJson();
     }
 }

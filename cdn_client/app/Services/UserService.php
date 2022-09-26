@@ -2,16 +2,15 @@
 
 namespace App\Services;
 
+use App\Dto\InputPageDto;
 use App\Dto\InputUserDto;
-use App\Models\User;
+use App\Dto\OutputPageDto;
+use App\Enums\ListType;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
     protected $userRepository;
-
-    const HASH_OPTION = ['rounds' => 12];
 
     public function __construct(UserRepository $userRepository)
     {
@@ -20,23 +19,40 @@ class UserService
 
     public function create(InputUserDto $userDto)
     {
-        $user = new User();
-        $user->name = $userDto->getName();
-        $user->email = $userDto->getEmail();
-        $user->password = $this->getPasswordHash($userDto->getPassword());
-        $user->status = $userDto->getStatus();
-        $user->user_type = $userDto->getUserType();
-        $user->remark = $userDto->getRemark();
-        $user->save();
+        $this->userRepository->createUser($userDto);
     }
 
-    private function getPasswordHash(string $passowrd)
+    public function getUser(int $id)
     {
-        return Hash::make($passowrd, $this::HASH_OPTION);
+        $data = $this->userRepository->getUserById($id);
+        return $data;
     }
 
-    private function validPassword(string $passowrd, string $hashedPassword)
+    public function getUserList(InputPageDto $pageManagement)
     {
-        return Hash::check($passowrd, $hashedPassword, $this::HASH_OPTION);
+        $data = $this->userRepository->getUserListByPage($pageManagement, ListType::ListData);
+        return $data;
+    }
+
+    public function getUserPage(InputPageDto $pageManagement): OutputPageDto
+    {
+        $count = $this->userRepository->getUserListByPage($pageManagement, ListType::ListCount);
+        $pageCount = ceil($count / $pageManagement->getPageCount());
+
+        $page = new OutputPageDto(
+            $pageManagement->getPage(),
+            $pageCount,
+            $count,
+            $pageManagement->getLimit(),
+            $pageManagement->getSearch(),
+            $pageManagement->getSort(),
+            $pageManagement->getSortColumn()
+        );
+        return $page;
+    }
+
+    public function deleteUserById(int $id)
+    {
+        $this->userRepository->deleteUserById($id);
     }
 }

@@ -8,7 +8,7 @@ class OutputResponseDto
     public $message;
     public $success;
 
-    public function __construct($data = null, $message = "", $success = true)
+    public function __construct($data, $message, $success)
     {
         $this->data = $data;
         $this->message = $message;
