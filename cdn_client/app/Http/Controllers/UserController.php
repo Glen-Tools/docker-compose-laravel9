@@ -92,7 +92,7 @@ class UserController extends Controller
             $data["remark"] ?? "",
         );
 
-        $this->userService->create($userDto);
+        $this->userService->createUser($userDto);
         return $this->responseService->responseJson();
     }
 
@@ -104,7 +104,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $data = $this->userService->getUser($id);
+        $data = $this->userService->getUserById($id);
         return $this->responseService->responseJson($data);
     }
 
@@ -116,7 +116,6 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
     }
 
     /**
@@ -128,7 +127,33 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //取得api data
+        $data = $request->all();
+
+        //驗證
+        $validator = Validator::make($data, [
+            'name' => 'max:50',
+            'email' => 'max:100|email:rfc,dns',
+            'status' => 'boolean',
+            'user_type' => [Rule::in([1, 2])], //管理者=1,一般使用者=2
+            'remark' => 'string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $userDto = new InputUserDto(
+            $data["name"] ?? "",
+            $data["email"] ?? "",
+            "",
+            $data["status"] ?? "",
+            $data["user_type"] ?? "",
+            $data["remark"] ?? "",
+        );
+
+        $this->userService->updateUser($userDto, $id);
+        return $this->responseService->responseJson();
     }
 
     /**
