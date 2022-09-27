@@ -30,9 +30,33 @@ class UserRepository extends BaseRepository
         $this->user->save();
     }
 
+    public function updateUser(InputUserDto $userDto, int $id)
+    {
+        $user = $this->user->find($id);
+        $user->name = $userDto->getName() ?? $user->name;
+        $user->email = $userDto->getEmail() ?? $user->email;
+        $user->status = $userDto->getStatus() ?? $user->status;
+        $user->user_type = $userDto->getUserType() ?? $user->user_type;
+        $user->remark = $userDto->getRemark() ?? $user->remark;
+        // $user->password = $this->getPasswordHash($userDto->getPassword());
+        $user->save();
+    }
+
     public function getUserById(int $id)
     {
-        return  $this->user->find($id);
+        return  $this->user->select(
+            "id",
+            "name",
+            "email",
+            "password_update_time",
+            "status",
+            "user_type",
+            "login_ip",
+            "login_time",
+            "remark",
+            "created_at",
+            "updated_at"
+        )->where("id", $id)->get();
     }
 
     public function getUserListByPage(InputPageDto $inPageManagement, ListType $type)

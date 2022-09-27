@@ -6,7 +6,6 @@ use App\Dto\InputPageDto;
 use App\Enums\ListOrderByType;
 
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 use Exception;
 
@@ -23,9 +22,9 @@ class UtilService
             'page' => 'numeric|min:1',
             'pageCount' => 'numeric||min:0',
             'count' => 'numeric|min:0',
-            'limit' => 'numeric|min:1',
+            'limit' => 'numeric|min:',
             'search' => 'array',
-            'sort' => 'string',
+            'sort' => 'string', // 使用Enum 不能空值,先不使用 [new Enum(ListType::class)],
             'sortColumn' => 'string',
         ]);
 
