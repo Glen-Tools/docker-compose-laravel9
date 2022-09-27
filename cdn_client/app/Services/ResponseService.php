@@ -18,11 +18,11 @@ class ResponseService
         $this->outputResponseDto = $outputResponseDto;
     }
 
-    public function responseJson($data = null, $message = "", $success = true)
+    public function responseJson($data = null, $message = "", $success = true, int $status = 200)
     {
         $this->outputResponseDto->data = $data;
         $this->outputResponseDto->message = $message;
         $this->outputResponseDto->success = $success;
-        return response()->json($this->outputResponseDto);
+        return response()->json($this->outputResponseDto, $status);
     }
 }
