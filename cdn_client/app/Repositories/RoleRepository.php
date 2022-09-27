@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Dto\InputPageDto;
 use App\Dto\InputRoleDto;
 use App\Enums\ListType;
 use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class RoleRepository extends BaseRepository
 {
@@ -27,9 +29,30 @@ class RoleRepository extends BaseRepository
         $this->role->save();
     }
 
+    public function updateRole(InputRoleDto $roleDto, int $id)
+    {
+        $role = $this->role->find($id);
+        $role->name = $roleDto->getName() ?? $role->name;
+        $role->key = $roleDto->getKey() ?? $role->key;
+        $role->status = $roleDto->getStatus() ?? $role->status;
+        $role->weight = $roleDto->getWeight() ?? $role->weight;
+        $role->remark = $roleDto->getRemark() ?? $role->remark;
+        // $role->password = $this->getPasswordHash($roleDto->getPassword());
+        $role->save();
+    }
+
     public function getRoleById(int $id)
     {
-        return  $this->role->find($id);
+        return  $this->role->select(
+            "id",
+            "name",
+            "key",
+            "status",
+            "weight",
+            "remark",
+            "created_at",
+            "updated_at"
+        )->where("id", $id)->get();
     }
 
     public function getRoleListByPage(InputPageDto $inPageManagement, ListType $type)

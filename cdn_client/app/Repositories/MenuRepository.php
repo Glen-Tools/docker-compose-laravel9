@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Dto\InputPageDto;
 use App\Dto\InputMenuDto;
 use App\Enums\ListType;
 use App\Models\Menu;
+use Illuminate\Support\Facades\Hash;
 
 class MenuRepository extends BaseRepository
 {
@@ -30,9 +32,36 @@ class MenuRepository extends BaseRepository
         $this->menu->save();
     }
 
+    public function updateMenu(InputMenuDto $menuDto, int $id)
+    {
+        $menu = $this->menu->find($id);
+        $menu->name = $menuDto->getName() ?? $menu->name;
+        $menu->key = $menuDto->getKey() ?? $menu->key;
+        $menu->url = $menuDto->getUrl() ?? $menu->url;
+        $menu->feature = $menuDto->getFeature() ?? $menu->feature;
+        $menu->status = $menuDto->getStatus() ?? $menu->status;
+        $menu->parent = $menuDto->getParent() ?? $menu->parent;
+        $menu->weight = $menuDto->getWeight() ?? $menu->weight;
+        $menu->remark = $menuDto->getRemark() ?? $menu->remark;
+        // $menu->password = $this->getPasswordHash($menuDto->getPassword());
+        $menu->save();
+    }
+
     public function getMenuById(int $id)
     {
-        return  $this->menu->find($id);
+        return  $this->menu->select(
+            "id",
+            "name",
+            "key",
+            "url",
+            "feature",
+            "status",
+            "parent",
+            "weight",
+            "remark",
+            "created_at",
+            "updated_at"
+        )->where("id", $id)->get();
     }
 
     public function getMenuListByPage(InputPageDto $inPageManagement, ListType $type)
