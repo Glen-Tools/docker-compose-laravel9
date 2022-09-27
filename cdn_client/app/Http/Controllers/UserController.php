@@ -10,6 +10,7 @@ use App\Services\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -80,7 +81,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            throw new ValidationException($validator);
         }
 
         $userDto = new InputUserDto(
@@ -140,7 +141,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            throw new ValidationException($validator);
         }
 
         $userDto = new InputUserDto(
