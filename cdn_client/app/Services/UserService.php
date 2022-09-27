@@ -36,7 +36,7 @@ class UserService
             $item->userType = $item->user_type;
             $item->loginIp = $item->login_ip;
             $item->loginTime = $item->login_time;
-            $item->password_update_time = $item->password_update_time;
+            $item->passwordUpdateTime = $item->password_update_time;
             $item->createdAt = $item->created_at;
             $item->updatedAt = $item->updated_at;
             unset($item->user_type);
