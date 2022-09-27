@@ -3,23 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Dto\InputMenuDto;
-use App\Dto\OutputResponseDto;
-use App\Models\Menu;
+use App\Dto\OutputMenuListDto;
+use App\Services\ResponseService;
 use App\Services\MenuService;
+use App\Services\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class MenuController extends Controller
 {
+
+    private $menuService;
+    private $utilService;
+    private $responseService;
+
+    public function __construct(
+        MenuService $menuService,
+        UtilService $utilService,
+        ResponseService $responseService
+    ) {
+        $this->menuService = $menuService;
+        $this->utilService = $utilService;
+        $this->responseService = $responseService;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //取得api data
+        $data = $request->query();
+
+        //頁數初始化
+        $pageManagement = $this->utilService->initPage($data ?? null);
+
+        //取得List, page
+        $menuList = $this->menuService->getMenuList($pageManagement);
+        $menuPage = $this->menuService->getMenuPage($pageManagement);
+
+        $outputMenuListDto = new OutputMenuListDto($menuList, $menuPage);
+        return $this->responseService->responseJson($outputMenuListDto);
     }
 
     /**
@@ -29,7 +56,6 @@ class MenuController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -48,10 +74,11 @@ class MenuController extends Controller
             'name' => 'required|unique:menus|max:100',
             'key' => 'required|unique:menus|max:150',
             'url' => 'required|max:500',
-            'feature' => ['required', 'max:10', Rule::in(['T', 'P','F'])],
+            'feature' => 'required|max:10|Rule::in(["T", "P","F"])]',
             'status' => 'required|boolean',
             'parent' => 'numeric',
-            'remark' => 'max:5000'
+            'weight' => 'numeric',
+            'remark' => 'string|max:5000'
         ]);
 
         if ($validator->fails()) {
@@ -70,8 +97,7 @@ class MenuController extends Controller
         );
 
         $this->menuService->create($menuDto);
-        $responseDto = new OutputResponseDto();
-        return response()->json($responseDto);
+        return $this->responseService->responseJson();
     }
 
     /**
@@ -80,9 +106,10 @@ class MenuController extends Controller
      * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function show(Menu $menu)
+    public function show($id)
     {
-        //
+        $data = $this->menuService->getMenu($id);
+        return $this->responseService->responseJson($data);
     }
 
     /**
@@ -91,7 +118,7 @@ class MenuController extends Controller
      * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function edit(Menu $menu)
+    public function edit($id)
     {
         //
     }
@@ -103,7 +130,7 @@ class MenuController extends Controller
      * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Menu $menu)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -114,8 +141,9 @@ class MenuController extends Controller
      * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Menu $menu)
+    public function destroy($id)
     {
-        //
+        $this->menuService->deleteMenuById($id);
+        return $this->responseService->responseJson();
     }
 }

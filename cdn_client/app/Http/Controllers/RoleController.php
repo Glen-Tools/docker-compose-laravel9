@@ -3,23 +3,49 @@
 namespace App\Http\Controllers;
 
 use App\Dto\InputRoleDto;
-use App\Dto\OutputResponseDto;
-use App\Models\Role;
+use App\Dto\OutputRoleListDto;
+use App\Services\ResponseService;
 use App\Services\RoleService;
+use App\Services\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
+    private $roleService;
+    private $utilService;
+    private $responseService;
+
+    public function __construct(
+        RoleService $roleService,
+        UtilService $utilService,
+        ResponseService $responseService
+    ) {
+        $this->roleService = $roleService;
+        $this->utilService = $utilService;
+        $this->responseService = $responseService;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //取得api data
+        $data = $request->query();
+
+        //頁數初始化
+        $pageManagement = $this->utilService->initPage($data ?? null);
+
+        //取得List, page
+        $roleList = $this->roleService->getRoleList($pageManagement);
+        $rolePage = $this->roleService->getRolePage($pageManagement);
+
+        $outputRoleListDto = new OutputRoleListDto($roleList, $rolePage);
+        return $this->responseService->responseJson($outputRoleListDto);
     }
 
     /**
@@ -29,7 +55,6 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -48,7 +73,8 @@ class RoleController extends Controller
             'name' => 'required|unique:roles|max:100',
             'key' => 'required|unique:roles|max:150',
             'status' => 'required|boolean',
-            'remark' => 'max:5000'
+            'weight' => 'numeric',
+            'remark' => 'string|max:5000'
         ]);
 
         if ($validator->fails()) {
@@ -64,8 +90,7 @@ class RoleController extends Controller
         );
 
         $this->roleService->create($roleDto);
-        $responseDto = new OutputResponseDto();
-        return response()->json($responseDto);
+        return $this->responseService->responseJson();
     }
 
     /**
@@ -74,9 +99,10 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show($id)
     {
-        //
+        $data = $this->roleService->getRole($id);
+        return $this->responseService->responseJson($data);
     }
 
     /**
@@ -85,7 +111,7 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit($id)
     {
         //
     }
@@ -97,7 +123,7 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -108,8 +134,9 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy($id)
     {
-        //
+        $this->roleService->deleteRoleById($id);
+        return $this->responseService->responseJson();
     }
 }
