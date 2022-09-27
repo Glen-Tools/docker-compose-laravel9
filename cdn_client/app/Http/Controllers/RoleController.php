@@ -89,7 +89,7 @@ class RoleController extends Controller
             $data["remark"] ?? "",
         );
 
-        $this->roleService->create($roleDto);
+        $this->roleService->createRole($roleDto);
         return $this->responseService->responseJson();
     }
 
@@ -101,7 +101,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $data = $this->roleService->getRole($id);
+        $data = $this->roleService->getRoleById($id);
         return $this->responseService->responseJson($data);
     }
 
@@ -125,7 +125,32 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //取得api data
+        $data = $request->all();
+
+        //驗證
+        $validator = Validator::make($data, [
+            'name' => 'required|unique:roles|max:100',
+            'key' => 'required|unique:roles|max:150',
+            'status' => 'required|boolean',
+            'weight' => 'numeric',
+            'remark' => 'string|max:5000'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $roleDto = new InputRoleDto(
+            $data["name"],
+            $data["key"],
+            $data["status"],
+            $data["weight"],
+            $data["remark"] ?? "",
+        );
+
+        $this->roleService->updateRole($roleDto, $id);
+        return $this->responseService->responseJson();
     }
 
     /**

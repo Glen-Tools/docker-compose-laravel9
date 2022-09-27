@@ -5,8 +5,10 @@ namespace App\Services;
 use App\Dto\InputPageDto;
 use App\Dto\InputMenuDto;
 use App\Dto\OutputPageDto;
+use App\Dto\OutputMenuListDto;
 use App\Enums\ListType;
 use App\Repositories\MenuRepository;
+use stdClass;
 
 class MenuService
 {
@@ -17,21 +19,42 @@ class MenuService
         $this->menuRepository = $menuRepository;
     }
 
-    public function create(InputMenuDto $menuDto)
+    public function createMenu(InputMenuDto $menuDto)
     {
         $this->menuRepository->createMenu($menuDto);
     }
 
-    public function getMenu(int $id)
+    public function updateMenu(InputMenuDto $menuDto, int $id)
+    {
+        $this->menuRepository->updateMenu($menuDto, $id);
+    }
+
+    public function getMenuById(int $id)
     {
         $data = $this->menuRepository->getMenuById($id);
+        $data->transform(function ($item) {
+            $item->createdAt = $item->created_at;
+            $item->updatedAt = $item->updated_at;
+            unset($item->created_at);
+            unset($item->updated_at);
+            return $item;
+        });
         return $data;
     }
 
     public function getMenuList(InputPageDto $pageManagement)
     {
         $data = $this->menuRepository->getMenuListByPage($pageManagement, ListType::ListData);
-        return $data;
+
+        $data->transform(function ($item) {
+            $item->createdAt = $item->created_at;
+            $item->updatedAt = $item->updated_at;
+            unset($item->created_at);
+            unset($item->updated_at);
+            return $item;
+        });
+
+        return  $data;
     }
 
     public function getMenuPage(InputPageDto $pageManagement): OutputPageDto

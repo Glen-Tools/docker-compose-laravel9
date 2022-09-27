@@ -74,7 +74,7 @@ class MenuController extends Controller
             'name' => 'required|unique:menus|max:100',
             'key' => 'required|unique:menus|max:150',
             'url' => 'required|max:500',
-            'feature' => 'required|max:10|Rule::in(["T", "P","F"])]',
+            'feature' => ['required','max:10',Rule::in(['T', 'P','F'])],
             'status' => 'required|boolean',
             'parent' => 'numeric',
             'weight' => 'numeric',
@@ -96,7 +96,7 @@ class MenuController extends Controller
             $data["remark"] ?? "",
         );
 
-        $this->menuService->create($menuDto);
+        $this->menuService->createMenu($menuDto);
         return $this->responseService->responseJson();
     }
 
@@ -108,7 +108,7 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-        $data = $this->menuService->getMenu($id);
+        $data = $this->menuService->getMenuById($id);
         return $this->responseService->responseJson($data);
     }
 
@@ -132,7 +132,38 @@ class MenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //取得api data
+        $data = $request->all();
+
+        //驗證
+        $validator = Validator::make($data, [
+            'name' => 'required|unique:menus|max:100',
+            'key' => 'required|unique:menus|max:150',
+            'url' => 'required|max:500',
+            'feature' => ['required','max:10',Rule::in(['T', 'P','F'])],
+            'status' => 'required|boolean',
+            'parent' => 'numeric',
+            'weight' => 'numeric',
+            'remark' => 'string|max:5000'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $menuDto = new InputMenuDto(
+            $data["name"],
+            $data["key"],
+            $data["url"],
+            $data["feature"],
+            $data["status"],
+            $data["parent"],
+            $data["weight"],
+            $data["remark"] ?? "",
+        );
+
+        $this->menuService->updateMenu($menuDto, $id);
+        return $this->responseService->responseJson();
     }
 
     /**

@@ -5,8 +5,10 @@ namespace App\Services;
 use App\Dto\InputPageDto;
 use App\Dto\InputRoleDto;
 use App\Dto\OutputPageDto;
+use App\Dto\OutputRoleListDto;
 use App\Enums\ListType;
 use App\Repositories\RoleRepository;
+use stdClass;
 
 class RoleService
 {
@@ -18,21 +20,42 @@ class RoleService
         $this->roleRepository = $roleRepository;
     }
 
-    public function create(InputRoleDto $roleDto)
+    public function createRole(InputRoleDto $roleDto)
     {
         $this->roleRepository->createRole($roleDto);
     }
 
-    public function getRole(int $id)
+    public function updateRole(InputRoleDto $roleDto, int $id)
+    {
+        $this->roleRepository->updateRole($roleDto, $id);
+    }
+
+    public function getRoleById(int $id)
     {
         $data = $this->roleRepository->getRoleById($id);
+        $data->transform(function ($item) {
+            $item->createdAt = $item->created_at;
+            $item->updatedAt = $item->updated_at;
+            unset($item->created_at);
+            unset($item->updated_at);
+            return $item;
+        });
         return $data;
     }
 
     public function getRoleList(InputPageDto $pageManagement)
     {
         $data = $this->roleRepository->getRoleListByPage($pageManagement, ListType::ListData);
-        return $data;
+
+        $data->transform(function ($item) {
+            $item->createdAt = $item->created_at;
+            $item->updatedAt = $item->updated_at;
+            unset($item->created_at);
+            unset($item->updated_at);
+            return $item;
+        });
+
+        return  $data;
     }
 
     public function getRolePage(InputPageDto $pageManagement): OutputPageDto
