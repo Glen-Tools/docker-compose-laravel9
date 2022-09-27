@@ -29,9 +29,9 @@ services:
       - -c
       - |
         composer install
-        composer remove laravel/sanctum
         php artisan migrate
         php-fpm
+      # composer remove laravel/sanctum
       # composer dumpautoload
       # composer require barryvdh/laravel-debugbar --dev
       # tail -f /dev/null
