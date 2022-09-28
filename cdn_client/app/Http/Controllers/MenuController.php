@@ -142,8 +142,8 @@ class MenuController extends Controller
             'name' => 'required|unique:menus|max:100',
             'key' => 'required|unique:menus|max:150',
             'url' => 'required|max:500',
-            //'feature' => ['required','max:10',Rule::in(['T', 'P','F'])],
-            'feature' => ['required','regex:/[T|P|F]{1}/'],
+            'feature' => ['required','max:10',Rule::in(['T', 'P','F'])],
+
             'status' => 'required|boolean',
             'parent' => 'integer',
             'weight' => 'integer',

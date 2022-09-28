@@ -77,7 +77,7 @@ class UserController extends Controller
             'password' => 'required|max:50',
             'status' => 'required|boolean',
             'user_type' => ['required', Rule::in([1, 2])], //管理者=1,一般使用者=2
-            'remark' => 'string',
+            'remark' => 'string|max:5000',
         ]);
 
         if ($validator->fails()) {

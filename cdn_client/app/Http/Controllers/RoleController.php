@@ -10,6 +10,7 @@ use App\Services\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class RoleController extends Controller
 {
@@ -73,12 +74,12 @@ class RoleController extends Controller
             'name' => 'required|unique:roles|max:100',
             'key' => 'required|unique:roles|max:150',
             'status' => 'required|boolean',
-            'weight' => 'numeric',
+            'weight' => 'integer',
             'remark' => 'string|max:5000'
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            throw new ValidationException($validator);
         }
 
         $roleDto = new InputRoleDto(
@@ -133,12 +134,12 @@ class RoleController extends Controller
             'name' => 'required|unique:roles|max:100',
             'key' => 'required|unique:roles|max:150',
             'status' => 'required|boolean',
-            'weight' => 'numeric',
+            'weight' => 'integer',
             'remark' => 'string|max:5000'
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            throw new ValidationException($validator);
         }
 
         $roleDto = new InputRoleDto(

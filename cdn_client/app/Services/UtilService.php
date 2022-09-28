@@ -22,10 +22,10 @@ class UtilService
     {
         //驗證
         $validator = Validator::make($data, [
-            'page' => 'numeric|min:1',
-            'pageCount' => 'numeric|min:0',
-            'count' => 'numeric|min:0',
-            'limit' => 'numeric|min:1',
+            'page' => 'integer|min:1',
+            'pageCount' => 'integer|min:0',
+            'count' => 'integer|min:0',
+            'limit' => 'integer|min:1',
             'search' => 'array',
             'sort' => [new Enum(ListOrderByType::class)],
             'sortColumn' => 'string',
