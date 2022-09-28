@@ -14,10 +14,14 @@ class RoleService
 {
 
     protected $roleRepository;
+    protected $utilService;
 
-    public function __construct(RoleRepository $roleRepository)
-    {
+    public function __construct(
+        RoleRepository $roleRepository,
+        UtilService $utilService
+    ) {
         $this->roleRepository = $roleRepository;
+        $this->utilService = $utilService;
     }
 
     public function createRole(InputRoleDto $roleDto)
@@ -61,7 +65,7 @@ class RoleService
     public function getRolePage(InputPageDto $pageManagement): OutputPageDto
     {
         $count = $this->roleRepository->getRoleListByPage($pageManagement, ListType::ListCount);
-        $pageCount = ceil($count / $pageManagement->getPageCount());
+        $pageCount = ceil($count / $pageManagement->getLimit());
 
         $page = new OutputPageDto(
             $pageManagement->getPage(),

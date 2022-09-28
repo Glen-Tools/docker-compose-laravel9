@@ -13,10 +13,14 @@ use stdClass;
 class MenuService
 {
     protected $menuRepository;
+    protected $utilService;
 
-    public function __construct(MenuRepository $menuRepository)
-    {
+    public function __construct(
+        MenuRepository $menuRepository,
+        UtilService $utilService
+    ) {
         $this->menuRepository = $menuRepository;
+        $this->utilService = $utilService;
     }
 
     public function createMenu(InputMenuDto $menuDto)
@@ -60,17 +64,9 @@ class MenuService
     public function getMenuPage(InputPageDto $pageManagement): OutputPageDto
     {
         $count = $this->menuRepository->getMenuListByPage($pageManagement, ListType::ListCount);
-        $pageCount = ceil($count / $pageManagement->getPageCount());
+        $pageCount = ceil($count / $pageManagement->getLimit());
 
-        $page = new OutputPageDto(
-            $pageManagement->getPage(),
-            $pageCount,
-            $count,
-            $pageManagement->getLimit(),
-            $pageManagement->getSearch(),
-            $pageManagement->getSort(),
-            $pageManagement->getSortColumn()
-        );
+        $page = $this->utilService->setOutputPageDto($pageManagement);
         return $page;
     }
 
