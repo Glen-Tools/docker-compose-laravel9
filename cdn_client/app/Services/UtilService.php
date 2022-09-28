@@ -21,9 +21,9 @@ class UtilService
         //驗證
         $validator = Validator::make($data, [
             'page' => 'numeric|min:1',
-            'pageCount' => 'numeric||min:0',
+            'pageCount' => 'numeric|min:0',
             'count' => 'numeric|min:0',
-            'limit' => 'numeric|min:',
+            'limit' => 'numeric|min:1',
             'search' => 'array',
             'sort' => 'string', // 使用Enum 不能空值,先不使用 [new Enum(ListType::class)],
             'sortColumn' => 'string',
