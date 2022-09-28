@@ -122,11 +122,11 @@ class UserRepository extends BaseRepository
 
     public function testDbTooRawSql()
     {
-        return DB::table('user')->select("id", "name")->where("id", 1)->toRawSql();
+        return DB::table('user')->select("id", "name")->where("id", 1)->toBoundSql();
     }
 
     public function testOrmtoRawSql()
     {
-        return User::select("id", "name")->where("id", 1)->toRawSql();
+        return User::select("id", "name")->where("id", 1)->toBoundSql();
     }
 }
