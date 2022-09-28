@@ -7,7 +7,7 @@ use App\Repositories\LogRepository;
 
 class LogService
 {
-    protected $userRepository;
+    protected $logRepository;
 
     public function __construct(LogRepository $logRepository)
     {
