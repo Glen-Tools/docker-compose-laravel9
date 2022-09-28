@@ -5,7 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Support\Str;
 
 class QueryServiceProvider extends ServiceProvider
 {
