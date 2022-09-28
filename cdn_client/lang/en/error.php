@@ -14,7 +14,7 @@ return [
     */
 
     //錯誤訊息
-    "parameter"                => "參數錯誤 :msg",
+    "parameter"                => "參數錯誤:msg",
     "parameter_login_name_duplicate" => "登入帳號重複",
     "create_login_name_duplicate"    => "帳號重複",
     "unauthorized"             => "身份驗證錯誤",
