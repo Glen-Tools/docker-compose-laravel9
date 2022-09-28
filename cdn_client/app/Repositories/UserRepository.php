@@ -5,8 +5,12 @@ namespace App\Repositories;
 use App\Dto\InputPageDto;
 use App\Dto\InputUserDto;
 use App\Enums\ListType;
+use App\Exceptions\ParameterException;
 use App\Models\User;
+
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class UserRepository extends BaseRepository
 {
@@ -33,6 +37,11 @@ class UserRepository extends BaseRepository
     public function updateUser(InputUserDto $userDto, int $id)
     {
         $user = $this->user->find($id);
+
+        if (empty($user)) {
+            throw new ParameterException(trans('error.user_not_found'));
+        }
+
         $user->name = $userDto->getName() ?? $user->name;
         $user->email = $userDto->getEmail() ?? $user->email;
         $user->status = $userDto->getStatus() ?? $user->status;

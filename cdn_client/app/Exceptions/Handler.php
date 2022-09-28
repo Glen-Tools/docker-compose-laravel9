@@ -72,22 +72,49 @@ class Handler extends ExceptionHandler
         $outputResponseDto->success = false;
 
         if ($exception instanceof ValidationException || $exception instanceof ParameterException) { //驗證錯誤 回參數錯誤
-            if (env("APP_DEBUG") == true) {
-                $msg = $exception->errors();
-                if (gettype($msg) != "string") {
-                    $msg = json_encode($msg);
-                }
-            }
-            $outputResponseDto->message = __('error.parameter', ["msg" => $msg]);
+            $msg = "";
+            $msg = $this->getValidAndParameterExceptionError($exception);
+            $outputResponseDto->message = trans('error.parameter', ["msg" => $msg]);
             return response()->json($outputResponseDto,  Response::HTTP_BAD_REQUEST);
         }
 
         if ($exception instanceof NotFoundHttpException) { //404
-            $outputResponseDto->message = __('error.not_found');
+            $outputResponseDto->message = trans('error.not_found');
             return response()->json($outputResponseDto,  Response::HTTP_NOT_FOUND);
         }
 
-        $outputResponseDto->message = __('error.server');
+        $outputResponseDto->message = trans('error.server');
         return response()->json($outputResponseDto, Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    private function getValidAndParameterExceptionError($exception): string
+    {
+        if (env("APP_DEBUG") == true) {
+            $msg = $exception->errors();
+            if (is_array($msg)) {
+                $msg =  rtrim($this->getKeyAndValueToString($msg), ",");
+            }
+            $msg = "," . $msg;
+        }
+        return $msg;
+    }
+
+    private function getKeyAndValueToString(array $data): string
+    {
+        $keyValue = "";
+
+        foreach ($data as $key => $value) {
+            if (gettype($value) == "string" && !empty($value) && !empty($key)) {
+                $keyValue .= "$key:$value,";
+            } else if (gettype($key) == "string" && !empty($key)) {
+                $keyValue .= "$key:";
+            } else if (gettype($value) == "string" && !empty($value)) {
+                $keyValue .= "$value,";
+            }
+            if (is_array($value)) {
+                $keyValue .= $this->getKeyAndValueToString($value);
+            }
+        }
+        return $keyValue;
     }
 }

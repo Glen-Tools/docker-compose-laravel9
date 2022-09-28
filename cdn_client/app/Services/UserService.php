@@ -14,9 +14,12 @@ class UserService
 {
     protected $userRepository;
 
-    public function __construct(UserRepository $userRepository)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        UtilService $utilService
+    ) {
         $this->userRepository = $userRepository;
+        $this->utilService = $utilService;
     }
 
     public function createUser(InputUserDto $userDto)
@@ -74,17 +77,9 @@ class UserService
     public function getUserPage(InputPageDto $pageManagement): OutputPageDto
     {
         $count = $this->userRepository->getUserListByPage($pageManagement, ListType::ListCount);
-        $pageCount = ceil($count / $pageManagement->getPageCount());
+        $pageCount = ceil($count / $pageManagement->getLimit());
 
-        $page = new OutputPageDto(
-            $pageManagement->getPage(),
-            $pageCount,
-            $count,
-            $pageManagement->getLimit(),
-            $pageManagement->getSearch(),
-            $pageManagement->getSort(),
-            $pageManagement->getSortColumn()
-        );
+        $page = $this->utilService->setOutputPageDto($pageManagement, $pageCount, $count);
         return $page;
     }
 

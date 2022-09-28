@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\InputPageDto;
+use App\Dto\OutputPageDto;
 use App\Enums\ListOrderByType;
 
 use Illuminate\Support\Facades\Validator;
@@ -33,7 +34,7 @@ class UtilService
         }
 
         $page = (is_array($data)) ? (object)$data : $data;
-        $page->sort = (isset($page) && $page->sort == ListOrderByType::Desc->value) ? ListOrderByType::Desc->value : ListOrderByType::Asc->value;
+        $page->sort = (isset($page->sort) && $page->sort == ListOrderByType::Desc->value) ? ListOrderByType::Desc->value : ListOrderByType::Asc->value;
 
         $pageData = new InputPageDto(
             $page->page ?? 1,
@@ -45,5 +46,19 @@ class UtilService
             $page->sortColumn ?? "",
         );
         return $pageData;
+    }
+
+    public function setOutputPageDto(InputPageDto $pageManagement, int $pageCount, int $count): OutputPageDto
+    {
+        $page = new OutputPageDto(
+            $pageManagement->getPage(),
+            $pageCount,
+            $count,
+            $pageManagement->getLimit(),
+            $pageManagement->getSearch(),
+            $pageManagement->getSort(),
+            $pageManagement->getSortColumn()
+        );
+        return $page;
     }
 }
