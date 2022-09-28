@@ -7,10 +7,8 @@ use App\Dto\InputUserDto;
 use App\Enums\ListType;
 use App\Exceptions\ParameterException;
 use App\Models\User;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class UserRepository extends BaseRepository
 {
@@ -120,5 +118,15 @@ class UserRepository extends BaseRepository
     private function validPassword(string $passowrd, string $hashedPassword)
     {
         return Hash::check($passowrd, $hashedPassword, $this::HASH_OPTION);
+    }
+
+    public function testDbTooRawSql()
+    {
+        return DB::table('user')->select("id", "name")->where("id", 1)->toRawSql();
+    }
+
+    public function testOrmtoRawSql()
+    {
+        return User::select("id", "name")->where("id", 1)->toRawSql();
     }
 }
