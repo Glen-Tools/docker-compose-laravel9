@@ -13,6 +13,7 @@ use stdClass;
 class UserService
 {
     protected $userRepository;
+    protected $utilService;
 
     public function __construct(
         UserRepository $userRepository,
@@ -78,8 +79,10 @@ class UserService
     {
         $count = $this->userRepository->getUserListByPage($pageManagement, ListType::ListCount);
         $pageCount = ceil($count / $pageManagement->getLimit());
+        $pageManagement->setCount($count);
+        $pageManagement->setPageCount($pageCount);
 
-        $page = $this->utilService->setOutputPageDto($pageManagement, $pageCount, $count);
+        $page = $this->utilService->setOutputPageDto($pageManagement);
         return $page;
     }
 

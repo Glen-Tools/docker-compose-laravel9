@@ -48,12 +48,12 @@ class UtilService
         return $pageData;
     }
 
-    public function setOutputPageDto(InputPageDto $pageManagement, int $pageCount, int $count): OutputPageDto
+    public function setOutputPageDto(InputPageDto $pageManagement): OutputPageDto
     {
         $page = new OutputPageDto(
             $pageManagement->getPage(),
-            $pageCount,
-            $count,
+            $pageManagement->getPageCount(),
+            $pageManagement->getCount(),
             $pageManagement->getLimit(),
             $pageManagement->getSearch(),
             $pageManagement->getSort(),
