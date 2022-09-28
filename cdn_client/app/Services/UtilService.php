@@ -5,10 +5,12 @@ namespace App\Services;
 use App\Dto\InputPageDto;
 use App\Dto\OutputPageDto;
 use App\Enums\ListOrderByType;
+use Illuminate\Validation\Rules\Enum;
 
 use Illuminate\Support\Facades\Validator;
 
 use Exception;
+use Illuminate\Validation\ValidationException;
 
 class UtilService
 {
@@ -25,16 +27,15 @@ class UtilService
             'count' => 'numeric|min:0',
             'limit' => 'numeric|min:1',
             'search' => 'array',
-            'sort' => 'string', // 使用Enum 不能空值,先不使用 [new Enum(ListType::class)],
+            'sort' => [new Enum(ListOrderByType::class)],
             'sortColumn' => 'string',
         ]);
 
         if ($validator->fails()) {
-            throw new Exception($validator->errors());
+            throw new ValidationException($validator);
         }
 
         $page = (is_array($data)) ? (object)$data : $data;
-        $page->sort = (isset($page->sort) && $page->sort == ListOrderByType::Desc->value) ? ListOrderByType::Desc->value : ListOrderByType::Asc->value;
 
         $pageData = new InputPageDto(
             $page->page ?? 1,
@@ -42,7 +43,7 @@ class UtilService
             $page->count ?? 0,
             $page->limit ?? 10,
             $page->search ?? [],
-            $page->sort,
+            $page->sort ?? ListOrderByType::Desc->value,
             $page->sortColumn ?? "",
         );
         return $pageData;
