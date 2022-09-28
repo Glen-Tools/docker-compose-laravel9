@@ -21,7 +21,7 @@ class UtilService
     public function initPage($data): InputPageDto
     {
         //驗證
-        $validator = Validator::make($data, [
+        $this->ColumnValidator($data, [
             'page' => 'integer|min:1',
             'pageCount' => 'integer|min:0',
             'count' => 'integer|min:0',
@@ -30,10 +30,6 @@ class UtilService
             'sort' => [new Enum(ListOrderByType::class)],
             'sortColumn' => 'string',
         ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
 
         $page = (is_array($data)) ? (object)$data : $data;
 
@@ -61,5 +57,15 @@ class UtilService
             $pageManagement->getSortColumn()
         );
         return $page;
+    }
+
+    public function ColumnValidator($data,array $dataValidator){
+
+        //驗證
+        $validator = Validator::make($data, $dataValidator);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
     }
 }

@@ -8,9 +8,6 @@ use App\Services\ResponseService;
 use App\Services\RoleService;
 use App\Services\UtilService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 class RoleController extends Controller
 {
@@ -70,17 +67,13 @@ class RoleController extends Controller
         $data = $request->all();
 
         //驗證
-        $validator = Validator::make($data, [
+        $this->utilService->ColumnValidator($data, [
             'name' => 'required|unique:roles|max:100',
             'key' => 'required|unique:roles|max:150',
             'status' => 'required|boolean',
             'weight' => 'integer',
             'remark' => 'string|max:5000'
         ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
 
         $roleDto = new InputRoleDto(
             $data["name"],
@@ -130,17 +123,13 @@ class RoleController extends Controller
         $data = $request->all();
 
         //驗證
-        $validator = Validator::make($data, [
-            'name' => 'required|unique:roles|max:100',
-            'key' => 'required|unique:roles|max:150',
-            'status' => 'required|boolean',
+        $this->utilService->ColumnValidator($data, [
+            'name' => 'unique:roles|max:100',
+            'key' => 'unique:roles|max:150',
+            'status' => 'boolean',
             'weight' => 'integer',
             'remark' => 'string|max:5000'
         ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
 
         $roleDto = new InputRoleDto(
             $data["name"],

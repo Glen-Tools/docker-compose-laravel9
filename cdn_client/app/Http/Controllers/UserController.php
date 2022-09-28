@@ -8,9 +8,7 @@ use App\Services\ResponseService;
 use App\Services\UserService;
 use App\Services\UtilService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -71,7 +69,7 @@ class UserController extends Controller
         $data = $request->all();
 
         //驗證
-        $validator = Validator::make($data, [
+        $this->utilService->ColumnValidator($data, [
             'name' => 'required|max:50',
             'email' => 'required|unique:users|max:100|email:rfc,dns',
             'password' => 'required|max:50',
@@ -79,10 +77,6 @@ class UserController extends Controller
             'user_type' => ['required', Rule::in([1, 2])], //管理者=1,一般使用者=2
             'remark' => 'string|max:5000',
         ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
 
         $userDto = new InputUserDto(
             $data["name"],
@@ -132,17 +126,13 @@ class UserController extends Controller
         $data = $request->all();
 
         //驗證
-        $validator = Validator::make($data, [
+        $this->utilService->ColumnValidator($data, [
             'name' => 'max:50',
-            'email' => 'max:100|email:rfc,dns',
+            'email' => 'unique:users|max:100|email:rfc,dns',
             'status' => 'boolean',
             'user_type' => [Rule::in([1, 2])], //管理者=1,一般使用者=2
-            'remark' => 'string',
+            'remark' => 'string|max:5000',
         ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
 
         $userDto = new InputUserDto(
             $data["name"] ?? "",

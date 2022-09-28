@@ -8,9 +8,7 @@ use App\Services\ResponseService;
 use App\Services\MenuService;
 use App\Services\UtilService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 class MenuController extends Controller
 {
@@ -71,8 +69,7 @@ class MenuController extends Controller
         $data = $request->all();
 
         //驗證
-        $validator = Validator::make($data, [
-
+        $this->utilService->ColumnValidator($data, [
             'name' => 'required|unique:menus|max:100',
             'key' => 'required|unique:menus|max:150',
             'url' => 'required|max:500',
@@ -82,10 +79,6 @@ class MenuController extends Controller
             'weight' => 'integer',
             'remark' => 'string|max:5000'
         ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
 
         $menuDto = new InputMenuDto(
             $data["name"],
@@ -138,21 +131,16 @@ class MenuController extends Controller
         $data = $request->all();
 
         //驗證
-        $validator = Validator::make($data, [
-            'name' => 'required|unique:menus|max:100',
-            'key' => 'required|unique:menus|max:150',
-            'url' => 'required|max:500',
-            'feature' => ['required','max:10',Rule::in(['T', 'P','F'])],
-
-            'status' => 'required|boolean',
+        $this->utilService->ColumnValidator($data, [
+            'name' => 'unique:menus|max:100',
+            'key' => 'unique:menus|max:150',
+            'url' => 'max:500',
+            'feature' => ['max:10',Rule::in(['T', 'P','F'])],
+            'status' => 'boolean',
             'parent' => 'integer',
             'weight' => 'integer',
-            'remark' => 'string|max:5000',
+            'remark' => 'string|max:5000'
         ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
 
         $menuDto = new InputMenuDto(
             $data["name"],
