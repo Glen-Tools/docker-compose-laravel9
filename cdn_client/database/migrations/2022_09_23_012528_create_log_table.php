@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string("table", 100)->nullable()->comment("table");
             $table->bigInteger("user_id")->comment("操作人id");
             $table->string("content");
-            $table->timestamp("create_at");
+            $table->timestamp("create_at")->useCurrent();
         });
     }
 

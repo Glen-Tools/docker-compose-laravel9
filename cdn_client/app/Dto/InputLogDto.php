@@ -8,13 +8,15 @@ class InputLogDto
     protected $operate;
     protected $table;
     protected $content;
+    protected $userId;
 
-    public function __construct($feature, $operate, $table, $content)
+    public function __construct(string $feature, string $operate, string $table, string $content, int $userId)
     {
         $this->feature = $feature;
         $this->operate = $operate;
         $this->table = $table;
         $this->content = $content;
+        $this->userId = $userId;
     }
 
     /**
@@ -66,6 +68,18 @@ class InputLogDto
     }
 
     /**
+     * Set the value of content
+     *
+     * @return  self
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
      * Get the value of feature
      */
     public function getFeature()
@@ -95,5 +109,13 @@ class InputLogDto
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Get the value of content
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 }

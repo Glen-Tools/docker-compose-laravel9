@@ -22,6 +22,7 @@ class LogRepository extends Model
         $log->operate = $inputLogDto->getOperate();
         $log->table = $inputLogDto->getTable();
         $log->content = $inputLogDto->getContent();
+        $log->user_id = $inputLogDto->getUserId();
         $log->save();
     }
 }
