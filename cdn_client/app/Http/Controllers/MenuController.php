@@ -10,6 +10,7 @@ use App\Services\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class MenuController extends Controller
 {
@@ -71,18 +72,19 @@ class MenuController extends Controller
 
         //驗證
         $validator = Validator::make($data, [
+
             'name' => 'required|unique:menus|max:100',
             'key' => 'required|unique:menus|max:150',
             'url' => 'required|max:500',
             'feature' => ['required','max:10',Rule::in(['T', 'P','F'])],
             'status' => 'required|boolean',
-            'parent' => 'numeric',
-            'weight' => 'numeric',
+            'parent' => 'integer',
+            'weight' => 'integer',
             'remark' => 'string|max:5000'
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            throw new ValidationException($validator);
         }
 
         $menuDto = new InputMenuDto(
@@ -140,15 +142,16 @@ class MenuController extends Controller
             'name' => 'required|unique:menus|max:100',
             'key' => 'required|unique:menus|max:150',
             'url' => 'required|max:500',
-            'feature' => ['required','max:10',Rule::in(['T', 'P','F'])],
+            //'feature' => ['required','max:10',Rule::in(['T', 'P','F'])],
+            'feature' => ['required','regex:/[T|P|F]{1}/'],
             'status' => 'required|boolean',
-            'parent' => 'numeric',
-            'weight' => 'numeric',
-            'remark' => 'string|max:5000'
+            'parent' => 'integer',
+            'weight' => 'integer',
+            'remark' => 'string|max:5000',
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            throw new ValidationException($validator);
         }
 
         $menuDto = new InputMenuDto(
