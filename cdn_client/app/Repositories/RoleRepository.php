@@ -5,8 +5,8 @@ namespace App\Repositories;
 use App\Dto\InputPageDto;
 use App\Dto\InputRoleDto;
 use App\Enums\ListType;
+use App\Exceptions\ParameterException;
 use App\Models\Role;
-use Illuminate\Support\Facades\Hash;
 
 class RoleRepository extends BaseRepository
 {
@@ -32,13 +32,18 @@ class RoleRepository extends BaseRepository
     public function updateRole(InputRoleDto $roleDto, int $id)
     {
         $role = $this->role->find($id);
+
+        if (empty($role)) {
+            throw new ParameterException(trans('error.role_not_found'));
+        }
+
         $role->name = $roleDto->getName() ?? $role->name;
         $role->key = $roleDto->getKey() ?? $role->key;
         $role->status = $roleDto->getStatus() ?? $role->status;
         $role->weight = $roleDto->getWeight() ?? $role->weight;
         $role->remark = $roleDto->getRemark() ?? $role->remark;
-        // $role->password = $this->getPasswordHash($roleDto->getPassword());
         $role->save();
+
     }
 
     public function getRoleById(int $id)

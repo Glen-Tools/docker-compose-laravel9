@@ -5,8 +5,8 @@ namespace App\Repositories;
 use App\Dto\InputPageDto;
 use App\Dto\InputMenuDto;
 use App\Enums\ListType;
+use App\Exceptions\ParameterException;
 use App\Models\Menu;
-use Illuminate\Support\Facades\Hash;
 
 class MenuRepository extends BaseRepository
 {
@@ -35,6 +35,11 @@ class MenuRepository extends BaseRepository
     public function updateMenu(InputMenuDto $menuDto, int $id)
     {
         $menu = $this->menu->find($id);
+
+        if (empty($menu)) {
+            throw new ParameterException(trans('error.menu_not_found'));
+        }
+
         $menu->name = $menuDto->getName() ?? $menu->name;
         $menu->key = $menuDto->getKey() ?? $menu->key;
         $menu->url = $menuDto->getUrl() ?? $menu->url;
@@ -43,8 +48,8 @@ class MenuRepository extends BaseRepository
         $menu->parent = $menuDto->getParent() ?? $menu->parent;
         $menu->weight = $menuDto->getWeight() ?? $menu->weight;
         $menu->remark = $menuDto->getRemark() ?? $menu->remark;
-        // $menu->password = $this->getPasswordHash($menuDto->getPassword());
         $menu->save();
+
     }
 
     public function getMenuById(int $id)
