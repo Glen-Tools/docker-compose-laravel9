@@ -39,7 +39,7 @@ class UtilService
             $page->count ?? 0,
             $page->limit ?? 10,
             $page->search ?? [],
-            $page->sort ?? ListOrderByType::Desc->value,
+            $page->sort ?? ListOrderByType::Asc->value,
             $page->sortColumn ?? "",
         );
         return $pageData;
@@ -59,7 +59,8 @@ class UtilService
         return $page;
     }
 
-    public function ColumnValidator($data,array $dataValidator){
+    public function ColumnValidator($data, array $dataValidator)
+    {
 
         //驗證
         $validator = Validator::make($data, $dataValidator);
