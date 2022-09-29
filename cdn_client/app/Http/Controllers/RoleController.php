@@ -71,15 +71,15 @@ class RoleController extends Controller
             'name' => 'required|unique:roles|max:100',
             'key' => 'required|unique:roles|max:150',
             'status' => 'required|boolean',
-            'weight' => 'integer',
-            'remark' => 'string|max:5000'
+            'weight' => 'integer|nullable',
+            'remark' => 'string|max:5000|nullable'
         ]);
 
         $roleDto = new InputRoleDto(
             $data["name"],
             $data["key"],
             $data["status"],
-            $data["weight"],
+            $data["weight"] ?? "",
             $data["remark"] ?? "",
         );
 
@@ -124,18 +124,18 @@ class RoleController extends Controller
 
         //驗證
         $this->utilService->ColumnValidator($data, [
-            'name' => 'unique:roles|max:100',
-            'key' => 'unique:roles|max:150',
+            'name' => 'max:100|unique:menus,name,' . $id,
+            'key' => 'max:150|unique:menus,key,' . $id,
             'status' => 'boolean',
-            'weight' => 'integer',
-            'remark' => 'string|max:5000'
+            'weight' => 'integer|nullable',
+            'remark' => 'string|max:5000|nullable'
         ]);
 
         $roleDto = new InputRoleDto(
             $data["name"],
             $data["key"],
             $data["status"],
-            $data["weight"],
+            $data["weight"] ?? "",
             $data["remark"] ?? "",
         );
 

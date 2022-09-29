@@ -8,7 +8,7 @@ use App\Dto\InputLogDto;
 
 class LogRepository extends Model
 {
-    protected $user;
+    protected $Log;
 
     public function __construct()
     {

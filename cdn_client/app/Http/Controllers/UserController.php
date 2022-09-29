@@ -75,7 +75,7 @@ class UserController extends Controller
             'password' => 'required|max:50',
             'status' => 'required|boolean',
             'user_type' => ['required', Rule::in([1, 2])], //管理者=1,一般使用者=2
-            'remark' => 'string|max:5000',
+            'remark' => 'string|max:5000|nullable',
         ]);
 
         $userDto = new InputUserDto(
@@ -128,18 +128,18 @@ class UserController extends Controller
         //驗證
         $this->utilService->ColumnValidator($data, [
             'name' => 'max:50',
-            'email' => 'unique:users|max:100|email:rfc,dns',
+            'email' => 'max:100|email:rfc,dns|unique:users,email,' . $id ,
             'status' => 'boolean',
             'user_type' => [Rule::in([1, 2])], //管理者=1,一般使用者=2
-            'remark' => 'string|max:5000',
+            'remark' => 'string|max:5000|nullable',
         ]);
 
         $userDto = new InputUserDto(
-            $data["name"] ?? "",
-            $data["email"] ?? "",
+            $data["name"],
+            $data["email"],
             "",
-            $data["status"] ?? "",
-            $data["user_type"] ?? "",
+            $data["status"],
+            $data["user_type"],
             $data["remark"] ?? "",
         );
 

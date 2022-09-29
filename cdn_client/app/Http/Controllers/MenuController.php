@@ -75,9 +75,9 @@ class MenuController extends Controller
             'url' => 'required|max:500',
             'feature' => ['required','max:10',Rule::in(['T', 'P','F'])],
             'status' => 'required|boolean',
-            'parent' => 'integer',
-            'weight' => 'integer',
-            'remark' => 'string|max:5000'
+            'parent' => 'integer|nullable',
+            'weight' => 'integer|nullable',
+            'remark' => 'string|max:5000|nullable'
         ]);
 
         $menuDto = new InputMenuDto(
@@ -86,8 +86,8 @@ class MenuController extends Controller
             $data["url"],
             $data["feature"],
             $data["status"],
-            $data["parent"],
-            $data["weight"],
+            $data["parent"] ?? 0,
+            $data["weight"] ?? "",
             $data["remark"] ?? "",
         );
 
@@ -132,14 +132,14 @@ class MenuController extends Controller
 
         //驗證
         $this->utilService->ColumnValidator($data, [
-            'name' => 'unique:menus|max:100',
-            'key' => 'unique:menus|max:150',
+            'name' => 'max:100|unique:menus,name,' . $id,
+            'key' => 'max:150|unique:menus,key,' . $id,
             'url' => 'max:500',
             'feature' => ['max:10',Rule::in(['T', 'P','F'])],
             'status' => 'boolean',
-            'parent' => 'integer',
-            'weight' => 'integer',
-            'remark' => 'string|max:5000'
+            'parent' => 'integer|nullable',
+            'weight' => 'integer|nullable',
+            'remark' => 'string|max:5000|nullable'
         ]);
 
         $menuDto = new InputMenuDto(
@@ -148,8 +148,8 @@ class MenuController extends Controller
             $data["url"],
             $data["feature"],
             $data["status"],
-            $data["parent"],
-            $data["weight"],
+            $data["parent"] ?? 0,
+            $data["weight"] ?? "",
             $data["remark"] ?? "",
         );
 
