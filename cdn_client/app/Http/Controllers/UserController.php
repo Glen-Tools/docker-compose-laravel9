@@ -28,9 +28,27 @@ class UserController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *  tags={"User"},
+     *  path="/api/v1/user",
+     *  summary="使用者清單 (User List)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="query",name="page",description="頁數",@OA\Schema(type="integer",default="1")),
+     *  @OA\Parameter(parameter="pageCount",in="query",name="pageCount",description="總頁數",@OA\Schema(type="integer")),
+     *  @OA\Parameter(parameter="count",in="query",name="count",description="總筆數",@OA\Schema(type="integer")),
+     *  @OA\Parameter(parameter="limit",in="query",name="limit",description="每頁筆數",@OA\Schema(type="integer",default="10")),
+     *  @OA\Parameter(parameter="search",in="query",name="search[name]",description="搜尋條件",@OA\Schema(type="string",default=" ")),
+     *  @OA\Parameter(parameter="search",in="query",name="search[email]",description="搜尋條件",@OA\Schema(type="string",default=" ")),
+     *  @OA\Parameter(parameter="sort",in="query",name="sort",description="排序", explode=true,
+     *      @OA\Schema(type="array",default="asc",@OA\Items(type="string",enum = {"asc","desc"},))),
+     *  @OA\Parameter(parameter="sortColumn",in="query",name="sortColumn",description="排序欄位", explode=true,
+     *      @OA\Schema(type="array",default="id",@OA\Items(type="string",
+     *      enum = {"id","name","email","status","userType","loginIp","loginTime","createdAt","updatedAt"},))),
+     *  @OA\Response(response=200,description="OK"),
+     *  @OA\Response(response=401,description="Unauthorized"),
+     *  @OA\Response(response=404,description="Not Found")
+     * )
+     * @return OutputUserListDto
      */
     public function index(Request $request)
     {

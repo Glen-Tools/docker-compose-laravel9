@@ -96,6 +96,8 @@ class UserRepository extends BaseRepository
             $userOrm = $userOrm->orderBy($orderByColums[$SortColumn], $Sort);
         } else {
             $userOrm = $userOrm->orderBy("id", $Sort);
+            $inPageManagement->setSortColumn("id");
+            $inPageManagement->setSort($Sort);
         }
 
         //筆數
