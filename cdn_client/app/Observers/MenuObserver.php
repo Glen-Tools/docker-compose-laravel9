@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Models\User;
 use App\Services\LogService;
 use Illuminate\Http\Request;
 
