@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('feature', 10)->comment("功能(T=標題、P=頁面、F=按鍵功能)");
             $table->boolean('status')->comment("狀態(開,關)")->default(1);
             $table->integer('parent')->comment("父類(id)")->default(0);
-            $table->integer('weight')->nullable()->comment("權重(優先順序 重=高)");
+            $table->smallInteger('weight')->nullable()->comment("權重(優先順序 重=高)");
             $table->string('remark', 5000)->nullable()->comment("備註");
             $table->timestamps();
         });

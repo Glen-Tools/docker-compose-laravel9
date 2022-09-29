@@ -34,9 +34,9 @@ Route::post('/testjson', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
-    Route::resource('user', UserController::class);
-    Route::resource('role', RoleController::class);
-    Route::resource('menu', MenuController::class);
+    Route::resource('user', UserController::class)->except(['create', 'edit']);
+    Route::resource('role', RoleController::class)->except(['create', 'edit']);
+    Route::resource('menu', MenuController::class)->except(['create', 'edit']);
 
     // Route::get('/users', function () {
     //     // Matches The "/admin/users" URL
