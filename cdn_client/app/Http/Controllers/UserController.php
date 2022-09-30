@@ -40,10 +40,9 @@ class UserController extends Controller
      *  @OA\Parameter(parameter="search",in="query",name="search[name]",description="搜尋條件",@OA\Schema(type="string",default=" ")),
      *  @OA\Parameter(parameter="search",in="query",name="search[email]",description="搜尋條件",@OA\Schema(type="string",default=" ")),
      *  @OA\Parameter(parameter="sort",in="query",name="sort",description="排序", explode=true,
-     *      @OA\Schema(type="array",default="asc",@OA\Items(type="string",enum = {"asc","desc"},))),
+     *      @OA\Schema(type="string",default="asc",enum = {"asc","desc"})),
      *  @OA\Parameter(parameter="sortColumn",in="query",name="sortColumn",description="排序欄位", explode=true,
-     *      @OA\Schema(type="array",default="id",@OA\Items(type="string",
-     *      enum = {"id","name","email","status","userType","loginIp","loginTime","createdAt","updatedAt"},))),
+     *      @OA\Schema(type="string",default="id",enum = {"id","name","email","status","userType","loginIp","loginTime","createdAt","updatedAt"})),
      *  @OA\Response(response=200,description="OK"),
      *  @OA\Response(response=401,description="Unauthorized"),
      *  @OA\Response(response=404,description="Not Found")
@@ -146,7 +145,7 @@ class UserController extends Controller
         //驗證
         $this->utilService->ColumnValidator($data, [
             'name' => 'max:50',
-            'email' => 'max:100|email:rfc,dns|unique:users,email,' . $id ,
+            'email' => 'max:100|email:rfc,dns|unique:users,email,' . $id,
             'status' => 'boolean',
             'user_type' => [Rule::in([1, 2])], //管理者=1,一般使用者=2
             'remark' => 'string|max:5000|nullable',
