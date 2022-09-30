@@ -40,7 +40,7 @@ class UserController extends Controller
      *  @OA\Parameter(parameter="search",in="query",name="search[name]",description="搜尋條件",@OA\Schema(type="string")),
      *  @OA\Parameter(parameter="search",in="query",name="search[email]",description="搜尋條件",@OA\Schema(type="string")),
      *  @OA\Parameter(parameter="sort",in="query",name="sort",description="排序", explode=true,
-     *      @OA\Schema(type="string",default="asc",enum = {"asc","desc"})),
+     *      @OA\Schema(type="string",default="asc",enum = \App\Enums\ListOrderByType::class)),
      *  @OA\Parameter(parameter="sortColumn",in="query",name="sortColumn",description="排序欄位", explode=true,
      *      @OA\Schema(type="string",default="id",enum = {"id","name","email","status","userType","loginIp","loginTime","createdAt","updatedAt"})),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowUserList", example="ShowUserList")})),
