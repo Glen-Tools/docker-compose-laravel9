@@ -27,12 +27,11 @@ class UtilService
             'count' => 'integer|min:0',
             'limit' => 'integer|min:1',
             'search' => 'array',
-            'sort' => 'string|nullable',
-            'sortColumn' => 'string|nullable',
+            'sort' => [new Enum(ListOrderByType::class)],
+            'sortColumn' => 'string',
         ]);
 
         $page = (is_array($data)) ? (object)$data : $data;
-        $page->sort = (empty($page->sort) || $page->sort != ListOrderByType::Desc->value) ? ListOrderByType::Asc->value : ListOrderByType::Desc->value;
 
         $pageData = new InputPageDto(
             $page->page ?? 1,
@@ -40,7 +39,7 @@ class UtilService
             $page->count ?? 0,
             $page->limit ?? 10,
             $page->search ?? [],
-            $page->sort,
+            $page->sort ?? ListOrderByType::Asc->value,
             $page->sortColumn ?? "",
         );
         return $pageData;
