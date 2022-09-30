@@ -7,15 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
-/**
- * @OA\SecurityScheme(
- *      securityScheme="Authorization",
- *      in="header",
- *      type="http",
- *      scheme="bearer",
- *      name="Authorization"
- * )
- */
+
 
 /**
  * @OA\OpenApi(
@@ -37,7 +29,16 @@ use Illuminate\Routing\Controller as BaseController;
  *  ),
  *  @OA\PathItem(
  *      path="/"
- *  )
+ *  ),
+ *   @OA\Components(
+ *     @OA\SecurityScheme(
+ *        securityScheme="Authorization",
+ *        in="header",
+ *        type="http",
+ *        scheme="bearer",
+ *        name="Authorization"
+ *      )
+ *   )
  * )
  */
 
