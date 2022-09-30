@@ -8,16 +8,16 @@ class InputUserDto
     protected $email;
     protected $password;
     protected $status;
-    protected $user_type;
+    protected $userType;
     protected $remark;
 
-    public function __construct($name, $email, $password, $status, $user_type, $remark = "")
+    public function __construct($name, $email, $password, $status, $userType, $remark = "")
     {
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
         $this->status = $status;
-        $this->user_type = $user_type;
+        $this->userType = $userType;
         $this->remark = $remark;
     }
 
@@ -70,13 +70,13 @@ class InputUserDto
     }
 
     /**
-     * Set the value of user_type
+     * Set the value of userType
      *
      * @return  self
      */
-    public function setUser_type($user_type)
+    public function setUserType($userType)
     {
-        $this->user_type = $user_type;
+        $this->userType = $userType;
 
         return $this;
     }
@@ -126,11 +126,11 @@ class InputUserDto
     }
 
     /**
-     * Get the value of user_type
+     * Get the value of userType
      */
     public function getUserType()
     {
-        return $this->user_type;
+        return $this->userType;
     }
 
     /**

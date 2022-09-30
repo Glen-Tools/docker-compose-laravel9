@@ -43,7 +43,7 @@ class UserRepository extends BaseRepository
         $user->name = $userDto->getName() ?? $user->name;
         $user->email = $userDto->getEmail() ?? $user->email;
         $user->status = $userDto->getStatus() ?? $user->status;
-        $user->user_type = $userDto->getUserType() ?? $user->user_type;
+        $user->user_type = $userDto->getUserType() ?? $user->userType;
         $user->remark = $userDto->getRemark() ?? $user->remark;
         // $user->password = $this->getPasswordHash($userDto->getPassword());
         $user->save();

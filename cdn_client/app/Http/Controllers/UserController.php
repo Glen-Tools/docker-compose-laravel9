@@ -43,9 +43,9 @@ class UserController extends Controller
      *      @OA\Schema(type="string",default="asc",enum = {"asc","desc"})),
      *  @OA\Parameter(parameter="sortColumn",in="query",name="sortColumn",description="排序欄位", explode=true,
      *      @OA\Schema(type="string",default="id",enum = {"id","name","email","status","userType","loginIp","loginTime","createdAt","updatedAt"})),
-     *  @OA\Response(response=200,description="OK"),
-     *  @OA\Response(response=401,description="Unauthorized"),
-     *  @OA\Response(response=404,description="Not Found")
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowUserList", example="ShowUserList")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      * @return OutputUserListDto
      */
@@ -66,10 +66,34 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *  tags={"User"},
+     *  path="/api/v1/user/{id}",
+     *  summary="使用者資料 (User Info)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowUserById", example="ShowUserById")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function show($id)
+    {
+        $data = $this->userService->getUserById($id);
+        return $this->responseService->responseJson($data);
+    }
+
+    /**
+     * @OA\Post(
+     *  tags={"User"},
+     *  path="/api/v1/user",
+     *  summary="新增使用者(User Create)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateUser")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function store(Request $request)
     {
@@ -82,7 +106,7 @@ class UserController extends Controller
             'email' => 'required|unique:users|max:100|email:rfc,dns',
             'password' => 'required|max:50',
             'status' => 'required|boolean',
-            'user_type' => ['required', Rule::in([1, 2])], //管理者=1,一般使用者=2
+            'userType' => ['required', Rule::in([1, 2])], //管理者=1,一般使用者=2
             'remark' => 'string|max:5000|nullable',
         ]);
 
@@ -91,7 +115,7 @@ class UserController extends Controller
             $data["email"],
             $data["password"],
             $data["status"],
-            $data["user_type"],
+            $data["userType"],
             $data["remark"] ?? "",
         );
 
@@ -99,24 +123,19 @@ class UserController extends Controller
         return $this->responseService->responseJson();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $data = $this->userService->getUserById($id);
-        return $this->responseService->responseJson($data);
-    }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *  tags={"User"},
+     *  path="/api/v1/user/{id}",
+     *  summary="修改使用者(User Update)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UpdateUser")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -128,7 +147,7 @@ class UserController extends Controller
             'name' => 'max:50',
             'email' => 'max:100|email:rfc,dns|unique:users,email,' . $id,
             'status' => 'boolean',
-            'user_type' => [Rule::in([1, 2])], //管理者=1,一般使用者=2
+            'userType' => [Rule::in([1, 2])], //管理者=1,一般使用者=2
             'remark' => 'string|max:5000|nullable',
         ]);
 
@@ -137,7 +156,7 @@ class UserController extends Controller
             $data["email"],
             "",
             $data["status"],
-            $data["user_type"],
+            $data["userType"],
             $data["remark"] ?? "",
         );
 
@@ -146,10 +165,16 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *  tags={"User"},
+     *  path="/api/v1/user/{id}",
+     *  summary="刪除使用者(User Delete)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function destroy($id)
     {
