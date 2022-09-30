@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
         //     //
         // });
 
-        $this->renderable(function (Exception $e, $request) {
+        $this->renderable(function (Throwable $e, $request) {
             return $this->handleException($request, $e);
         });
     }
@@ -64,7 +64,7 @@ class Handler extends ExceptionHandler
      * @param \Exception $exception
      * @return JsonResponse|null
      */
-    private function handleException($request, Exception $exception)
+    private function handleException($request, Throwable $exception)
     {
         //回傳 Response dto
         $outputResponseDto = new OutputResponseDto();
