@@ -37,8 +37,8 @@ class UserController extends Controller
      *  @OA\Parameter(parameter="pageCount",in="query",name="pageCount",description="總頁數",@OA\Schema(type="integer")),
      *  @OA\Parameter(parameter="count",in="query",name="count",description="總筆數",@OA\Schema(type="integer")),
      *  @OA\Parameter(parameter="limit",in="query",name="limit",description="每頁筆數",@OA\Schema(type="integer",default="10")),
-     *  @OA\Parameter(parameter="search",in="query",name="search[name]",description="搜尋條件",@OA\Schema(type="string",default=" ")),
-     *  @OA\Parameter(parameter="search",in="query",name="search[email]",description="搜尋條件",@OA\Schema(type="string",default=" ")),
+     *  @OA\Parameter(parameter="search",in="query",name="search[name]",description="搜尋條件",@OA\Schema(type="string")),
+     *  @OA\Parameter(parameter="search",in="query",name="search[email]",description="搜尋條件",@OA\Schema(type="string")),
      *  @OA\Parameter(parameter="sort",in="query",name="sort",description="排序", explode=true,
      *      @OA\Schema(type="string",default="asc",enum = {"asc","desc"})),
      *  @OA\Parameter(parameter="sortColumn",in="query",name="sortColumn",description="排序欄位", explode=true,
@@ -63,15 +63,6 @@ class UserController extends Controller
 
         $outputUserListDto = new OutputUserListDto($userList, $userPage);
         return $this->responseService->responseJson($outputUserListDto);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
     }
 
     /**
@@ -118,16 +109,6 @@ class UserController extends Controller
     {
         $data = $this->userService->getUserById($id);
         return $this->responseService->responseJson($data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
     }
 
     /**

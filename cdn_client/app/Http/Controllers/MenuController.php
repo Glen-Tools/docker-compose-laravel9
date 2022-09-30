@@ -49,15 +49,6 @@ class MenuController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -73,7 +64,7 @@ class MenuController extends Controller
             'name' => 'required|unique:menus|max:100',
             'key' => 'required|unique:menus|max:150',
             'url' => 'required|max:500',
-            'feature' => ['required','max:10',Rule::in(['T', 'P','F'])],
+            'feature' => ['required', 'max:10', Rule::in(['T', 'P', 'F'])],
             'status' => 'required|boolean',
             'parent' => 'integer|nullable',
             'weight' => 'integer|nullable',
@@ -108,17 +99,6 @@ class MenuController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Menu  $menu
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -135,7 +115,7 @@ class MenuController extends Controller
             'name' => 'max:100|unique:menus,name,' . $id,
             'key' => 'max:150|unique:menus,key,' . $id,
             'url' => 'max:500',
-            'feature' => ['max:10',Rule::in(['T', 'P','F'])],
+            'feature' => ['max:10', Rule::in(['T', 'P', 'F'])],
             'status' => 'boolean',
             'parent' => 'integer|nullable',
             'weight' => 'integer|nullable',
