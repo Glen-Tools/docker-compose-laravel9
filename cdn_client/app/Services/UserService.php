@@ -37,19 +37,18 @@ class UserService
     {
         $data = $this->userRepository->getUserById($id);
         $data->transform(function ($item) {
-            $item->userType = $item->user_type;
-            $item->loginIp = $item->login_ip;
-            $item->loginTime = $item->login_time;
-            $item->passwordUpdateTime = $item->password_update_time;
-            $item->createdAt = $item->created_at;
-            $item->updatedAt = $item->updated_at;
-            unset($item->user_type);
-            unset($item->login_ip);
-            unset($item->login_time);
-            unset($item->password_update_time);
-            unset($item->created_at);
-            unset($item->updated_at);
-            return $item;
+            $user = new stdClass();
+            $user->id = $item->id;
+            $user->name = $item->name;
+            $user->email = $item->email;
+            $user->status = $item->status;
+            $user->userType = $item->user_type;
+            $user->loginIp = $item->login_ip;
+            $user->passwordUpdateTime = $item->password_update_time;
+            $user->loginTime = $item->login_time;
+            $user->createdAt = $item->created_at;
+            $user->updatedAt = $item->updated_at;
+            return $user;
         });
         return $data;
     }
@@ -59,17 +58,17 @@ class UserService
         $data = $this->userRepository->getUserListByPage($pageManagement, ListType::ListData);
 
         $data->transform(function ($item) {
-            $item->userType = $item->user_type;
-            $item->loginIp = $item->login_ip;
-            $item->loginTime = $item->login_time;
-            $item->createdAt = $item->created_at;
-            $item->updatedAt = $item->updated_at;
-            unset($item->user_type);
-            unset($item->login_ip);
-            unset($item->login_time);
-            unset($item->created_at);
-            unset($item->updated_at);
-            return $item;
+            $user = new stdClass();
+            $user->id = $item->id;
+            $user->name = $item->name;
+            $user->email = $item->email;
+            $user->status = $item->status;
+            $user->userType = $item->user_type;
+            $user->loginIp = $item->login_ip;
+            $user->loginTime = $item->login_time;
+            $user->createdAt = $item->created_at;
+            $user->updatedAt = $item->updated_at;
+            return $user;
         });
 
         return  $data;
