@@ -8,6 +8,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Exception;
+use Psr\Log\LogLevel;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -18,7 +19,8 @@ class Handler extends ExceptionHandler
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
     protected $levels = [
-        //
+        ValidationException::class => LogLevel::INFO,
+        ParameterException::class => LogLevel::INFO,
     ];
 
     /**
@@ -49,13 +51,17 @@ class Handler extends ExceptionHandler
     public function register()
     {
         // $this->reportable(function (Throwable $e) {
-        //     //
+        // return $this->handleLog($e);
         // });
 
         $this->renderable(function (Throwable $e, $request) {
             return $this->handleException($request, $e);
         });
     }
+
+    // private function handleLog($request, Throwable $exception)
+    // {
+    // }
 
     /**
      * Handle response from exception.
