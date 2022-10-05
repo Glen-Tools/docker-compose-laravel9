@@ -3,6 +3,7 @@
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoginController;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -34,6 +35,13 @@ Route::post('/testjson', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
+    Route::post('/login', [LoginController::class, 'login']);
+
+
+    //todo group jwt驗證
+
+    //移除 create:/photos/create 頁面
+    //移除 edit:/photos/{photo}/edit 頁面
     Route::resource('user', UserController::class)->except(['create', 'edit']);
     Route::resource('role', RoleController::class)->except(['create', 'edit']);
     Route::resource('menu', MenuController::class)->except(['create', 'edit']);
@@ -42,11 +50,11 @@ Route::prefix('v1')->group(function () {
     //     // Matches The "/admin/users" URL
     // })->scopeBindings();
 
-    // group jwt驗證
+
     // Route::middleware()->group(function () {
-        // Route::get('/users', function () {
-        //     // Matches The "/admin/users" URL
-        // })->scopeBindings();;
+    // Route::get('/users', function () {
+    //     // Matches The "/admin/users" URL
+    // })->scopeBindings();;
     // });
 
 });

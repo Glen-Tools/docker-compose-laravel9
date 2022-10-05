@@ -112,14 +112,21 @@ class UserRepository extends BaseRepository
         $this->user->destroy($id);
     }
 
+    public function getUserByAccount(string $account)
+    {
+        //account = email
+        return $this->user->select("id", "name", "email", "user_type")->where("email", $account)->first();
+    }
+
+    public function validPassword(int $id, string $passowrd): bool
+    {
+        $user = $this->user->select("password")->where("id", $id)->first();
+        return Hash::check($passowrd, $user->password, $this::HASH_OPTION);
+    }
+
     private function getPasswordHash(string $passowrd)
     {
         return Hash::make($passowrd, $this::HASH_OPTION);
-    }
-
-    private function validPassword(string $passowrd, string $hashedPassword)
-    {
-        return Hash::check($passowrd, $hashedPassword, $this::HASH_OPTION);
     }
 
     public function testDbTooRawSql()
