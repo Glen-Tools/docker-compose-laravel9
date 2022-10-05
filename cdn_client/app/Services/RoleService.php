@@ -38,11 +38,16 @@ class RoleService
     {
         $data = $this->roleRepository->getRoleById($id);
         $data->transform(function ($item) {
-            $item->createdAt = $item->created_at;
-            $item->updatedAt = $item->updated_at;
-            unset($item->created_at);
-            unset($item->updated_at);
-            return $item;
+            $role = new stdClass();
+            $role->id = $item->id;
+            $role->name = $item->name;
+            $role->key = $item->key;
+            $role->status = $item->status;
+            $role->weight = $item->weight;
+            $role->remark = $item->remark;
+            $role->createdAt = $item->created_at;
+            $role->updatedAt = $item->updated_at;
+            return $role;
         });
         return $data;
     }
@@ -52,11 +57,15 @@ class RoleService
         $data = $this->roleRepository->getRoleListByPage($pageManagement, ListType::ListData);
 
         $data->transform(function ($item) {
-            $item->createdAt = $item->created_at;
-            $item->updatedAt = $item->updated_at;
-            unset($item->created_at);
-            unset($item->updated_at);
-            return $item;
+            $role = new stdClass();
+            $role->id = $item->id;
+            $role->name = $item->name;
+            $role->key = $item->key;
+            $role->status = $item->status;
+            $role->weight = $item->weight;
+            $role->createdAt = $item->created_at;
+            $role->updatedAt = $item->updated_at;
+            return $role;
         });
 
         return  $data;

@@ -28,9 +28,26 @@ class MenuController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *  tags={"Menu"},
+     *  path="/api/v1/menu",
+     *  summary="Menu清單 (Menu List)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="query",name="page",description="頁數",@OA\Schema(type="integer",default="1")),
+     *  @OA\Parameter(parameter="pageCount",in="query",name="pageCount",description="總頁數",@OA\Schema(type="integer")),
+     *  @OA\Parameter(parameter="count",in="query",name="count",description="總筆數",@OA\Schema(type="integer")),
+     *  @OA\Parameter(parameter="limit",in="query",name="limit",description="每頁筆數",@OA\Schema(type="integer",default="10")),
+     *  @OA\Parameter(parameter="search",in="query",name="search[name]",description="搜尋條件",@OA\Schema(type="string")),
+     *  @OA\Parameter(parameter="search",in="query",name="search[url]",description="搜尋條件",@OA\Schema(type="string")),
+     *  @OA\Parameter(parameter="sort",in="query",name="sort",description="排序", explode=true,
+     *      @OA\Schema(type="string",enum = \App\Enums\ListOrderByType::class)),
+     *  @OA\Parameter(parameter="sortColumn",in="query",name="sortColumn",description="排序欄位", explode=true,
+     *      @OA\Schema(type="string",enum = {"id","name","url","feature","status","parent","weight","createdAt","updatedAt"})),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowMenuList", example="ShowMenuList")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     * @return OutputMenuListDto
      */
     public function index(Request $request)
     {
@@ -49,10 +66,16 @@ class MenuController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *  tags={"Menu"},
+     *  path="/api/v1/menu/{id}",
+     *  summary="Menu資料 (Menu Info)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowMenuById", example="ShowMenuById")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function store(Request $request)
     {
@@ -87,10 +110,16 @@ class MenuController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Menu  $menu
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *  tags={"Menu"},
+     *  path="/api/v1/menu",
+     *  summary="新增Menu(Menu Create)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateMenu")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function show($id)
     {
@@ -99,11 +128,17 @@ class MenuController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Menu  $menu
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *  tags={"Menu"},
+     *  path="/api/v1/menu/{id}",
+     *  summary="修改Menu(Menu Update)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UpdateMenu")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -138,10 +173,16 @@ class MenuController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Menu  $menu
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *  tags={"Menu"},
+     *  path="/api/v1/menu/{id}",
+     *  summary="刪除Menu(Menu Delete)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function destroy($id)
     {
