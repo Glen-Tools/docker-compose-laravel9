@@ -37,11 +37,19 @@ class MenuService
     {
         $data = $this->menuRepository->getMenuById($id);
         $data->transform(function ($item) {
-            $item->createdAt = $item->created_at;
-            $item->updatedAt = $item->updated_at;
-            unset($item->created_at);
-            unset($item->updated_at);
-            return $item;
+            $menu = new stdClass();
+            $menu->id = $item->id;
+            $menu->name = $item->name;
+            $menu->key = $item->key;
+            $menu->url = $item->url;
+            $menu->feature = $item->feature;
+            $menu->status = $item->status;
+            $menu->parent = $item->parent;
+            $menu->weight = $item->weight;
+            $menu->remark = $item->remark;
+            $menu->createdAt = $item->created_at;
+            $menu->updatedAt = $item->updated_at;
+            return $menu;
         });
         return $data;
     }
@@ -51,11 +59,18 @@ class MenuService
         $data = $this->menuRepository->getMenuListByPage($pageManagement, ListType::ListData);
 
         $data->transform(function ($item) {
-            $item->createdAt = $item->created_at;
-            $item->updatedAt = $item->updated_at;
-            unset($item->created_at);
-            unset($item->updated_at);
-            return $item;
+            $menu = new stdClass();
+            $menu->id = $item->id;
+            $menu->name = $item->name;
+            $menu->key = $item->key;
+            $menu->url = $item->url;
+            $menu->feature = $item->feature;
+            $menu->status = $item->status;
+            $menu->parent = $item->parent;
+            $menu->weight = $item->weight;
+            $menu->createdAt = $item->created_at;
+            $menu->updatedAt = $item->updated_at;
+            return $menu;
         });
 
         return  $data;

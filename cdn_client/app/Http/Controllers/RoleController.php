@@ -26,9 +26,26 @@ class RoleController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *  tags={"Role"},
+     *  path="/api/v1/role",
+     *  summary="角色清單 (Role List)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="query",name="page",description="頁數",@OA\Schema(type="integer",default="1")),
+     *  @OA\Parameter(parameter="pageCount",in="query",name="pageCount",description="總頁數",@OA\Schema(type="integer")),
+     *  @OA\Parameter(parameter="count",in="query",name="count",description="總筆數",@OA\Schema(type="integer")),
+     *  @OA\Parameter(parameter="limit",in="query",name="limit",description="每頁筆數",@OA\Schema(type="integer",default="10")),
+     *  @OA\Parameter(parameter="search",in="query",name="search[name]",description="搜尋條件",@OA\Schema(type="string")),
+     *  @OA\Parameter(parameter="search",in="query",name="search[url]",description="搜尋條件",@OA\Schema(type="string")),
+     *  @OA\Parameter(parameter="sort",in="query",name="sort",description="排序", explode=true,
+     *      @OA\Schema(type="string",enum = \App\Enums\ListOrderByType::class)),
+     *  @OA\Parameter(parameter="sortColumn",in="query",name="sortColumn",description="排序欄位", explode=true,
+     *      @OA\Schema(type="string",enum = {"id","name","status","weight","createdAt","updatedAt"})),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowRoleList", example="ShowRoleList")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     * @return OutputRoleListDto
      */
     public function index(Request $request)
     {
@@ -47,10 +64,16 @@ class RoleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *  tags={"Role"},
+     *  path="/api/v1/role/{id}",
+     *  summary="角色資料 (Role Info)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowRoleById", example="ShowRoleById")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function store(Request $request)
     {
@@ -79,10 +102,16 @@ class RoleController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *  tags={"Role"},
+     *  path="/api/v1/role",
+     *  summary="新增角色(Role Create)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateRole")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function show($id)
     {
@@ -91,11 +120,17 @@ class RoleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *  tags={"Role"},
+     *  path="/api/v1/role/{id}",
+     *  summary="修改角色(Role Update)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UpdateRole")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -124,10 +159,16 @@ class RoleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *  tags={"Role"},
+     *  path="/api/v1/role/{id}",
+     *  summary="刪除使用者(Role Delete)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
      */
     public function destroy($id)
     {

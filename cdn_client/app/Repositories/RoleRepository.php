@@ -69,7 +69,7 @@ class RoleRepository extends BaseRepository
         $Search = $inPageManagement->getSearch();
 
         //搜尋項目
-        $roleOrm = $this->role->select("id", "name", "key", "status", "weight", "remark", "created_at", "updated_at");
+        $roleOrm = $this->role->select("id", "name", "key", "status", "weight", "created_at", "updated_at");
 
         //where 條件
         $roleTypeWhere = array("name" => "name", "key" => "key",  "status" => "status");

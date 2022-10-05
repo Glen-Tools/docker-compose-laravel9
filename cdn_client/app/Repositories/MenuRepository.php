@@ -49,7 +49,6 @@ class MenuRepository extends BaseRepository
         $menu->weight = $menuDto->getWeight() ?? $menu->weight;
         $menu->remark = $menuDto->getRemark() ?? $menu->remark;
         $menu->save();
-
     }
 
     public function getMenuById(int $id)
@@ -78,14 +77,14 @@ class MenuRepository extends BaseRepository
         $Search = $inPageManagement->getSearch();
 
         //搜尋項目
-        $menuOrm = $this->menu->select("id", "name", "key", "url", "feature", "status", "parent", "weight", "remark", "created_at", "updated_at");
+        $menuOrm = $this->menu->select("id", "name", "key", "url", "feature", "status", "parent", "weight", "created_at", "updated_at");
 
         //where 條件
         $menuTypeWhere = array("name" => "name", "key" => "key", "url" => "url", "feature" => "feature", "status" => "status", "parent" => "parent");
         $menuOrm = (isset($Search["status"])) ? $menuOrm->where($menuTypeWhere["status"], $Search["status"]) : $menuOrm;
         $menuOrm = (isset($Search["name"])) ? $menuOrm->where($menuTypeWhere["name"], "like", $this->stringMixLike($Search["name"])) : $menuOrm;
-        $menuOrm = (isset($Search["key"])) ? $menuOrm->where($menuTypeWhere["key"], "like", $this->stringMixLike($Search["key"])) : $menuOrm;
         $menuOrm = (isset($Search["url"])) ? $menuOrm->where($menuTypeWhere["url"], "like", $this->stringMixLike($Search["url"])) : $menuOrm;
+        $menuOrm = (isset($Search["feature"])) ? $menuOrm->where($menuTypeWhere["feature"], "like", $this->stringMixLike($Search["feature"])) : $menuOrm;
 
         //判斷是否取總數
         $isGetListCount = $this->isGetListCount($type);
