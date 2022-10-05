@@ -101,7 +101,7 @@ class MenuController extends Controller
             $data["feature"],
             $data["status"],
             $data["parent"] ?? 0,
-            $data["weight"] ?? "",
+            $data["weight"] ?? null,
             $data["remark"] ?? "",
         );
 
@@ -164,7 +164,7 @@ class MenuController extends Controller
             $data["feature"],
             $data["status"],
             $data["parent"] ?? 0,
-            $data["weight"] ?? "",
+            $data["weight"] ?? null,
             $data["remark"] ?? "",
         );
 

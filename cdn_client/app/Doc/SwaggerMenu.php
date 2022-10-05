@@ -89,7 +89,7 @@ class SwaggerMenu
      *          description="name",
      *          type="string",
      *          format="string",
-     *          example="Gary"
+     *          example="修改密碼"
      *      ),
      *      @OA\Property(
      *          property="key",
@@ -103,7 +103,7 @@ class SwaggerMenu
      *          description="url",
      *          type="string",
      *          format="string",
-     *          example="aa.php"
+     *          example="passwd.php"
      *      ),
      *      @OA\Property(
      *          property="feature",
@@ -122,15 +122,19 @@ class SwaggerMenu
      *      @OA\Property(
      *          property="parent",
      *          description="parent",
-     *          type="string",
-     *          format="string",
+     *          minimum="0",
      *          example="0",
+     *      ),
+     *      @OA\Property(
+     *          property="weight",
+     *          description="weight",
+     *          type="string",
+     *          example="",
      *      ),
      *      @OA\Property(
      *          property="remark",
      *          description="remark",
      *          type="string",
-     *          format="string",
      *          example="管理者帳號",
      *      ),
      * )
@@ -145,7 +149,7 @@ class SwaggerMenu
      *          description="name",
      *          type="string",
      *          format="string",
-     *          example="Gary"
+     *          example="修改密碼"
      *      ),
      *      @OA\Property(
      *          property="key",
@@ -178,15 +182,19 @@ class SwaggerMenu
      *      @OA\Property(
      *          property="parent",
      *          description="parent",
-     *          type="string",
-     *          format="string",
+     *          minimum="0",
      *          example="0",
+     *      ),
+     *      @OA\Property(
+     *          property="weight",
+     *          description="weight",
+     *          type="string",
+     *          example="",
      *      ),
      *      @OA\Property(
      *          property="remark",
      *          description="remark",
      *          type="string",
-     *          format="string",
      *          example="管理者帳號",
      *      ),
      * )

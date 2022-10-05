@@ -12,13 +12,12 @@ class SwaggerRole
      *     "data":{
      *       {
      *       "id": 1,
-     *       "name": "ffttttt1",
-     *       "key": "gg2222223",
+     *       "name": "管理者",
+     *       "key": "!QAZ2wsx",
      *       "status": 1,
-     *       "weight": 1,
-     *       "remark": "",
-     *       "createdAt": "2022-09-29T08:58:00.000000Z",
-     *       "updatedAt": "2022-09-29T08:58:31.000000Z"
+     *       "weight": null,
+     *       "createdAt": "2022-10-05T09:24:37.000000Z",
+     *       "updatedAt": "2022-10-05T09:24:37.000000Z"
      *       }
      *     },
      *     "message": "",
@@ -38,21 +37,12 @@ class SwaggerRole
      *        "roleList": {
      *          {
      *              "id": 1,
-     *              "name": "ffttttt1",
-     *              "key": "gg2222223",
+     *              "name": "管理者",
+     *              "key": "!QAZ2wsx",
      *              "status": 1,
-     *              "weight": 1,
-     *              "createdAt": "2022-09-29T08:58:00.000000Z",
-     *              "updatedAt": "2022-09-29T08:58:31.000000Z"
-     *          },
-     *          {
-     *              "id": 2,
-     *              "name": "testbb",
-     *              "key": "1234567",
-     *              "status": 1,
-     *              "weight": 1,
-     *              "createdAt": "2022-09-30T09:43:55.000000Z",
-     *              "updatedAt": "2022-09-30T09:43:55.000000Z"
+     *              "weight": null,
+     *              "createdAt": "2022-10-05T09:24:37.000000Z",
+     *              "updatedAt": "2022-10-05T09:24:37.000000Z"
      *          }
      *        },
      *        "pageManagement": {
@@ -80,7 +70,7 @@ class SwaggerRole
      *          description="name",
      *          type="string",
      *          format="string",
-     *          example="Gary"
+     *          example="管理者"
      *      ),
      *      @OA\Property(
      *          property="key",
@@ -97,11 +87,16 @@ class SwaggerRole
      *          example="true",
      *      ),
      *      @OA\Property(
+     *          property="weight",
+     *          description="weight",
+     *          type="string",
+     *          example="",
+     *      ),
+     *      @OA\Property(
      *          property="remark",
      *          description="remark",
      *          type="string",
-     *          format="string",
-     *          example="管理者帳號",
+     *          example="",
      *      ),
      * )
      */
@@ -115,7 +110,7 @@ class SwaggerRole
      *          description="name",
      *          type="string",
      *          format="string",
-     *          example="Gary"
+     *          example="管理者"
      *      ),
      *      @OA\Property(
      *          property="key",
@@ -132,11 +127,16 @@ class SwaggerRole
      *          example="true",
      *      ),
      *      @OA\Property(
+     *          property="weight",
+     *          description="weight",
+     *          type="string",
+     *          example="",
+     *      ),
+     *      @OA\Property(
      *          property="remark",
      *          description="remark",
      *          type="string",
-     *          format="string",
-     *          example="管理者帳號",
+     *          example="",
      *      ),
      * )
      */
