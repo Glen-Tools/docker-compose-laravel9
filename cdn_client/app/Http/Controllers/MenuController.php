@@ -123,7 +123,6 @@ class MenuController extends BaseController
     public function show(Request $request, $id)
     {
         parent::show($request, $id);
-        $this->baseController->isnumberId($id);
         $data = $this->menuService->getMenuById($id);
         return $this->responseService->responseJson($data);
     }
