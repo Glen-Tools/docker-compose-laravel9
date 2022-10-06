@@ -9,6 +9,7 @@ use App\Enums\JwtType;
 use App\Exceptions\ParameterException;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class JwtService
 {
@@ -38,7 +39,7 @@ class JwtService
         if (str_contains($jwt, "bearer") || str_contains($jwt, "Bearer")) {
             $jwtToken = str_replace(["Bearer", "bearer", " "], "", $jwt);
         } else {
-            throw new ParameterException(trans('error.unauthorized'));
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
         }
         return $jwtToken;
     }
@@ -139,14 +140,14 @@ class JwtService
     {
         $validSign = $this->validJwtSign($jwt);
         if (!$validSign) {
-            throw new ParameterException(trans('error.unauthorized'));
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
         }
 
         $payload = $this->parseJwtPayload($jwt);
 
         $validPayload = $this->validJwtPayload($payload, JwtType::jwtRefreshToken);
         if (!$validPayload) {
-            throw new ParameterException(trans('error.unauthorized'));
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
         }
 
         $userInfoDto = $payload->getUserInfo();
@@ -157,7 +158,7 @@ class JwtService
     {
         $validSign = $this->validJwtSign($jwt);
         if (!$validSign) {
-            throw new ParameterException(trans('error.unauthorized'));
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
         }
 
         $payload = $this->parseJwtPayload($jwt);
@@ -165,7 +166,7 @@ class JwtService
 
         $validPayload = $this->validJwtPayload($payload, JwtType::jwtToken);
         if (!$validPayload) {
-            throw new ParameterException(trans('error.unauthorized'));
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
         }
 
         $request->merge([$this::REQUEST_USER_INFO => (array)$userInfoDto]);

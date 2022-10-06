@@ -6,6 +6,7 @@ use App\Exceptions\ParameterException;
 use App\Services\JwtService;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class JwtValid
 {
@@ -30,7 +31,7 @@ class JwtValid
         if (str_contains($jwt, "bearer") || str_contains($jwt, "Bearer")) {
             $jwtToken = str_replace(["Bearer", "bearer", " "], "", $jwt);
         } else {
-            throw new ParameterException(trans('error.unauthorized'));
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
         }
 
         $this->jwtService->setUserInfoToRequest($jwtToken, $request);

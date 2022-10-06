@@ -6,6 +6,7 @@ use App\Dto\InputLoginDto;
 use App\Dto\OutputUserInfoDto;
 use App\Exceptions\ParameterException;
 use App\Repositories\UserRepository;
+use Illuminate\Http\Response;
 
 class LoginService
 {
@@ -25,7 +26,7 @@ class LoginService
 
         $isLogin = $this->userRepository->validPassword($user->id, $inputLoginDto->getPassword());
         if (!$isLogin) {
-            throw new ParameterException(trans('error.password'));
+            throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
         }
 
         $outputUserInfoDto = new OutputUserInfoDto(
