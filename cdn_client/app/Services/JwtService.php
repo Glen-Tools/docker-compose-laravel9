@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dto\InputPayloadDto;
+use App\Dto\InputUserInfoDto;
 use App\Dto\OutputUserInfoDto;
 use App\Enums\JwtType;
 use App\Exceptions\ParameterException;
@@ -13,6 +14,7 @@ class JwtService
 {
 
     protected $utilService;
+    protected const REQUEST_USER_INFO = "userInfo";
     protected const JWT_ISS = "CDN";
     protected const JWT_EXP_ADD_TIME = 7200;
     protected const JWT_REF_EXP_ADD_TIME = 14400;
@@ -166,6 +168,19 @@ class JwtService
             throw new ParameterException(trans('error.unauthorized'));
         }
 
-        $request->merge((array)$userInfoDto);
+        $request->merge([$this::REQUEST_USER_INFO => (array)$userInfoDto]);
+    }
+
+    public function getUserInfoByRequest(Request $request): InputUserInfoDto
+    {
+        $data = $request->get($this::REQUEST_USER_INFO);
+        var_dump($data);
+        $userInfo = new InputUserInfoDto(
+            0,
+            "",
+            "",
+            "",
+        );
+        return  $userInfo;
     }
 }

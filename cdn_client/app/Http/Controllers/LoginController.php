@@ -97,4 +97,10 @@ class LoginController extends Controller
         $outputLoginDto = new OutputLoginDto($userInfo, $outputJwtDto);
         return $this->responseService->responseJson($outputLoginDto);
     }
+
+    public function test(Request $request)
+    {
+        $data = $this->jwtService->getUserInfoByRequest($request);
+        return $this->responseService->responseJson($data);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Dto\InputLogDto;
+use App\Services\JwtService;
 use App\Services\LogService;
 use Illuminate\Http\Request;
 
@@ -12,11 +13,16 @@ class BaseObserver
     protected $request;
     protected $logService;
     protected $tableName;
+    protected $userId;
 
-    public function __construct(Request $request, LogService $logService)
-    {
+    public function __construct(
+        Request $request,
+        LogService $logService,
+        JwtService $jwtService
+    ) {
         $this->request = $request;
         $this->logService = $logService;
+        $this->userId = $jwtService->getUserInfoByRequest($request);
     }
 
     /**
@@ -75,15 +81,13 @@ class BaseObserver
         $queryString = $this->request->getQueryString();
         $feature = "$uri?$queryString";
         $content = json_encode($this->request->all());
-        //todo userId 先給1,等jwt 做完則修改
-        $userId = 1;
 
         $inputLogDto = new InputLogDto(
             $feature,
             $operate,
             $this->tableName,
             $content,
-            $userId
+            $this->userId
         );
 
         $this->logService->create($inputLogDto);
