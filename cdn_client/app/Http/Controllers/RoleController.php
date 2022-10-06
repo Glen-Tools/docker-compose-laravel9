@@ -9,7 +9,7 @@ use App\Services\RoleService;
 use App\Services\UtilService;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class RoleController extends BaseController
 {
     private $roleService;
     private $utilService;
@@ -112,8 +112,9 @@ class RoleController extends Controller
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        parent::show($request, $id);
         $data = $this->roleService->getRoleById($id);
         return $this->responseService->responseJson($data);
     }
@@ -133,6 +134,8 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        parent::update($request, $id);
+
         //取得api data
         $data = $request->all();
 
@@ -169,8 +172,9 @@ class RoleController extends Controller
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        parent::destroy($request, $id);
         $this->roleService->deleteRoleById($id);
         return $this->responseService->responseJson();
     }

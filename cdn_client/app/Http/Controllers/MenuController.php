@@ -10,9 +10,8 @@ use App\Services\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class MenuController extends Controller
+class MenuController extends BaseController
 {
-
     private $menuService;
     private $utilService;
     private $responseService;
@@ -121,8 +120,10 @@ class MenuController extends Controller
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        parent::show($request, $id);
+        $this->baseController->isnumberId($id);
         $data = $this->menuService->getMenuById($id);
         return $this->responseService->responseJson($data);
     }
@@ -142,6 +143,8 @@ class MenuController extends Controller
      */
     public function update(Request $request, $id)
     {
+        parent::update($request, $id);
+
         //取得api data
         $data = $request->all();
 
@@ -184,8 +187,9 @@ class MenuController extends Controller
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        parent::destroy($request, $id);
         $this->menuService->deleteMenuById($id);
         return $this->responseService->responseJson();
     }

@@ -34,7 +34,7 @@ class RoleRepository extends BaseRepository
         $role = $this->role->find($id);
 
         if (empty($role)) {
-            throw new ParameterException(trans('error.role_not_found'));
+            throw new ParameterException(trans('error.data_not_found', ['title' => 'Menu']));
         }
 
         $role->name = $roleDto->getName() ?? $role->name;

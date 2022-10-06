@@ -10,7 +10,7 @@ use App\Services\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
 
     private $userService;
@@ -77,8 +77,9 @@ class UserController extends Controller
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        parent::update($request, $id);
         $data = $this->userService->getUserById($id);
         return $this->responseService->responseJson($data);
     }
@@ -139,6 +140,8 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        parent::update($request, $id);
+
         //取得api data
         $data = $request->all();
 
@@ -176,8 +179,9 @@ class UserController extends Controller
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        parent::destroy($request, $id);
         $this->userService->deleteUserById($id);
         return $this->responseService->responseJson();
     }

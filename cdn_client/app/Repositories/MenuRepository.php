@@ -37,7 +37,7 @@ class MenuRepository extends BaseRepository
         $menu = $this->menu->find($id);
 
         if (empty($menu)) {
-            throw new ParameterException(trans('error.menu_not_found'));
+            throw new ParameterException(trans('error.data_not_found', ['title' => 'Menu']));
         }
 
         $menu->name = $menuDto->getName() ?? $menu->name;
