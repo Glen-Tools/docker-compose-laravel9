@@ -31,7 +31,7 @@ class JwtValid
         if (str_contains($jwt, "bearer") || str_contains($jwt, "Bearer")) {
             $jwtToken = str_replace(["Bearer", "bearer", " "], "", $jwt);
         } else {
-            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_UNAUTHORIZED);
         }
 
         $this->jwtService->setUserInfoToRequest($jwtToken, $request);

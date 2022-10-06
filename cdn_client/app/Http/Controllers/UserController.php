@@ -148,7 +148,7 @@ class UserController extends BaseController
         //驗證
         $this->utilService->ColumnValidator($data, [
             'name' => 'max:50',
-            'email' => 'max:100|email:rfc,dns|unique:users,email,' . $id,
+            'email' => 'max:100|email:rfc,dns',
             'status' => 'boolean',
             'userType' => [Rule::in([1, 2])], //管理者=1,一般使用者=2
             'remark' => 'string|max:5000|nullable',

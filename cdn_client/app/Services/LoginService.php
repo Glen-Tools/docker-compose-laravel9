@@ -26,7 +26,7 @@ class LoginService
 
         $isLogin = $this->userRepository->validPassword($user->id, $inputLoginDto->getPassword());
         if (!$isLogin) {
-            throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
+            throw new ParameterException(trans('error.password'), Response::HTTP_UNAUTHORIZED);
         }
 
         $outputUserInfoDto = new OutputUserInfoDto(
