@@ -174,13 +174,12 @@ class JwtService
 
     public function getUserInfoByRequest(Request $request): InputUserInfoDto
     {
-        $data = $request->get($this::REQUEST_USER_INFO);
-        var_dump($data);
+        $data = (object)$request->get($this::REQUEST_USER_INFO);
         $userInfo = new InputUserInfoDto(
-            0,
-            "",
-            "",
-            "",
+            $data->id,
+            $data->name,
+            $data->email,
+            $data->userType,
         );
         return  $userInfo;
     }

@@ -13,7 +13,7 @@ class BaseObserver
     protected $request;
     protected $logService;
     protected $tableName;
-    protected $userId;
+    protected $userInfo;
 
     public function __construct(
         Request $request,
@@ -22,7 +22,7 @@ class BaseObserver
     ) {
         $this->request = $request;
         $this->logService = $logService;
-        $this->userId = $jwtService->getUserInfoByRequest($request);
+        $this->userInfo = $jwtService->getUserInfoByRequest($request);
     }
 
     /**
@@ -87,7 +87,7 @@ class BaseObserver
             $operate,
             $this->tableName,
             $content,
-            $this->userId
+            $this->userInfo->getId()
         );
 
         $this->logService->create($inputLogDto);
