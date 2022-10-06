@@ -39,7 +39,7 @@ class JwtService
         if (str_contains($jwt, "bearer") || str_contains($jwt, "Bearer")) {
             $jwtToken = str_replace(["Bearer", "bearer", " "], "", $jwt);
         } else {
-            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_UNAUTHORIZED);
         }
         return $jwtToken;
     }
@@ -140,14 +140,14 @@ class JwtService
     {
         $validSign = $this->validJwtSign($jwt);
         if (!$validSign) {
-            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_UNAUTHORIZED);
         }
 
         $payload = $this->parseJwtPayload($jwt);
 
         $validPayload = $this->validJwtPayload($payload, JwtType::jwtRefreshToken);
         if (!$validPayload) {
-            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_UNAUTHORIZED);
         }
 
         $userInfoDto = $payload->getUserInfo();
@@ -158,7 +158,7 @@ class JwtService
     {
         $validSign = $this->validJwtSign($jwt);
         if (!$validSign) {
-            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_UNAUTHORIZED);
         }
 
         $payload = $this->parseJwtPayload($jwt);
@@ -166,7 +166,7 @@ class JwtService
 
         $validPayload = $this->validJwtPayload($payload, JwtType::jwtToken);
         if (!$validPayload) {
-            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_BAD_REQUEST);
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_UNAUTHORIZED);
         }
 
         $request->merge([$this::REQUEST_USER_INFO => (array)$userInfoDto]);
