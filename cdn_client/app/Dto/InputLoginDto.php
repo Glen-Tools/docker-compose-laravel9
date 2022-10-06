@@ -7,13 +7,15 @@ class InputLoginDto
     protected $account;
     protected $password;
     protected $captcha;
+    protected $captchaId;
 
 
-    public function __construct($account, $password, $captcha)
+    public function __construct($account, $password, $captcha = "", $captchaId = "")
     {
         $this->account = $account;
         $this->password = $password;
         $this->captcha = $captcha;
+        $this->captchaId = $captchaId;
     }
 
     /**

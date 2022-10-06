@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Dto\InputLoginDto;
+use App\Dto\OutputJwtDto;
+use App\Dto\OutputLoginDto;
+use App\Enums\JwtType;
+use App\Services\JwtService;
 use App\Services\LoginService;
 use App\Services\ResponseService;
 use App\Services\UtilService;
@@ -14,15 +18,18 @@ class LoginController extends Controller
     private $utilService;
     private $loginService;
     private $responseService;
+    protected $jwtService;
 
     public function __construct(
         UtilService $utilService,
         LoginService $loginService,
-        ResponseService $responseService
+        ResponseService $responseService,
+        JwtService $jwtService
     ) {
         $this->utilService = $utilService;
         $this->loginService = $loginService;
         $this->responseService = $responseService;
+        $this->jwtService = $jwtService;
     }
 
     /**
@@ -46,21 +53,48 @@ class LoginController extends Controller
         $this->utilService->ColumnValidator($data, [
             'account' => 'required|max:100|email:rfc,dns',
             'password' => 'required|max:50',
-            'captcha' => 'max:50'
-            // 'captcha' => 'required|max:50'
+            'captcha' => 'max:50',
+            'captchaId' => 'max:50'
         ]);
 
         $inputLoginDto = new InputLoginDto(
             $data["account"],
             $data["password"],
             $data["captcha"] ?? "",
+            $data["captchaId"] ?? "",
         );
 
-        $outputLoginDto = $this->loginService->login($inputLoginDto);
+        $outputUserInfoDto = $this->loginService->login($inputLoginDto);
 
-        // //jwk token
-        // $User
+        $jwtToken = $this->jwtService->genJwtToken($outputUserInfoDto, JwtType::jwtToken);
+        $refreshToken = $this->jwtService->genJwtToken($outputUserInfoDto, JwtType::jwtRefreshToken);
+        //todo 有時間在做 驗證 captcha
 
+        $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
+        $outputLoginDto = new OutputLoginDto($outputUserInfoDto, $outputJwtDto);
+
+        return $this->responseService->responseJson($outputLoginDto);
+    }
+
+    public function refreshJwtToken(Request $request)
+    {
+        //取得api data
+        $data = $request->all();
+
+        //驗證
+        $this->utilService->ColumnValidator($data, [
+            'refreshtoken' => 'required|max:800'
+        ]);
+
+        $data = (is_array($data)) ? (object)$data : $data;
+
+        // $jwtToken = $this->jwtService->getJwtToken($data->refreshtoken);
+        $userInfo = $this->jwtService->getUserInfoByRefreshJwtToken($data->refreshtoken);
+
+        $jwtToken = $this->jwtService->genJwtToken($userInfo, JwtType::jwtToken);
+        $refreshToken = $this->jwtService->genJwtToken($userInfo, JwtType::jwtRefreshToken);
+        $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
+        $outputLoginDto = new OutputLoginDto($userInfo, $outputJwtDto);
         return $this->responseService->responseJson($outputLoginDto);
     }
 }

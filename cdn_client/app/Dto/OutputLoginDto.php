@@ -5,8 +5,7 @@ namespace App\Dto;
 class OutputLoginDto
 {
     public $user;
-    public $jwt;
-    public $refreshJwt;
+    public $authorisation;
 
     public function __construct($user, OutputJwtDto $authorisation)
     {

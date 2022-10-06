@@ -3,10 +3,9 @@
 namespace App\Services;
 
 use App\Dto\InputLoginDto;
-use App\Dto\OutputLoginDto;
+use App\Dto\OutputUserInfoDto;
 use App\Exceptions\ParameterException;
 use App\Repositories\UserRepository;
-use stdClass;
 
 class LoginService
 {
@@ -29,14 +28,13 @@ class LoginService
             throw new ParameterException(trans('error.password'));
         }
 
-        //todo 驗證 captcha
+        $outputUserInfoDto = new OutputUserInfoDto(
+            $user->id,
+            $user->name,
+            $user->email,
+            $user->user_type,
+        );
 
-        return $user;
-        // $outputLoginDto = new OutputLoginDto($user);
-        // return $outputLoginDto;
-    }
-
-    public function getJwtToken()
-    {
+        return $outputUserInfoDto;
     }
 }

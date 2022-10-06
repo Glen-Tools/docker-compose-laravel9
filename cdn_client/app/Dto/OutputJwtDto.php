@@ -8,7 +8,7 @@ class OutputJwtDto
     public $accessToken;
     public $refreshToken;
 
-    public function __construct(string $tokenType = "Bearer", string $accessToken, string $refreshToken)
+    public function __construct(string $accessToken, string $refreshToken, string $tokenType = "bearer")
     {
         $this->tokenType = $tokenType;
         $this->accessToken = $accessToken;
