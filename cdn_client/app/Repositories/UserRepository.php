@@ -7,6 +7,7 @@ use App\Dto\InputUserDto;
 use App\Enums\ListType;
 use App\Exceptions\ParameterException;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -37,7 +38,7 @@ class UserRepository extends BaseRepository
         $user = $this->user->find($id);
 
         if (empty($user)) {
-            throw new ParameterException(trans('error.user_not_found'));
+            throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
         }
 
         $user->name = $userDto->getName() ?? $user->name;

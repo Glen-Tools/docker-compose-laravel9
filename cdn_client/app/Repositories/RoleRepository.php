@@ -7,6 +7,7 @@ use App\Dto\InputRoleDto;
 use App\Enums\ListType;
 use App\Exceptions\ParameterException;
 use App\Models\Role;
+use Illuminate\Http\Response;
 
 class RoleRepository extends BaseRepository
 {
@@ -34,7 +35,7 @@ class RoleRepository extends BaseRepository
         $role = $this->role->find($id);
 
         if (empty($role)) {
-            throw new ParameterException(trans('error.data_not_found', ['title' => 'Menu']));
+            throw new ParameterException(trans('error.data_not_found', ['title' => 'Menu']), Response::HTTP_BAD_REQUEST);
         }
 
         $role->name = $roleDto->getName() ?? $role->name;

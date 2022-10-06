@@ -85,7 +85,7 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof ParameterException) { //自訂錯誤
             $outputResponseDto->message = $exception->errors();
-            return response()->json($outputResponseDto,  Response::HTTP_BAD_REQUEST);
+            return response()->json($outputResponseDto,  $exception->code);
         }
 
         if ($exception instanceof NotFoundHttpException) { //404

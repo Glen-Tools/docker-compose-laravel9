@@ -7,6 +7,7 @@ use App\Dto\InputMenuDto;
 use App\Enums\ListType;
 use App\Exceptions\ParameterException;
 use App\Models\Menu;
+use Illuminate\Http\Response;
 
 class MenuRepository extends BaseRepository
 {
@@ -37,7 +38,7 @@ class MenuRepository extends BaseRepository
         $menu = $this->menu->find($id);
 
         if (empty($menu)) {
-            throw new ParameterException(trans('error.data_not_found', ['title' => 'Menu']));
+            throw new ParameterException(trans('error.data_not_found', ['title' => 'Menu']), Response::HTTP_BAD_REQUEST);
         }
 
         $menu->name = $menuDto->getName() ?? $menu->name;
