@@ -69,4 +69,46 @@ class UtilService
             throw new ValidationException($validator);
         }
     }
+
+    /**
+     * 判斷是否為 json 字串
+     *
+     * @since 1.03.22
+     *
+     * @link https://vector.cool/php-is-json/
+     *
+     * @param string|null $string = ""
+     * @return bool
+     */
+    function isJson(?string $json_string = ""): bool
+    {
+        return is_string($json_string) &&
+            is_array(json_decode($json_string, true)) &&
+            (json_last_error() == JSON_ERROR_NONE) ? true : false;
+    }
+
+
+    /**
+     * arrayAppendToKeyValueArray
+     * 合併兩個array (key,value)
+     * @param  mixed $ray1
+     * @param  mixed $ray2
+     * @return void
+     */
+    function arrayAppendToKeyValueArray($ray1, $ray2)
+    {
+        $keys = array_merge(array_keys($ray1), array_keys($ray2));
+        $vals = array_merge($ray1, $ray2);
+        return array_combine($keys, $vals);
+    }
+
+    function base64url_encode($data)
+    {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    }
+
+    function base64url_decode($data)
+    {
+        return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+    }
 }
