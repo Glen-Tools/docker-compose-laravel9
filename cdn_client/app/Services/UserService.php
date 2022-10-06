@@ -5,9 +5,10 @@ namespace App\Services;
 use App\Dto\InputPageDto;
 use App\Dto\InputUserDto;
 use App\Dto\OutputPageDto;
-use App\Dto\OutputUserListDto;
 use App\Enums\ListType;
+use App\Exceptions\ParameterException;
 use App\Repositories\UserRepository;
+use Illuminate\Http\Response;
 use stdClass;
 
 class UserService
@@ -30,6 +31,10 @@ class UserService
 
     public function updateUser(InputUserDto $userDto, int $id)
     {
+        $user = $this->userRepository->getUserByAccount($userDto->getEmail());
+        if (isset($user) && $user->id != $id) {
+            throw new ParameterException(trans('error.create_login_name_duplicate'), Response::HTTP_BAD_REQUEST);
+        }
         $this->userRepository->updateUser($userDto, $id);
     }
 
