@@ -22,7 +22,7 @@ return new class extends Migration
                     'id' => 1,
                     'name' => 'admin',
                     'email' => 'admin@gmail.com',
-                    'password' => '$2y$12$SRrP6I/AC4maB7dRGVa4SuSxuE4WUFozxuFbHJf68lDBmAVzjMpl2',
+                    'password' => '$2y$12$SRrP6I/AC4maB7dRGVa4SuSxuE4WUFozxuFbHJf68lDBmAVzjMpl2', //admin123
                     'status' => 1,      //狀態(開,關)
                     'user_type' => 1    //管理者=1,一般使用者=2]
                 ],
@@ -30,7 +30,7 @@ return new class extends Migration
                     'id' => 2,
                     'name' => 'user',
                     'email' => 'user@gmail.com',
-                    'password' => '$2y$12$6f6HMmYcqpmGA/fmrBKjNe05mC0mWd5uZT.WOYA1aulxM7ZmS6hzC',
+                    'password' => '$2y$12$6f6HMmYcqpmGA/fmrBKjNe05mC0mWd5uZT.WOYA1aulxM7ZmS6hzC', //user
                     'status' => 1,      //狀態(開,關)
                     'user_type' => 2    //管理者=1,一般使用者=2]
                 ]
