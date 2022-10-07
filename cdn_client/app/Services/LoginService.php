@@ -22,7 +22,7 @@ class LoginService
         $outputUserInfoDto = $this->getUserInfoByLogin($inputLoginDto->getAccount());
         $isLogin = $this->userRepository->validPassword($outputUserInfoDto->id, $inputLoginDto->getPassword());
         if (!$isLogin) {
-            throw new ParameterException(trans('error.password'), Response::HTTP_UNAUTHORIZED);
+            throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
         }
 
         return $outputUserInfoDto;
@@ -32,7 +32,7 @@ class LoginService
     {
         $user = $this->userRepository->getUserByAccount($account);
         if (empty($user)) {
-            throw new ParameterException(trans('error.user_not_found'));
+            throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
         }
 
         $outputUserInfoDto = new OutputUserInfoDto(
