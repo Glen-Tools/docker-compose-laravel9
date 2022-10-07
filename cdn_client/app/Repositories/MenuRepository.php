@@ -11,7 +11,7 @@ use Illuminate\Http\Response;
 
 class MenuRepository extends BaseRepository
 {
-    protected $menu;
+    protected Menu $menu;
 
     const HASH_OPTION = ['rounds' => 12];
 

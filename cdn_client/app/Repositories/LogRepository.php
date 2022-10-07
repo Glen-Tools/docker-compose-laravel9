@@ -8,21 +8,20 @@ use App\Dto\InputLogDto;
 
 class LogRepository extends Model
 {
-    protected $Log;
+    protected CdnLog $log;
 
-    public function __construct()
+    public function __construct(CdnLog $log)
     {
-        $this->Log = new CdnLog();
+        $this->log = $log;
     }
 
     public function create(InputLogDto $inputLogDto)
     {
-        $log = new CdnLog();
-        $log->feature = $inputLogDto->getFeature();
-        $log->operate = $inputLogDto->getOperate();
-        $log->table = $inputLogDto->getTable();
-        $log->content = $inputLogDto->getContent();
-        $log->user_id = $inputLogDto->getUserId();
-        $log->save();
+        $this->log->feature = $inputLogDto->getFeature();
+        $this->log->operate = $inputLogDto->getOperate();
+        $this->log->table = $inputLogDto->getTable();
+        $this->log->content = $inputLogDto->getContent();
+        $this->log->user_id = $inputLogDto->getUserId();
+        $this->log->save();
     }
 }

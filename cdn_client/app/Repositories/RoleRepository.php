@@ -11,7 +11,7 @@ use Illuminate\Http\Response;
 
 class RoleRepository extends BaseRepository
 {
-    protected $role;
+    protected Role $role;
 
     const HASH_OPTION = ['rounds' => 12];
 

@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends BaseRepository
 {
-    protected $user;
-
+    protected User $user;
     const HASH_OPTION = ['rounds' => 12];
 
     public function __construct(User $user)
