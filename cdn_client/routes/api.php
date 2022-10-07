@@ -38,7 +38,7 @@ Route::post('/testjson', function (Request $request) {
 Route::prefix('v1')->group(function () {
 
     Route::post('/login', [LoginController::class, 'login']);
-
+    Route::get('/jwt', [LoginController::class, 'refreshJwtToken']);
 
     //jwt 登入驗證
     Route::middleware(JwtValid::class)->group(function () {
