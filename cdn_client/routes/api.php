@@ -43,11 +43,9 @@ Route::prefix('v1')->group(function () {
     //todo group jwt驗證
 
     Route::middleware(JwtValid::class)->group(function () {
-        //移除 create:/photos/create 頁面
-        //移除 edit:/photos/{photo}/edit 頁面
-        Route::resource('user', UserController::class)->except(['create', 'edit']);
-        Route::resource('role', RoleController::class)->except(['create', 'edit']);
-        Route::resource('menu', MenuController::class)->except(['create', 'edit']);
+        Route::apiResource('user', UserController::class);
+        Route::apiResource('role', RoleController::class);
+        Route::apiResource('menu', MenuController::class);
     });
     // Route::get('/users', function () {
     //     // Matches The "/admin/users" URL
