@@ -4,6 +4,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Middleware\AuthorizationValid;
 use App\Http\Middleware\JwtValid;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
@@ -39,23 +40,15 @@ Route::prefix('v1')->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
     Route::get('/jwt', [LoginController::class, 'refreshJwtToken']);
 
-
-    //todo group jwt驗證
-
+    //jwt 登入驗證
     Route::middleware(JwtValid::class)->group(function () {
+    });
+
+    //jwt 登入與頁面權限驗證
+    Route::middleware([JwtValid::class, AuthorizationValid::class])->group(function () {
+
         Route::apiResource('user', UserController::class);
         Route::apiResource('role', RoleController::class);
         Route::apiResource('menu', MenuController::class);
     });
-    // Route::get('/users', function () {
-    //     // Matches The "/admin/users" URL
-    // })->scopeBindings();
-
-
-    // Route::middleware()->group(function () {
-    // Route::get('/users', function () {
-    //     // Matches The "/admin/users" URL
-    // })->scopeBindings();;
-    // });
-
 });
