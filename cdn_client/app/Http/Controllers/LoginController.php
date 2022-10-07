@@ -39,12 +39,12 @@ class LoginController extends Controller
 
     /**
      * @OA\Post(
-     *  tags={"User"},
-     *  path="/api/v1/user",
-     *  summary="新增使用者(User Create)",
+     *  tags={"Login"},
+     *  path="/api/v1/login",
+     *  summary="使用者登入(User Login)",
      *  security={{"Authorization":{}}},
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UserLogin")),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
-     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateUser")),
      *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
@@ -81,6 +81,18 @@ class LoginController extends Controller
         return $this->responseService->responseJson($outputLoginDto);
     }
 
+    /**
+     * @OA\Get(
+     *  tags={"Jwt"},
+     *  path="/api/v1/jwt",
+     *  summary="更新JwtToken (RefreshJwtToken)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="query",name="refreshtoken",required=true,description="refreshtoken",@OA\Schema(type="string")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/RefreshJwtToken", example="RefreshJwtToken")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
     public function refreshJwtToken(Request $request)
     {
         //取得api data
@@ -104,5 +116,22 @@ class LoginController extends Controller
         $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
         $outputLoginDto = new OutputLoginDto($userInfo, $outputJwtDto);
         return $this->responseService->responseJson($outputLoginDto);
+    }
+
+    /**
+     * @OA\Get(
+     *  tags={"LoginOut"},
+     *  path="/api/v1/logout",
+     *  summary="使用者登出 (User Logout)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="query",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/LoginOut", example="LoginOut")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function logout(Request $request)
+    {
+
     }
 }

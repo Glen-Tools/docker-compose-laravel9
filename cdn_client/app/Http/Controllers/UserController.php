@@ -90,8 +90,8 @@ class UserController extends BaseController
      *  path="/api/v1/user",
      *  summary="新增使用者(User Create)",
      *  security={{"Authorization":{}}},
-     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
      *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateUser")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
      *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )

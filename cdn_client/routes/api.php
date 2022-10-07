@@ -38,7 +38,7 @@ Route::post('/testjson', function (Request $request) {
 Route::prefix('v1')->group(function () {
 
     Route::post('/login', [LoginController::class, 'login']);
-    Route::get('/jwt', [LoginController::class, 'refreshJwtToken']);
+
 
     //jwt 登入驗證
     Route::middleware(JwtValid::class)->group(function () {
@@ -50,5 +50,6 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('user', UserController::class);
         Route::apiResource('role', RoleController::class);
         Route::apiResource('menu', MenuController::class);
+        Route::get('/logout', [LoginController::class, 'logout']);
     });
 });

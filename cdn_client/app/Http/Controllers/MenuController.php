@@ -114,8 +114,8 @@ class MenuController extends BaseController
      *  path="/api/v1/menu",
      *  summary="新增Menu(Menu Create)",
      *  security={{"Authorization":{}}},
-     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
      *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateMenu")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
      *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )

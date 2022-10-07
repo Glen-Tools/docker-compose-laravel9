@@ -106,8 +106,8 @@ class RoleController extends BaseController
      *  path="/api/v1/role",
      *  summary="新增角色(Role Create)",
      *  security={{"Authorization":{}}},
-     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
      *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateRole")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
      *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
