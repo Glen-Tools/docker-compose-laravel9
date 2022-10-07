@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Dto\InputLoginDto;
 use App\Dto\OutputJwtDto;
 use App\Dto\OutputLoginDto;
+use App\Dto\OutputUserInfoDto;
 use App\Enums\JwtType;
 use App\Services\JwtService;
 use App\Services\LoginService;
 use App\Services\ResponseService;
+use App\Services\UserService;
 use App\Services\UtilService;
 use Illuminate\Http\Request;
 
@@ -19,17 +21,20 @@ class LoginController extends Controller
     private $loginService;
     private $responseService;
     protected $jwtService;
+    protected $userService;
 
     public function __construct(
         UtilService $utilService,
         LoginService $loginService,
         ResponseService $responseService,
-        JwtService $jwtService
+        JwtService $jwtService,
+        UserService $userService,
     ) {
         $this->utilService = $utilService;
         $this->loginService = $loginService;
         $this->responseService = $responseService;
         $this->jwtService = $jwtService;
+        $this->userService = $userService;
     }
 
     /**
@@ -89,7 +94,10 @@ class LoginController extends Controller
         $data = (is_array($data)) ? (object)$data : $data;
 
         // $jwtToken = $this->jwtService->getJwtToken($data->refreshtoken);
-        $userInfo = $this->jwtService->getUserInfoByRefreshJwtToken($data->refreshtoken);
+        $userInfoDto = $this->jwtService->getUserInfoByRefreshJwtToken($data->refreshtoken);
+
+        //user可能更新資訊，所以重取user 資料
+        $userInfo = $this->loginService->getUserInfoByLogin($userInfoDto->email);
 
         $jwtToken = $this->jwtService->genJwtToken($userInfo, JwtType::jwtToken);
         $refreshToken = $this->jwtService->genJwtToken($userInfo, JwtType::jwtRefreshToken);

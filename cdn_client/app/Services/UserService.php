@@ -8,6 +8,7 @@ use App\Dto\OutputPageDto;
 use App\Enums\ListType;
 use App\Exceptions\ParameterException;
 use App\Repositories\UserRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use stdClass;
 
@@ -38,7 +39,7 @@ class UserService
         $this->userRepository->updateUser($userDto, $id);
     }
 
-    public function getUserById(int $id)
+    public function getUserById(int $id): Collection
     {
         $data = $this->userRepository->getUserById($id);
         $data->transform(function ($item) {
@@ -58,7 +59,7 @@ class UserService
         return $data;
     }
 
-    public function getUserList(InputPageDto $pageManagement)
+    public function getUserList(InputPageDto $pageManagement): Collection
     {
         $data = $this->userRepository->getUserListByPage($pageManagement, ListType::ListData);
 

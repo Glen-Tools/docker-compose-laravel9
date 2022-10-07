@@ -151,6 +151,7 @@ class JwtService
         }
 
         $userInfoDto = $payload->getUserInfo();
+
         return  $userInfoDto;
     }
 

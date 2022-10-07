@@ -19,14 +19,20 @@ class LoginService
 
     public function login(InputLoginDto $inputLoginDto)
     {
-        $user = $this->userRepository->getUserByAccount($inputLoginDto->getAccount());
-        if (empty($user)) {
-            throw new ParameterException(trans('error.user_not_found'));
-        }
-
-        $isLogin = $this->userRepository->validPassword($user->id, $inputLoginDto->getPassword());
+        $outputUserInfoDto = $this->getUserInfoByLogin($inputLoginDto->getAccount());
+        $isLogin = $this->userRepository->validPassword($outputUserInfoDto->id, $inputLoginDto->getPassword());
         if (!$isLogin) {
             throw new ParameterException(trans('error.password'), Response::HTTP_UNAUTHORIZED);
+        }
+
+        return $outputUserInfoDto;
+    }
+
+    public function getUserInfoByLogin(string $account): OutputUserInfoDto
+    {
+        $user = $this->userRepository->getUserByAccount($account);
+        if (empty($user)) {
+            throw new ParameterException(trans('error.user_not_found'));
         }
 
         $outputUserInfoDto = new OutputUserInfoDto(
@@ -36,6 +42,6 @@ class LoginService
             $user->user_type,
         );
 
-        return $outputUserInfoDto;
+        return   $outputUserInfoDto;
     }
 }

@@ -7,7 +7,7 @@ class OutputLoginDto
     public $user;
     public $authorisation;
 
-    public function __construct($user, OutputJwtDto $authorisation)
+    public function __construct(OutputUserInfoDto $user, OutputJwtDto $authorisation)
     {
         $this->user = $user;
         $this->authorisation = $authorisation;
