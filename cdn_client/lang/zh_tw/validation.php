@@ -13,8 +13,8 @@ return [
     |
     */
 
-    'accepted' => '必須接受 :attribute',
-    'accepted_if' => '當 :other 是 :value 時必須接受 :attribute',
+    'accepted' => ':attribute 必須是"yes"、"on"、1或true',
+    'accepted_if' => '當 :other 是 :value 時， :attribute 必須是"yes"、"on"、1或true',
     'active_url' => ':attribute 並非一個有效的網址',
     'after' => ':attribute 必須要在 :date 之後的日期',
     'after_or_equal' => ':attribute 必須要在 :date 之後或一樣的日期',
@@ -105,11 +105,11 @@ return [
     'not_regex' => ':attribute 格式錯誤',
     'numeric' => ':attribute 必須是數字',
     'password' => [
-        'letters' => 'The :attribute must contain at least one letter.',
-        'mixed' => 'The :attribute must contain at least one uppercase and one lowercase letter.',
-        'numbers' => 'The :attribute must contain at least one number.',
-        'symbols' => 'The :attribute must contain at least one symbol.',
-        'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
+        'letters' => ':attribute 必須包含至少一個英文',
+        'mixed' => ':attribute 必須至少包含一個大寫和一個小寫英文',
+        'numbers' => ':attribute 必須包含至少一個數字',
+        'symbols' => ':attribute 必須包含至少一個符號',
+        'uncompromised' => '給定的 :attribute 出現在數據洩露中，請選擇不同的 :attribute',
     ],
     'present' => ':attribute 必須存在於輸入數據中，但可以為空',
     'prohibited' => ':attribute 必須為空或不存在',

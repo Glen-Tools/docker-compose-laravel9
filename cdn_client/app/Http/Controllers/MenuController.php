@@ -149,8 +149,8 @@ class MenuController extends BaseController
 
         //驗證
         $this->utilService->ColumnValidator($data, [
-            'name' => 'max:100|unique:menus,name,' . $id,
-            'key' => 'max:150|unique:menus,key,' . $id,
+            'name' => 'max:100|unique:menus,name,' . $id, //當id不存在,在debug模式會顯示name 已經存在
+            'key' => 'max:150|unique:menus,key,' . $id, //當id不存在,在debug模式會顯示key 已經存在
             'url' => 'max:500',
             'feature' => ['max:10', Rule::in(['T', 'P', 'F'])],
             'status' => 'boolean',

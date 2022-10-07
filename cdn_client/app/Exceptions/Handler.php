@@ -78,7 +78,7 @@ class Handler extends ExceptionHandler
         $outputResponseDto->success = false;
 
         if ($exception instanceof ValidationException) { //驗證錯誤 回參數錯誤
-            $msg = $this->getValidAndParameterExceptionError($exception);
+            $msg = $this->getValidExceptionError($exception);
             $outputResponseDto->message = trans('error.parameter', ["msg" => $msg]);
             return response()->json($outputResponseDto,  Response::HTTP_BAD_REQUEST);
         }
@@ -97,7 +97,7 @@ class Handler extends ExceptionHandler
         return response()->json($outputResponseDto, Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    private function getValidAndParameterExceptionError($exception): string
+    private function getValidExceptionError($exception): string
     {
         $msg = "";
         if (env("APP_DEBUG") == true) {
