@@ -28,7 +28,6 @@ services:
       - /bin/bash
       - -c
       - |
-        composer update
         composer install
         php artisan migrate
         php-fpm

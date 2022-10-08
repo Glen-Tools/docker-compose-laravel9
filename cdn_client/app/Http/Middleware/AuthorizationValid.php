@@ -8,7 +8,6 @@ use App\Services\JwtService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AuthorizationValid
@@ -16,7 +15,6 @@ class AuthorizationValid
 
     private $jwtService;
     private $authorizationService;
-    private $validMenuAuth;
 
     public function __construct(
         JwtService $jwtService,
@@ -36,7 +34,7 @@ class AuthorizationValid
     public function handle(Request $request, Closure $next)
     {
         $userInfo = $this->jwtService->getUserInfoByRequest($request);
-        $userMenu = $this->authorizationService->getUserMenu($userInfo->getId());
+        $userMenu = collect($this->authorizationService->getUserMenu($userInfo->getId()));
 
         $route = $request->route();
         $actionName = explode('\\', $route->getActionName());
@@ -45,13 +43,13 @@ class AuthorizationValid
             throw new NotFoundHttpException(trans('error.not_found'), null, Response::HTTP_NOT_FOUND);
         }
 
-        $controllerMethod = $actionName[count($actionName)];
-
+        $controllerMethod = $actionName[count($actionName) - 1];
+        $authRouteMenuComparison = $this->authorizationService->getAuthRouteMenuComparison();
         $validMenuAuth = false;
 
-        $userMenu->each(function ($item) {
-            if ($item->key == [$controllerMethod]) {
-                $this->validMenuAuth = true;
+        $userMenu->each(function ($item) use (&$validMenuAuth, $authRouteMenuComparison, $controllerMethod) {
+            if (isset($authRouteMenuComparison[$controllerMethod]) && $item->key == $authRouteMenuComparison[$controllerMethod]) {
+                $validMenuAuth = true;
                 return false;
             }
         });
