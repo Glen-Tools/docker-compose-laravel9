@@ -61,7 +61,7 @@ class AuthorizationService
 
         $userMenu = $this->userRepository->getUserMenu($id);
 
-        $this->cacheService->putByJson($cacheNameUserMenu, $userMenu, $this::CACHE_TIME);
+        $this->cacheService->putByJson($cacheNameUserMenu, $userMenu, env("CACHE_TIME", $this::CACHE_TIME));
         return $userMenu;
     }
 }
