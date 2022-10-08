@@ -7,6 +7,7 @@ use App\Dto\InputUserDto;
 use App\Enums\ListType;
 use App\Exceptions\ParameterException;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -128,6 +129,25 @@ class UserRepository extends BaseRepository
     {
         return Hash::make($passowrd, $this::HASH_OPTION);
     }
+
+    public function getUserMenu(int $id): Collection
+    {
+        return $this->user
+            ->join('role_user as ru', 'ru.user_id', '=', 'users.id')
+            ->join('roles as r', 'r.id', '=', 'ru.role_id')
+            ->join('role_menu as rm', 'rm.role_id', '=', 'r.id')
+            ->join('menus as m', 'm.id', '=', 'rm.menu_id')
+            ->where('users.id', $id)
+            ->where('users.status', 1)
+            ->where('r.status', 1)
+            ->where('m.status', 1)
+            ->orderBy("m.parent", "asc")
+            ->orderBy("m.weight", "desc")
+            ->orderBy("m.id", "asc")
+            ->select("m.id", "m.name", "m.key", "m.url", "m.feature", "m.status", "m.parent", "m.weight")
+            ->get();
+    }
+
 
     public function testDbTooRawSql()
     {
