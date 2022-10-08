@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Middleware\AuthorizationValid;
 use App\Http\Middleware\JwtValid;
+use App\Http\Middleware\LanguageChange;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,18 +22,25 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
-    Route::post('/login', [LoginController::class, 'login']);
-    Route::get('/jwt', [LoginController::class, 'refreshJwtToken']);
+    Route::middleware(LanguageChange::class)->group(function () {
 
-    //jwt 登入驗證
-    Route::middleware(JwtValid::class)->group(function () {
-    });
+        //test language
+        Route::get('/test', function () {
+        });
 
-    //jwt 登入與頁面權限驗證
-    Route::middleware([JwtValid::class, AuthorizationValid::class])->group(function () {
+        Route::post('/login', [LoginController::class, 'login']);
+        Route::get('/jwt', [LoginController::class, 'refreshJwtToken']);
 
-        Route::apiResource('user', UserController::class);
-        Route::apiResource('role', RoleController::class);
-        Route::apiResource('menu', MenuController::class);
+        //jwt 登入驗證
+        Route::middleware(JwtValid::class)->group(function () {
+        });
+
+        //jwt 登入與頁面權限驗證
+        Route::middleware([JwtValid::class, AuthorizationValid::class])->group(function () {
+
+            Route::apiResource('user', UserController::class);
+            Route::apiResource('role', RoleController::class);
+            Route::apiResource('menu', MenuController::class);
+        });
     });
 });
