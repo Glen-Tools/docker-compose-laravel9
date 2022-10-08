@@ -3,13 +3,29 @@
 namespace App\Http\Middleware;
 
 use App\Exceptions\ParameterException;
+use App\Services\AuthorizationService;
+use App\Services\JwtService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AuthorizationValid
 {
+
+    private $jwtService;
+    private $authorizationService;
+    private $validMenuAuth;
+
+    public function __construct(
+        JwtService $jwtService,
+        AuthorizationService $authorizationService
+    ) {
+        $this->jwtService = $jwtService;
+        $this->authorizationService = $authorizationService;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -19,20 +35,30 @@ class AuthorizationValid
      */
     public function handle(Request $request, Closure $next)
     {
-        // todo write service
+        $userInfo = $this->jwtService->getUserInfoByRequest($request);
+        $userMenu = $this->authorizationService->getUserMenu($userInfo->getId());
 
-        //todo get auth page collection in cache
         $route = $request->route();
-        // var_dump("getControllerClass()", $route->getControllerClass());
-        // var_dump("methods()", $route->methods());
-        // var_dump("getActionName()", $route->getActionName());
-        // var_dump("getActionMethod()", $route->getActionMethod());
+        $actionName = explode('\\', $route->getActionName());
 
-        // $validMenuAuth = true;
+        if (empty($actionName)) {
+            throw new NotFoundHttpException(trans('error.not_found'), null, Response::HTTP_NOT_FOUND);
+        }
 
-        // if (!$validMenuAuth) {
-        //     throw new ParameterException(trans('error.user_authority_insufficinet'), Response::HTTP_UNAUTHORIZED);
-        // }
+        $controllerMethod = $actionName[count($actionName)];
+
+        $validMenuAuth = false;
+
+        $userMenu->each(function ($item) {
+            if ($item->key == [$controllerMethod]) {
+                $this->validMenuAuth = true;
+                return false;
+            }
+        });
+
+        if (!$validMenuAuth) {
+            throw new ParameterException(trans('error.user_authority_insufficinet'), Response::HTTP_UNAUTHORIZED);
+        }
         return $next($request);
     }
 }

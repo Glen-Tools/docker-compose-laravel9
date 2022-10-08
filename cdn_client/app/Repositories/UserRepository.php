@@ -129,6 +129,25 @@ class UserRepository extends BaseRepository
         return Hash::make($passowrd, $this::HASH_OPTION);
     }
 
+    public function getUserMenu(int $id)
+    {
+        return $this->user
+            ->join('role_user as ru', 'ru.user_id', '=', 'users.id')
+            ->join('roles as r', 'r.id', '=', 'ru.role_id')
+            ->join('role_menu as rm', 'rm.role_id', '=', 'r.id')
+            ->join('menus as m', 'm.id', '=', 'rm.role_id')
+            ->where('users.id', $id)
+            ->where('users.status', 1)
+            ->where('r.status', 1)
+            ->where('m.status', 1)
+            ->orderBy("m.parent", "asc")
+            ->orderBy("m.weight", "desc")
+            ->orderBy("m.id", "asc")
+            ->select("m.id", "m.name", "m.key", "m.url", "m.feature", "m.status", "m.parent", "m.weight")
+            ->get();
+    }
+
+
     public function testDbTooRawSql()
     {
         return DB::table('user')->select("id", "name")->where("id", 1)->toBoundSql();
