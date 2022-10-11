@@ -226,10 +226,6 @@ return new class extends Migration
                 ],
                 [
                     "role_id" => 2,
-                    "user_id" => 1
-                ],
-                [
-                    "role_id" => 2,
                     "user_id" => 2
                 ],
             ]

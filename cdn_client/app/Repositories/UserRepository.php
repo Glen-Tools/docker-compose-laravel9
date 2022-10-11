@@ -145,6 +145,7 @@ class UserRepository extends BaseRepository
             ->orderBy("m.weight", "desc")
             ->orderBy("m.id", "asc")
             ->select("m.id", "m.name", "m.key", "m.url", "m.feature", "m.status", "m.parent", "m.weight")
+            ->distinct("m.id")
             ->get();
     }
 
