@@ -49,14 +49,14 @@ class SwaggerLogin
      *          description="account",
      *          type="string",
      *          format="string",
-     *          example="tesq456123wtqwq@gmail.com"
+     *          example="admin@gmail.com"
      *      ),
      *      @OA\Property(
      *          property="password",
      *          description="password",
      *          type="string",
      *          format="string",
-     *          example="$2y$12$l22SuwrkyuByVHpU4aTaZeRjDv1daFaPXWYS"
+     *          example="admin123"
      *      ),
      * )
      */

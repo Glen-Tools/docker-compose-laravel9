@@ -33,6 +33,7 @@ Route::prefix('v1')->group(function () {
 
         //jwt 登入驗證
         Route::middleware(JwtValid::class)->group(function () {
+            Route::get('/jwt/check', [LoginController::class, 'validToken']);
         });
 
         //jwt 登入與頁面權限驗證

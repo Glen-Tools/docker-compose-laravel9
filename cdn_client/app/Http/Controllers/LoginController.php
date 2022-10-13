@@ -119,6 +119,22 @@ class LoginController extends Controller
 
     /**
      * @OA\Get(
+     *  tags={"Jwt"},
+     *  path="/api/v1/jwt/check",
+     *  summary="驗證JwtToken",
+     *  security={{"Authorization":{}}},
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function validToken()
+    {
+        return $this->responseService->responseJson();
+    }
+
+    /**
+     * @OA\Get(
      *  tags={"LoginOut"},
      *  path="/api/v1/logout",
      *  summary="使用者登出 (User Logout)",
@@ -131,6 +147,5 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-
     }
 }
