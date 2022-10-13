@@ -56,7 +56,7 @@ class LoginController extends Controller
         //驗證
         $this->utilService->ColumnValidator($data, [
             'account' => 'required|max:100|email:rfc,dns',
-            'password' => 'required|max:50',
+            'password' => 'required|max:100',
             'captcha' => 'max:50',
             'captchaId' => 'max:50'
         ]);
