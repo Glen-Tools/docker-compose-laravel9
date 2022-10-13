@@ -4,12 +4,12 @@ namespace App\Dto;
 
 class OutputLoginDto
 {
-    public $user;
+    public $userInfo;
     public $authorisation;
 
-    public function __construct(OutputUserInfoDto $user, OutputJwtDto $authorisation)
+    public function __construct(OutputUserInfoDto $userInfo, OutputJwtDto $authorisation)
     {
-        $this->user = $user;
+        $this->userInfo = $userInfo;
         $this->authorisation = $authorisation;
     }
 }

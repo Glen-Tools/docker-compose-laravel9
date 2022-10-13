@@ -10,7 +10,7 @@ class SwaggerLogin
      *   example="RefreshJwtToken",
      *   value={
      *     "data": {
-     *         "user": {
+     *         "userInfo": {
      *             "id": 1,
      *             "name": "test_update",
      *             "email": "tesq456123wtqwq@gmail.com",

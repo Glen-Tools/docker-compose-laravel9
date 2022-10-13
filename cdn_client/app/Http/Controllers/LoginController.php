@@ -43,7 +43,7 @@ class LoginController extends Controller
      *  summary="使用者登入(User Login)",
      *  security={{"Authorization":{}}},
      *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UserLogin")),
-     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/RefreshJwtToken", example="RefreshJwtToken")})),
      *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
