@@ -4,19 +4,6 @@ namespace App\Dto;
 
 class InputMenuDto
 {
-    /*
-
-    protected ?string $name;
-    protected ?string $key;
-    protected ?string $url;
-    protected ?string $feature;
-    protected ?bool $status;
-    protected ?int $parent;
-    protected ?int $weight;
-    protected ?string $remark;
-
-    public function __construct(string $name,string $key,string $url,string $feature,bool $status,int $parent,int $weight,string $remark = "")
-    */
     protected ?string $name;
     protected ?string $key;
     protected ?string $url;
