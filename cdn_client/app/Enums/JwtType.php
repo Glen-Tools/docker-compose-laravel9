@@ -5,6 +5,6 @@ namespace App\Enums;
 //  讀取資料 Enum
 enum JwtType: string
 {
-    case jwtToken = 'token';
+    case jwtToken = 'accessToken';
     case jwtRefreshToken = 'refreshToken';
 }
