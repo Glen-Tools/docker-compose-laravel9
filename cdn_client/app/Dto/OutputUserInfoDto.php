@@ -4,12 +4,12 @@ namespace App\Dto;
 
 class OutputUserInfoDto
 {
-    public $id;
-    public $name;
-    public $email;
-    public $userType;
+    public ?int $id;
+    public ?string $name;
+    public ?string $email;
+    public ?string $userType;
 
-    public function __construct(int $id, string $name,  string $email, string $userType)
+    public function __construct(int $id,string $name, string $email,string $userType)
     {
         $this->id = $id;
         $this->name = $name;

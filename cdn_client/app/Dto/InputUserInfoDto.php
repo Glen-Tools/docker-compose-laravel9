@@ -4,12 +4,12 @@ namespace App\Dto;
 
 class InputUserInfoDto
 {
-    protected $id;
-    protected $name;
-    protected $email;
-    protected $userType;
+    protected ?int $id;
+    protected ?string $name;
+    protected ?string $email;
+    protected ?string $userType;
 
-    public function __construct(int $id, string $name,  string $email, string $userType)
+    public function __construct(int $id,string $name,string $email,string $userType)
     {
         $this->id = $id;
         $this->name = $name;

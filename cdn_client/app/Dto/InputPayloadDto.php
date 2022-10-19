@@ -4,15 +4,15 @@ namespace App\Dto;
 
 class InputPayloadDto
 {
-    protected $iss;
-    protected $exp;
-    protected $nbf;
-    protected $iat;
-    protected $tokenType;
-    protected $userInfo;
+    protected ?string $iss;
+    protected ?int $exp;
+    protected ?int $nbf;
+    protected ?int $iat;
+    protected ?string $tokenType;
+    protected mixed $userInfo;
 
 
-    public function __construct(string $iss, int $exp, int $nbf, int $iat, string $tokenType, OutputUserInfoDto $userInfo)
+    public function __construct(string $iss,int $exp,int $nbf,int $iat,string $tokenType,OutputUserInfoDto $userInfo)
     {
         $this->iss = $iss;
         $this->exp = $exp;

@@ -4,15 +4,15 @@ namespace App\Dto;
 
 class InputPageDto
 {
-    protected $page;
-    protected $pageCount;
-    protected $count;
-    protected $limit;
-    protected $search;
-    protected $sort;
-    protected $sortColumn;
+    protected ?int $page;
+    protected ?int $pageCount;
+    protected ?int $count;
+    protected ?int $limit;
+    protected ?array $search;
+    protected ?string $sort;
+    protected ?string $sortColumn;
 
-    public function __construct($page, $pageCount, $count, $limit, $search, $sort, $sortColumn)
+    public function __construct(int $page,int $pageCount,int $count,int $limit,array $search,string $sort,string $sortColumn)
     {
         $this->page = $page;
         $this->pageCount = $pageCount;

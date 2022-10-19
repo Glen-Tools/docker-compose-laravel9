@@ -4,13 +4,13 @@ namespace App\Dto;
 
 class InputLogDto
 {
-    protected $feature;
-    protected $operate;
-    protected $table;
-    protected $content;
-    protected $userId;
+    protected ?string $feature;
+    protected ?string $operate;
+    protected ?string $table;
+    protected ?string $content;
+    protected ?int $userId;
 
-    public function __construct(string $feature, string $operate, string $table, string $content, int $userId)
+    public function __construct(string $feature,string $operate,string $table,string $content,int $userId)
     {
         $this->feature = $feature;
         $this->operate = $operate;

@@ -4,13 +4,13 @@ namespace App\Dto;
 
 class InputRoleDto
 {
-    protected $name;
-    protected $key;
-    protected $status;
-    protected $weight;
-    protected $remark;
+    protected ?string $name;
+    protected ?string $key;
+    protected ?bool $status;
+    protected mixed $weight;
+    protected ?string $remark;
 
-    public function __construct($name, $key, $status, $weight, $remark = "")
+    public function __construct(string $name,string $key,bool $status,mixed $weight,string $remark = "")
     {
         $this->name = $name;
         $this->key = $key;

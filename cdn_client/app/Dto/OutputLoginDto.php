@@ -4,8 +4,8 @@ namespace App\Dto;
 
 class OutputLoginDto
 {
-    public $userInfo;
-    public $authorisation;
+    public mixed $userInfo;
+    public mixed $authorisation;
 
     public function __construct(OutputUserInfoDto $userInfo, OutputJwtDto $authorisation)
     {

@@ -4,10 +4,10 @@ namespace App\Dto;
 
 class OutputMenuListDto
 {
-    public $menuList;
-    public $pageManagement;
+    public mixed $menuList;
+    public mixed $pageManagement;
 
-    public function __construct($menuList, OutputPageDto $pageManagement)
+    public function __construct(mixed $menuList, OutputPageDto $pageManagement)
     {
         $this->menuList = $menuList;
         $this->pageManagement = $pageManagement;

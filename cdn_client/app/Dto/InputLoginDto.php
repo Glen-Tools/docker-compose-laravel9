@@ -4,13 +4,13 @@ namespace App\Dto;
 
 class InputLoginDto
 {
-    protected $account;
-    protected $password;
-    protected $captcha;
-    protected $captchaId;
+    protected ?string $account;
+    protected ?string $password;
+    protected ?string $captcha;
+    protected ?string $captchaId;
 
 
-    public function __construct($account, $password, $captcha = "", $captchaId = "")
+    public function __construct(string $account,string $password,string $captcha = "",string $captchaId = "")
     {
         $this->account = $account;
         $this->password = $password;
