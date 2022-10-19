@@ -52,7 +52,7 @@ class JwtService
         $arrUserInfo = (array)$userInfoDto;
         $timeNow = Carbon::now()->timestamp;
         $exp = $timeNow;
-        if ($type == JwtType::jwtRefreshToken) {
+        if ($type == JwtType::JwtRefreshToken) {
             $exp += env('JWT_REF_EXP_ADD_TIME', $this::JWT_REF_EXP_ADD_TIME);
         } else {
             $exp += env('JWT_EXP_ADD_TIME', $this::JWT_EXP_ADD_TIME);
@@ -145,7 +145,7 @@ class JwtService
 
         $payload = $this->parseJwtPayload($jwt);
 
-        $validPayload = $this->validJwtPayload($payload, JwtType::jwtRefreshToken);
+        $validPayload = $this->validJwtPayload($payload, JwtType::JwtRefreshToken);
         if (!$validPayload) {
             throw new ParameterException(trans('error.unauthorized'), Response::HTTP_UNAUTHORIZED);
         }
@@ -165,7 +165,7 @@ class JwtService
         $payload = $this->parseJwtPayload($jwt);
         $userInfoDto = $payload->getUserInfo();
 
-        $validPayload = $this->validJwtPayload($payload, JwtType::jwtToken);
+        $validPayload = $this->validJwtPayload($payload, JwtType::JwtToken);
         if (!$validPayload) {
             throw new ParameterException(trans('error.unauthorized'), Response::HTTP_UNAUTHORIZED);
         }

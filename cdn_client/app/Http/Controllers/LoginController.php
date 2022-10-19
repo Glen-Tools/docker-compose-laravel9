@@ -70,8 +70,8 @@ class LoginController extends Controller
 
         $outputUserInfoDto = $this->loginService->login($inputLoginDto);
 
-        $jwtToken = $this->jwtService->genJwtToken($outputUserInfoDto, JwtType::jwtToken);
-        $refreshToken = $this->jwtService->genJwtToken($outputUserInfoDto, JwtType::jwtRefreshToken);
+        $jwtToken = $this->jwtService->genJwtToken($outputUserInfoDto, JwtType::JwtToken);
+        $refreshToken = $this->jwtService->genJwtToken($outputUserInfoDto, JwtType::JwtRefreshToken);
         //todo 有時間在做 驗證 captcha
 
         $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
@@ -110,8 +110,8 @@ class LoginController extends Controller
         //user可能更新資訊，所以重取user 資料
         $userInfo = $this->loginService->getUserInfoByLogin($userInfoDto->email);
 
-        $jwtToken = $this->jwtService->genJwtToken($userInfo, JwtType::jwtToken);
-        $refreshToken = $this->jwtService->genJwtToken($userInfo, JwtType::jwtRefreshToken);
+        $jwtToken = $this->jwtService->genJwtToken($userInfo, JwtType::JwtToken);
+        $refreshToken = $this->jwtService->genJwtToken($userInfo, JwtType::JwtRefreshToken);
         $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
         $outputLoginDto = new OutputLoginDto($userInfo, $outputJwtDto);
         return $this->responseService->responseJson($outputLoginDto);
