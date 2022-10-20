@@ -111,10 +111,8 @@ class UserRepository extends BaseRepository
 
     public function deleteUserById($id)
     {
-        if($id <> 1){
-            RoleUser::where("user_id",$id)->delete();
-            $this->user->destroy($id);
-        }
+        RoleUser::where("user_id",$id)->delete();
+        $this->user->destroy($id);
     }
 
     public function getUserByAccount(string $account)

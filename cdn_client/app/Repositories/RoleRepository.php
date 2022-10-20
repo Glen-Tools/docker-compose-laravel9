@@ -103,10 +103,8 @@ class RoleRepository extends BaseRepository
 
     public function deleteRoleById($id)
     {
-        if($id <> 1){
-            RoleUser::where("role_id",$id)->delete();
-            RoleMenu::where("role_id",$id)->delete();
-            $this->role->destroy($id);
-        }
+        RoleUser::where("role_id",$id)->delete();
+        RoleMenu::where("role_id",$id)->delete();
+        $this->role->destroy($id);
     }
 }
