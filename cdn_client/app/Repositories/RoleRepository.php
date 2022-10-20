@@ -8,6 +8,8 @@ use App\Enums\ListType;
 use App\Exceptions\ParameterException;
 use App\Models\Role;
 use Illuminate\Http\Response;
+use App\Models\RoleUser;
+use App\Models\RoleMenu;
 
 class RoleRepository extends BaseRepository
 {
@@ -101,6 +103,10 @@ class RoleRepository extends BaseRepository
 
     public function deleteRoleById($id)
     {
-        $this->role->destroy($id);
+        if($id <> 1){
+            RoleUser::where("role_id",$id)->delete();
+            RoleMenu::where("role_id",$id)->delete();
+            $this->role->destroy($id);
+        }
     }
 }

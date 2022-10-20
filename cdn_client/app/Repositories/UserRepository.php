@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\RoleUser;
 
 class UserRepository extends BaseRepository
 {
@@ -110,7 +111,10 @@ class UserRepository extends BaseRepository
 
     public function deleteUserById($id)
     {
-        $this->user->destroy($id);
+        if($id <> 1){
+            RoleUser::where("user_id",$id)->delete();
+            $this->user->destroy($id);
+        }
     }
 
     public function getUserByAccount(string $account)

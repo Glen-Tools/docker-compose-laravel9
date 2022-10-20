@@ -8,6 +8,7 @@ use App\Enums\ListType;
 use App\Exceptions\ParameterException;
 use App\Models\Menu;
 use Illuminate\Http\Response;
+use App\Models\RoleMenu;
 
 class MenuRepository extends BaseRepository
 {
@@ -110,6 +111,7 @@ class MenuRepository extends BaseRepository
 
     public function deleteMenuById($id)
     {
+        RoleMenu::where("menu_id",$id)->delete();
         $this->menu->destroy($id);
     }
 }
