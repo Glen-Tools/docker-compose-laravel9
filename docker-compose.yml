@@ -16,6 +16,7 @@ services:
     # restart: unless-stopped
     tty: true
     environment:
+      TZ: "Asia/Taipei"
       SERVICE_NAME: cdn
       SERVICE_TAGS: dev
     working_dir: /var/www
@@ -36,7 +37,7 @@ services:
       # composer require barryvdh/laravel-debugbar --dev
       # tail -f /dev/null
     networks:
-      - app-network
+      - cdn-client
 
   #Nginx
   nginx:
@@ -54,7 +55,7 @@ services:
       - ./nginx/conf.d/:/etc/nginx/conf.d/
       - ./nginx/log/:/var/log/nginx/
     networks:
-      - app-network
+      - cdn-client
 
   #MySQL Service
   db:
@@ -65,6 +66,7 @@ services:
     ports:
       - "3310:3306"
     environment:
+      TZ: "Asia/Taipei"
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MARIADB_USER: ${DB_USER}
       MARIADB_PASSWORD: ${DB_PASSWORD}
@@ -76,7 +78,7 @@ services:
       - ./db/config/mysql_conf:/etc/mysql/conf.d
       - ./db/config/mysql_init:/docker-entrypoint-initdb.d
     networks:
-      - app-network
+      - cdn-client
 
   #Redis
   redis:
@@ -91,11 +93,11 @@ services:
       - ./redis/redis.conf:/usr/local/etc/redis.conf
     command: redis-server /usr/local/etc/redis.conf
     networks:
-      - app-network
+      - cdn-client
 
 #Docker Networks
 networks:
-  app-network:
+  cdn-client:
     driver: bridge
 #Volumes
 volumes:
