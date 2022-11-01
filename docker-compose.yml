@@ -50,6 +50,10 @@ services:
     tty: true
     ports:
       - "8023:80"
+    environment:
+      TZ: "Asia/Taipei"
+    environment:
+      TZ: "Asia/Taipei"
     volumes:
       - ./cdn_client/:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
@@ -89,6 +93,8 @@ services:
       - 6377:6379
     expose:
       - "6379"
+    environment:
+      TZ: "Asia/Taipei"
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis.conf
     command: redis-server /usr/local/etc/redis.conf
