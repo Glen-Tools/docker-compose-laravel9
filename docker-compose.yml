@@ -4,7 +4,7 @@ services:
   #PHP Service
   cdn:
     build:
-      context: ./php
+      context: ./php/fpm
       dockerfile: Dockerfile
     # image: digitalocean.com/php
     container_name: cdn
@@ -25,6 +25,7 @@ services:
       - ./laravel_env_volume/.env:/var/www/.env
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
       - ./php/fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./php/fpm/log:/var/www/storage/logs
     command:
       - /bin/bash
       - -c
@@ -50,8 +51,6 @@ services:
     tty: true
     ports:
       - "8023:80"
-    environment:
-      TZ: "Asia/Taipei"
     environment:
       TZ: "Asia/Taipei"
     volumes:
