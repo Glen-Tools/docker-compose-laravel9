@@ -18,11 +18,11 @@ use Illuminate\Routing\Controller as BaseController;
  *      )
  *  ),
  *  @OA\Server(
- *      description="local",
- *      url="http://localhost:8023"
+ *      description="Swagger-doc App API",
+ *      url="http://cdntest.jiyipinjie.com"
  *  ),
  *  @OA\Server(
- *      description="Swagger-doc App API",
+ *      description="local",
  *      url="http://cdntest.jiyipinjie.com"
  *  ),
  *  @OA\PathItem(
@@ -41,7 +41,7 @@ use Illuminate\Routing\Controller as BaseController;
  */
 
 //swagger 網址
-//http://localhost:8023/api/documentation
+//http://localhost:8024/api/documentation
 
 class Controller extends BaseController
 {
