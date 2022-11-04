@@ -2,23 +2,23 @@ version: '3.8'
 services:
 
   #PHP Service
-  cdn:
+  cdn_client_cdn:
     user: "1000:1000"
     build:
       context: ./php/fpm
       dockerfile: Dockerfile
     # image: digitalocean.com/php
-    container_name: cdn
+    container_name: cdn_client_cdn
     healthcheck:
       test: php-fpm -t
     depends_on:
-      - redis
-      - db
+      - cdn_client_redis
+      - cdn_client_db
     # restart: unless-stopped
     tty: true
     environment:
       TZ: "Asia/Taipei"
-      SERVICE_NAME: cdn
+      SERVICE_NAME: cdn_client_cdn
       SERVICE_TAGS: dev
     working_dir: /var/www
     volumes:
@@ -38,19 +38,19 @@ services:
       # composer require barryvdh/laravel-debugbar --dev
       # tail -f /dev/null
     networks:
-      - cdn-client
+      - cdn-client-network
 
   #Nginx
-  nginx:
+  cdn_client_nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: cdn_client_nginx
     depends_on:
-      cdn:
+      cdn_client_cdn:
         condition: service_healthy
     restart: unless-stopped
     tty: true
     ports:
-      - "8023:80"
+      - "8024:80"
     environment:
       TZ: "Asia/Taipei"
     volumes:
@@ -58,16 +58,16 @@ services:
       - ./nginx/conf.d/:/etc/nginx/conf.d/
       - ./nginx/log/:/var/log/nginx/
     networks:
-      - cdn-client
+      - cdn-client-network
 
   #MySQL Service
-  db:
+  cdn_client_db:
     image: mariadb:10.6
-    container_name: db
+    container_name: cdn_client_db
     restart: unless-stopped
     tty: true
     ports:
-      - "3310:3306"
+      - "3311:3306"
     environment:
       TZ: "Asia/Taipei"
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
@@ -81,15 +81,15 @@ services:
       - ./db/config/mysql_conf:/etc/mysql/conf.d
       - ./db/config/mysql_init:/docker-entrypoint-initdb.d
     networks:
-      - cdn-client
+      - cdn-client-network
 
   #Redis
-  redis:
+  cdn_client_redis:
     image: redis:7.0
-    container_name: redis
+    container_name: cdn_client_redis
     restart: always
     ports:
-      - 6377:6379
+      - 6378:6379
     expose:
       - "6379"
     environment:
@@ -98,11 +98,11 @@ services:
       - ./redis/redis.conf:/usr/local/etc/redis.conf
     command: redis-server /usr/local/etc/redis.conf
     networks:
-      - cdn-client
+      - cdn-client-network
 
 #Docker Networks
 networks:
-  cdn-client:
+  cdn-client-network:
     driver: bridge
 #Volumes
 volumes:

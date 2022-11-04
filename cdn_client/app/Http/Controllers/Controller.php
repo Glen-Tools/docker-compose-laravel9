@@ -23,7 +23,7 @@ use Illuminate\Routing\Controller as BaseController;
  *  ),
  *  @OA\Server(
  *      description="Swagger-doc App API",
- *      url="http://localhost:8023"
+ *      url="http://cdntest.jiyipinjie.com"
  *  ),
  *  @OA\PathItem(
  *      path="/"
