@@ -31,7 +31,7 @@ docker-compose up -d
 等待build，成功後直接連結nginx port即可  
 參考：
 >location ^~ /api/v1 {  
->proxy_pass http://localhost:8023/api/v1/;  
+>proxy_pass http://localhost:8024/api/v1/;  
 >}  
 
 ## 相關文件 ## 
