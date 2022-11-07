@@ -27,8 +27,9 @@
 
 ## build 說明 ##
 -------------
-docker-compose up -d  
-等待build，成功後直接連結nginx port即可  
+~~docker-compose up -d~~
+執行 run_backend_docker.sh (覆蓋.env and run docker)
+等待build，成功後直接連結nginx port即可
 參考：
 >location ^~ /api/v1 {  
 >proxy_pass http://localhost:8024/api/v1/;  
