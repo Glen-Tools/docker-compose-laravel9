@@ -8,6 +8,8 @@ use App\Dto\OutputPageDto;
 use App\Dto\OutputMenuListDto;
 use App\Enums\ListType;
 use App\Repositories\MenuRepository;
+use App\Exceptions\ParameterException;
+use Illuminate\Http\Response;
 use stdClass;
 
 class MenuService
@@ -36,6 +38,11 @@ class MenuService
     public function getMenuById(int $id)
     {
         $data = $this->menuRepository->getMenuById($id);
+
+        if (empty($data->toArray())) {
+            throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
+        }
+
         $data->transform(function ($item) {
             $menu = new stdClass();
             $menu->id = $item->id;

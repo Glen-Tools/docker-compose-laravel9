@@ -8,6 +8,8 @@ use App\Dto\OutputPageDto;
 use App\Dto\OutputRoleListDto;
 use App\Enums\ListType;
 use App\Repositories\RoleRepository;
+use App\Exceptions\ParameterException;
+use Illuminate\Http\Response;
 use stdClass;
 
 class RoleService
@@ -37,6 +39,11 @@ class RoleService
     public function getRoleById(int $id)
     {
         $data = $this->roleRepository->getRoleById($id);
+
+        if (empty($data->toArray())) {
+            throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
+        }
+
         $data->transform(function ($item) {
             $role = new stdClass();
             $role->id = $item->id;

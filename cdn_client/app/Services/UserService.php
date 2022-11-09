@@ -6,10 +6,10 @@ use App\Dto\InputPageDto;
 use App\Dto\InputUserDto;
 use App\Dto\OutputPageDto;
 use App\Enums\ListType;
-use App\Exceptions\ParameterException;
 use App\Repositories\UserRepository;
-use Illuminate\Database\Eloquent\Collection;
+use App\Exceptions\ParameterException;
 use Illuminate\Http\Response;
+use Illuminate\Database\Eloquent\Collection;
 use stdClass;
 
 class UserService
@@ -38,6 +38,11 @@ class UserService
     public function getUserById(int $id): Collection
     {
         $data = $this->userRepository->getUserById($id);
+
+        if (empty($data->toArray())) {
+            throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
+        }
+
         $data->transform(function ($item) {
             $user = new stdClass();
             $user->id = $item->id;
