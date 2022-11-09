@@ -79,7 +79,7 @@ class UserController extends BaseController
      */
     public function show(Request $request, $id)
     {
-        parent::update($request, $id);
+        parent::show($request, $id);
         $data = $this->userService->getUserById($id);
         return $this->responseService->responseJson($data);
     }
@@ -147,10 +147,10 @@ class UserController extends BaseController
 
         //驗證
         $this->utilService->ColumnValidator($data, [
-            'name' => 'max:50',
-            'email' => 'max:100|email:rfc,dns|unique:users,email,' . $id, //當id不存在,在debug模式會顯示email 已經存在
-            'status' => 'boolean',
-            'userType' => [Rule::in([1, 2])], //管理者=1,一般使用者=2
+            'name' => 'required|max:50',
+            'email' => 'required|max:100|email:rfc,dns|unique:users,email,' . $id, //當id不存在,在debug模式會顯示email 已經存在
+            'status' => 'required|boolean',
+            'userType' => ['required', Rule::in([1, 2])], //管理者=1,一般使用者=2
             'remark' => 'string|max:5000|nullable',
         ]);
 

@@ -19,8 +19,8 @@ class Handler extends ExceptionHandler
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
     protected $levels = [
-        ValidationException::class => LogLevel::INFO,
-        ParameterException::class => LogLevel::INFO,
+        ValidationException::class => LogLevel::DEBUG,
+        ParameterException::class => LogLevel::DEBUG,
     ];
 
     /**
