@@ -55,6 +55,7 @@ class UserService
             $user->loginTime = $item->login_time;
             $user->createdAt = $item->created_at;
             $user->updatedAt = $item->updated_at;
+            $user->remark = $item->remark;
             return $user;
         });
         return $data;
