@@ -17,6 +17,7 @@ class AuthorizationService
         "UserController@store" => "user_create",
         "UserController@update" => "user_update",
         "UserController@destroy" => "user_delete",
+        "UserController@updatePassword" => "user_password_update",
         "RoleController@index" => "role_list",
         "RoleController@show" => "role_info",
         "RoleController@store" => "role_create",

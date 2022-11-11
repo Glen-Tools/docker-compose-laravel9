@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Dto\InputUserDto;
 use App\Dto\OutputUserListDto;
+use App\Dto\InputUserPasswordDto;
 use App\Services\ResponseService;
 use App\Services\UserService;
 use App\Services\UtilService;
+use App\Services\JwtService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -16,15 +18,19 @@ class UserController extends BaseController
     private $userService;
     private $utilService;
     private $responseService;
+    private $jwtService;
 
     public function __construct(
         UserService $userService,
         UtilService $utilService,
-        ResponseService $responseService
+        ResponseService $responseService,
+        JwtService $jwtService,
+
     ) {
         $this->userService = $userService;
         $this->utilService = $utilService;
         $this->responseService = $responseService;
+        $this->jwtService = $jwtService;
     }
 
     /**
@@ -126,6 +132,45 @@ class UserController extends BaseController
 
 
     /**
+     * @OA\Patch(
+     *  tags={"User"},
+     *  path="/api/v1/user/password/{id}",
+     *  summary="修改使用者密碼(User Update)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UpdateUserPassword")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function updatePassword(Request $request, $id)
+    {
+        parent::update($request, $id);
+
+        //取得api data
+        $data = $request->all();
+
+        //驗證
+        $this->utilService->ColumnValidator($data, [
+            'password' => 'nullable|max:50|min:5',
+            'newPassord' => 'required|max:50|min:5',
+            'checkPassord' => 'required|max:50|min:5',
+        ]);
+
+        $userPasswordDto = new InputUserPasswordDto(
+            $data["password"] ?? "",
+            $data["newPassord"],
+            $data["checkPassord"],
+        );
+
+        $InputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);
+
+        $this->userService->updateUserPassword($InputUserInfoDto, $userPasswordDto, $id);
+        return $this->responseService->responseJson();
+    }
+
+    /**
      * @OA\Put(
      *  tags={"User"},
      *  path="/api/v1/user/{id}",
@@ -157,7 +202,6 @@ class UserController extends BaseController
         $userDto = new InputUserDto(
             $data["name"],
             $data["email"],
-            "",
             $data["status"],
             $data["userType"],
             $data["remark"] ?? "",

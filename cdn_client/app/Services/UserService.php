@@ -4,8 +4,11 @@ namespace App\Services;
 
 use App\Dto\InputPageDto;
 use App\Dto\InputUserDto;
+use App\Dto\InputUserPasswordDto;
 use App\Dto\OutputPageDto;
+use App\Dto\InputUserInfoDto;
 use App\Enums\ListType;
+use App\Enums\UserType;
 use App\Repositories\UserRepository;
 use App\Exceptions\ParameterException;
 use Illuminate\Http\Response;
@@ -33,6 +36,24 @@ class UserService
     public function updateUser(InputUserDto $userDto, int $id)
     {
         $this->userRepository->updateUser($userDto, $id);
+    }
+
+    public function updateUserPassword(InputUserInfoDto $userInfo, InputUserPasswordDto $userDto, int $id)
+    {
+        if ($id != $userInfo->getId() && $userInfo->getUserType() == UserType::User->value) {
+            throw new ParameterException(trans('error.password_update'), Response::HTTP_UNAUTHORIZED);
+        }
+
+        // 確認新密碼、判斷一般使用者
+        if (($userDto->getNewPassord() != $userDto->getCheckPassord()) ||
+            ($userInfo->getUserType() == UserType::User->value &&
+                !$this->userRepository->validPassword($userInfo->getId(), $userDto->getPassword())
+            )
+        ) {
+            throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->userRepository->updateUserPassword($userDto->getNewPassord(), $id);
     }
 
     public function getUserById(int $id): Collection

@@ -23,7 +23,7 @@ use Illuminate\Routing\Controller as BaseController;
  *  ),
  *  @OA\Server(
  *      description="local",
- *      url="http://cdntest.jiyipinjie.com"
+ *      url="http://localhost:8024"
  *  ),
  *  @OA\PathItem(
  *      path="/"

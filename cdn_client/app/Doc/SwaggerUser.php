@@ -169,4 +169,32 @@ class SwaggerUser
      * )
      */
     public $UpdateUser;
+
+    /**
+     * @OA\Schema(
+     *      schema="UpdateUserPassword",
+     *      @OA\Property(
+     *          property="password",
+     *          description="password",
+     *          type="string",
+     *          format="string",
+     *          example="!QAZ2wsx"
+     *      ),
+     *      @OA\Property(
+     *          property="newPassord",
+     *          description="new Passord",
+     *          type="string",
+     *          format="string",
+     *          example="@WSX1qaz"
+     *      ),
+     *      @OA\Property(
+     *          property="checkPassord",
+     *          description="check Passord",
+     *          type="string",
+     *          format="string",
+     *          example="@WSX1qaz"
+     *      ),
+     * )
+     */
+    public $UpdateUserPassword;
 }

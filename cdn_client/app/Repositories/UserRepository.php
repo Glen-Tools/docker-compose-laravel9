@@ -36,19 +36,31 @@ class UserRepository extends BaseRepository
 
     public function updateUser(InputUserDto $userDto, int $id)
     {
-        $user = $this->user->find($id);
-
-        if (empty($user)) {
-            throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
-        }
+        $user = $this->isExistUser($id);
 
         $user->name = $userDto->getName() ?? $user->name;
         $user->email = $userDto->getEmail() ?? $user->email;
         $user->status = $userDto->getStatus() ?? $user->status;
         $user->user_type = $userDto->getUserType() ?? $user->userType;
         $user->remark = $userDto->getRemark() ?? $user->remark;
-        // $user->password = $this->getPasswordHash($userDto->getPassword());
         $user->save();
+    }
+
+    public function updateUserPassword(string $password, int $id)
+    {
+        $user = $this->isExistUser($id);
+        $user->password = $this->getPasswordHash($password);
+        $user->save();
+    }
+
+    private function isExistUser(int $id): mixed
+    {
+        $user = $this->user->find($id);
+        if (empty($user)) {
+            throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
+        }
+
+        return   $user;
     }
 
     public function getUserById(int $id)
@@ -111,7 +123,7 @@ class UserRepository extends BaseRepository
 
     public function deleteUserById($id)
     {
-        RoleUser::where("user_id",$id)->delete();
+        RoleUser::where("user_id", $id)->delete();
         $this->user->destroy($id);
     }
 

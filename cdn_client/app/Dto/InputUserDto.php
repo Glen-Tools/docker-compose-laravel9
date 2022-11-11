@@ -6,16 +6,14 @@ class InputUserDto
 {
     protected ?string $name;
     protected ?string $email;
-    protected ?string $password;
     protected ?bool $status;
     protected ?int $userType;
     protected ?string $remark;
 
-    public function __construct(string $name,string $email,string $password,bool $status,int $userType,string $remark = "")
+    public function __construct(string $name, string $email, bool $status, int $userType, string $remark = "")
     {
         $this->name = $name;
         $this->email = $email;
-        $this->password = $password;
         $this->status = $status;
         $this->userType = $userType;
         $this->remark = $remark;

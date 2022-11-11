@@ -40,6 +40,11 @@ Route::prefix('v1')->group(function () {
         Route::middleware([JwtValid::class, AuthorizationValid::class])->group(function () {
 
             Route::apiResource('user', UserController::class);
+
+            //使用者 密碼修改
+            Route::patch('/user/password/{id}', [UserController::class, 'updatePassword']);
+
+
             Route::apiResource('role', RoleController::class);
             Route::apiResource('menu', MenuController::class);
         });
