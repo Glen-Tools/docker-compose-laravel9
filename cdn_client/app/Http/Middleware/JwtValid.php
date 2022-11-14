@@ -2,18 +2,18 @@
 
 namespace App\Http\Middleware;
 
-use App\Exceptions\ParameterException;
-use App\Services\JwtService;
 use Closure;
+use App\Enums\JwtType;
+use App\Services\JwtService;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class JwtValid
 {
     private $jwtService;
 
-    public function __construct(JwtService $jwtService)
-    {
+    public function __construct(
+        JwtService $jwtService,
+    ) {
         $this->jwtService = $jwtService;
     }
 
@@ -26,15 +26,12 @@ class JwtValid
      */
     public function handle(Request $request, Closure $next)
     {
-        $jwt = $request->header('Authorization');
+        $jwtToken = $this->jwtService->getJwtToken($request);
 
-        if (str_contains($jwt, "bearer") || str_contains($jwt, "Bearer")) {
-            $jwtToken = str_replace(["Bearer", "bearer", " "], "", $jwt);
-        } else {
-            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_UNAUTHORIZED);
-        }
+        $this->jwtService->validJwt($jwtToken, JwtType::JwtToken);
 
-        $this->jwtService->setUserInfoToRequest($jwtToken, $request);
+        //寫入 userId
+        $this->jwtService->setUserIdToRequest($jwtToken, $request);
 
         return $next($request);
     }

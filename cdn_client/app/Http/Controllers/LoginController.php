@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dto\InputLoginDto;
 use App\Dto\OutputJwtDto;
 use App\Dto\OutputLoginDto;
+use App\Dto\OutputUserInfoDto;
 use App\Enums\JwtType;
 use App\Services\JwtService;
 use App\Services\LoginService;
@@ -57,8 +58,8 @@ class LoginController extends Controller
         $this->utilService->ColumnValidator($data, [
             'account' => 'required|max:100|email:rfc,dns',
             'password' => 'required|max:100',
-            'captcha' => 'max:50',
-            'captchaId' => 'max:50'
+            'captcha' => 'max:50|nullable',
+            'captchaId' => 'max:50|nullable'
         ]);
 
         $inputLoginDto = new InputLoginDto(
@@ -69,9 +70,9 @@ class LoginController extends Controller
         );
 
         $outputUserInfoDto = $this->loginService->login($inputLoginDto);
-
-        $jwtToken = $this->jwtService->genJwtToken($outputUserInfoDto, JwtType::JwtToken);
-        $refreshToken = $this->jwtService->genJwtToken($outputUserInfoDto, JwtType::JwtRefreshToken);
+        $userId = $outputUserInfoDto->id;
+        $jwtToken = $this->jwtService->genJwtToken($userId, JwtType::JwtToken);
+        $refreshToken = $this->jwtService->genJwtToken($userId, JwtType::JwtRefreshToken);
         //todo 有時間在做 驗證 captcha
 
         $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
@@ -104,16 +105,24 @@ class LoginController extends Controller
 
         $data = (is_array($data)) ? (object)$data : $data;
 
-        // $jwtToken = $this->jwtService->getJwtToken($data->refreshtoken);
-        $userInfoDto = $this->jwtService->getUserInfoByRefreshJwtToken($data->refreshtoken);
+        $token = $data->refreshtoken;
+        $this->jwtService->validJwt($token, JwtType::JwtRefreshToken);
 
-        //user可能更新資訊，所以重取user 資料
-        $userInfo = $this->loginService->getUserInfoByLogin($userInfoDto->email);
-
-        $jwtToken = $this->jwtService->genJwtToken($userInfo, JwtType::JwtToken);
-        $refreshToken = $this->jwtService->genJwtToken($userInfo, JwtType::JwtRefreshToken);
+        $userId = $this->jwtService->getUserIdByJwtPayload($token);
+        $userInfo = $this->jwtService->getUserInfoById($userId);
+        $jwtToken = $this->jwtService->genJwtToken($userId, JwtType::JwtToken);
+        $refreshToken = $this->jwtService->genJwtToken($userId, JwtType::JwtRefreshToken);
         $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
-        $outputLoginDto = new OutputLoginDto($userInfo, $outputJwtDto);
+        $outputLoginDto = new OutputLoginDto(
+            new OutputUserInfoDto(
+                $userInfo->getId(),
+                $userInfo->getName(),
+                $userInfo->getEmail(),
+                $userInfo->getUserType(),
+            ),
+            $outputJwtDto
+        );
+
         return $this->responseService->responseJson($outputLoginDto);
     }
 

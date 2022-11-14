@@ -5,67 +5,31 @@ namespace App\Dto;
 class InputPayloadDto
 {
     protected ?string $iss;
-    protected ?int $exp;
-    protected ?int $nbf;
+    protected int $exp;
+    protected int $nbf;
     protected ?int $iat;
     protected ?string $tokenType;
-    protected mixed $userInfo;
+    protected int $userId;
 
 
-    public function __construct(string $iss,int $exp,int $nbf,int $iat,string $tokenType,OutputUserInfoDto $userInfo)
+    public function __construct(string $iss, int $exp, int $nbf, int $iat, string $tokenType, int $userId)
     {
         $this->iss = $iss;
         $this->exp = $exp;
         $this->nbf = $nbf;
         $this->iat = $iat;
         $this->tokenType = $tokenType;
-        $this->userInfo = $userInfo;
+        $this->userId = $userId;
     }
 
     /**
-     * Set the value of iss
+     * Set the value of userId
      *
      * @return  self
      */
-    public function setIss($iss)
+    public function setUserId($userId)
     {
-        $this->iss = $iss;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of exp
-     *
-     * @return  self
-     */
-    public function setExp($exp)
-    {
-        $this->exp = $exp;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of nbf
-     *
-     * @return  self
-     */
-    public function setNbf($nbf)
-    {
-        $this->nbf = $nbf;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of iat
-     *
-     * @return  self
-     */
-    public function setIat($iat)
-    {
-        $this->iat = $iat;
+        $this->userId = $userId;
 
         return $this;
     }
@@ -83,13 +47,49 @@ class InputPayloadDto
     }
 
     /**
-     * Set the value of userInfo
+     * Set the value of iat
      *
      * @return  self
      */
-    public function setUserInfo($userInfo)
+    public function setIat($iat)
     {
-        $this->userInfo = $userInfo;
+        $this->iat = $iat;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of nbf
+     *
+     * @return  self
+     */
+    public function setNbf($nbf)
+    {
+        $this->nbf = $nbf;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of exp
+     *
+     * @return  self
+     */
+    public function setExp($exp)
+    {
+        $this->exp = $exp;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of iss
+     *
+     * @return  self
+     */
+    public function setIss($iss)
+    {
+        $this->iss = $iss;
 
         return $this;
     }
@@ -135,10 +135,10 @@ class InputPayloadDto
     }
 
     /**
-     * Get the value of userInfo
+     * Get the value of userId
      */
-    public function getUserInfo()
+    public function getUserId()
     {
-        return $this->userInfo;
+        return $this->userId;
     }
 }

@@ -17,7 +17,7 @@ class LoginService
         $this->userRepository = $userRepository;
     }
 
-    public function login(InputLoginDto $inputLoginDto)
+    public function login(InputLoginDto $inputLoginDto): OutputUserInfoDto
     {
         $outputUserInfoDto = $this->getUserInfoByLogin($inputLoginDto->getAccount());
         $isLogin = $this->userRepository->validPassword($outputUserInfoDto->id, $inputLoginDto->getPassword());
