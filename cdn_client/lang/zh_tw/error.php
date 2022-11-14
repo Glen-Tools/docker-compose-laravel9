@@ -32,6 +32,7 @@ return [
     "sql_duplicate_key"              => ": 識別碼(key) 重複,請重新輸入",
     "sql_menu"                       => ": 菜單權限錯誤",
     "not_found"                      => "頁面不存在",
+    "not_found_http_method"          => "Http method 錯誤",
     "data_not_found"                 => ":title資料不存在",
     "param_not_number"               => "querystring:{id},(:param) 此參數必須是整數",
 ];

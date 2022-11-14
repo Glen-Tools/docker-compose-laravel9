@@ -3,10 +3,20 @@
 namespace App\Exceptions;
 
 use App\Dto\OutputResponseDto;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Database\MultipleRecordsFoundException;
+use Illuminate\Database\RecordsNotFoundException;
+use Illuminate\Routing\Exceptions\BackedEnumCaseNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\Log;
 use Exception;
 use Psr\Log\LogLevel;
 use Throwable;
@@ -19,9 +29,33 @@ class Handler extends ExceptionHandler
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
     protected $levels = [
-        ValidationException::class => LogLevel::DEBUG,
-        ParameterException::class => LogLevel::DEBUG,
+        ValidationException::class => LogLevel::INFO,
+        ParameterException::class => LogLevel::INFO,
+        NotFoundHttpException::class => LogLevel::INFO,
+        MethodNotAllowedHttpException::class => LogLevel::INFO,
     ];
+
+
+    /**
+     * A list of the internal exception types that should not be reported.
+     *
+     * @var array<int, class-string<\Throwable>>
+     */
+    protected $internalDontReport = [
+        AuthenticationException::class,
+        AuthorizationException::class,
+        BackedEnumCaseNotFoundException::class,
+        MultipleRecordsFoundException::class,
+        RecordsNotFoundException::class,
+        SuspiciousOperationException::class,
+        TokenMismatchException::class,
+        ModelNotFoundException::class,
+
+        // HttpException::class,
+        // HttpResponseException::class,
+        // ValidationException::class,
+    ];
+
 
     /**
      * A list of the exception types that are not reported.
@@ -51,7 +85,6 @@ class Handler extends ExceptionHandler
     public function register()
     {
         // $this->reportable(function (Throwable $e) {
-        // return $this->handleLog($e);
         // });
 
         $this->renderable(function (Throwable $e, $request) {
@@ -88,11 +121,17 @@ class Handler extends ExceptionHandler
             return response()->json($outputResponseDto,  $exception->getCode());
         }
 
-        if ($exception instanceof NotFoundHttpException) { //404
+        if ($exception instanceof NotFoundHttpException) { //404 or method is not supported for this route
             $outputResponseDto->message = trans('error.not_found');
             return response()->json($outputResponseDto,  Response::HTTP_NOT_FOUND);
         }
 
+        if ($exception instanceof MethodNotAllowedHttpException) { //405 method is not supported for this route
+            $outputResponseDto->message = trans('error.not_found_http_method');
+            return response()->json($outputResponseDto,  Response::HTTP_METHOD_NOT_ALLOWED);
+        }
+
+        // Log::error($exception);
         $outputResponseDto->message = trans('error.server');
         return response()->json($outputResponseDto, Response::HTTP_INTERNAL_SERVER_ERROR);
     }

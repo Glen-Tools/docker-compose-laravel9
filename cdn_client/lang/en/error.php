@@ -32,6 +32,7 @@ return [
     "sql_duplicate_key"              => "The : The identification code (key) is duplicated, please re-enter.",
     "sql_menu"                       => "The : Menu permission error.",
     "not_found"                      => "Page not found.",
+    "not_found_http_method"          => "Method not allowed",
     "data_not_found"                 => "The :title data not found.",
     "param_not_number"               => "The querystring:{id},(:param) must be an integer.",
 ];
