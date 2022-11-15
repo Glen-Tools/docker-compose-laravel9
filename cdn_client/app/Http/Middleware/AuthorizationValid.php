@@ -33,9 +33,6 @@ class AuthorizationValid
      */
     public function handle(Request $request, Closure $next)
     {
-        $userInfo = $this->jwtService->getUserInfoByRequest($request);
-        $userMenu = collect($this->authorizationService->getUserMenu($userInfo->getId()));
-
         $route = $request->route();
         $actionName = explode('\\', $route->getActionName());
 
@@ -45,6 +42,9 @@ class AuthorizationValid
 
         $controllerMethod = $actionName[count($actionName) - 1];
         $authRouteMenuComparison = $this->authorizationService->getAuthRouteMenuComparison();
+
+        $userInfo = $this->jwtService->getUserInfoByRequest($request);
+        $userMenu = collect($this->authorizationService->getUserMenu($userInfo->getId()));
         $validMenuAuth = false;
 
         $userMenu->each(function ($item) use (&$validMenuAuth, $authRouteMenuComparison, $controllerMethod) {

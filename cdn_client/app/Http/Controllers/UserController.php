@@ -9,6 +9,7 @@ use App\Services\ResponseService;
 use App\Services\UserService;
 use App\Services\UtilService;
 use App\Services\JwtService;
+use App\Services\CacheMamageService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -19,18 +20,20 @@ class UserController extends BaseController
     private $utilService;
     private $responseService;
     private $jwtService;
+    protected $cacheMamageService;
 
     public function __construct(
         UserService $userService,
         UtilService $utilService,
         ResponseService $responseService,
         JwtService $jwtService,
-
+        CacheMamageService $cacheMamageService
     ) {
         $this->userService = $userService;
         $this->utilService = $utilService;
         $this->responseService = $responseService;
         $this->jwtService = $jwtService;
+        $this->cacheMamageService = $cacheMamageService;
     }
 
     /**
@@ -208,6 +211,9 @@ class UserController extends BaseController
         );
 
         $this->userService->updateUser($userDto, $id);
+
+        //移除 userInfo cache
+        $this->jwtService->removeCacheUserInfo($id);
         return $this->responseService->responseJson();
     }
 
@@ -227,6 +233,10 @@ class UserController extends BaseController
     {
         parent::destroy($request, $id);
         $this->userService->deleteUserById($id);
+
+        ///移除 權限相關 cache
+        $this->cacheMamageService->removeAuth($id);
+
         return $this->responseService->responseJson();
     }
 }

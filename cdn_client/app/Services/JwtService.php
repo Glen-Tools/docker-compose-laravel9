@@ -145,10 +145,15 @@ class JwtService
     public function getUserInfoById(int $userId): InputUserInfoDto
     {
         $cacheNameUserInfo = $this->getUserInfoCacheById($userId);
-
         $userInfo =  $this->cacheService->getByJson($cacheNameUserInfo);
+
         if (isset($userInfo)) {
-            return  $userInfo;
+            return  new InputUserInfoDto(
+                $userInfo->id,
+                $userInfo->name,
+                $userInfo->email,
+                $userInfo->userType,
+            );
         }
 
         $data =  $this->userRepository->getUserById($userId);
@@ -160,13 +165,19 @@ class JwtService
             $userInfo->user_type,
         );
 
-        $this->cacheService->putByJson($cacheNameUserInfo, $userInfo, env("CACHE_TIME", $this::CACHE_TIME));
+        $this->cacheService->putByJson($cacheNameUserInfo, $inputUserInfoDto, env("CACHE_TIME", $this::CACHE_TIME));
         return $inputUserInfoDto;
     }
 
     public function getUserInfoCacheById(int $id)
     {
         return $this::CACHE_USER_INFO . "_$id";
+    }
+
+    public function removeCacheUserInfo(int $id)
+    {
+        $cacheName = $this->getUserInfoCacheById($id);
+        $this->cacheService->removeCache($cacheName);
     }
 
     public function getUserIdByJwtPayload(string $jwt): int

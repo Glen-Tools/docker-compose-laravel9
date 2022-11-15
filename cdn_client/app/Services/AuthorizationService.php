@@ -65,4 +65,10 @@ class AuthorizationService
         $this->cacheService->putByJson($cacheNameUserMenu, $userMenu, env("CACHE_TIME", $this::CACHE_TIME));
         return $userMenu;
     }
+
+    public function removeCacheUserMenu(int $id)
+    {
+        $cacheName = $this->getUserMenusCacheNameById($id);
+        $this->cacheService->removeCache($cacheName);
+    }
 }

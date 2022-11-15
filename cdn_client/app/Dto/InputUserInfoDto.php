@@ -4,10 +4,10 @@ namespace App\Dto;
 
 class InputUserInfoDto
 {
-    protected int $id;
-    protected string $name;
-    protected string $email;
-    protected int $userType;
+    public readonly int $id;
+    public readonly string $name;
+    public readonly string $email;
+    public readonly int $userType;
 
     public function __construct(int $id, string $name, string $email, int $userType)
     {
@@ -15,54 +15,6 @@ class InputUserInfoDto
         $this->name = $name;
         $this->email = $email;
         $this->userType = $userType;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of name
-     *
-     * @return  self
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of email
-     *
-     * @return  self
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of userType
-     *
-     * @return  self
-     */
-    public function setUserType($userType)
-    {
-        $this->userType = $userType;
-
-        return $this;
     }
 
     /**

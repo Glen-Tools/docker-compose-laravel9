@@ -12,6 +12,7 @@ use App\Services\LoginService;
 use App\Services\ResponseService;
 use App\Services\UserService;
 use App\Services\UtilService;
+use App\Services\CacheMamageService;
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
@@ -22,6 +23,7 @@ class LoginController extends Controller
     private $responseService;
     protected $jwtService;
     protected $userService;
+    protected $cacheMamageService;
 
     public function __construct(
         UtilService $utilService,
@@ -29,12 +31,14 @@ class LoginController extends Controller
         ResponseService $responseService,
         JwtService $jwtService,
         UserService $userService,
+        CacheMamageService $cacheMamageService
     ) {
         $this->utilService = $utilService;
         $this->loginService = $loginService;
         $this->responseService = $responseService;
         $this->jwtService = $jwtService;
         $this->userService = $userService;
+        $this->cacheMamageService = $cacheMamageService;
     }
 
     /**
@@ -148,7 +152,6 @@ class LoginController extends Controller
      *  path="/api/v1/logout",
      *  summary="使用者登出 (User Logout)",
      *  security={{"Authorization":{}}},
-     *  @OA\Parameter(parameter="page",in="query",name="id",required=true,description="id",@OA\Schema(type="integer")),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/LoginOut", example="LoginOut")})),
      *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
@@ -156,5 +159,13 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        // userInfo
+        $inputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);
+        $userId = $inputUserInfoDto->getId();
+
+        //移除cache
+        $this->cacheMamageService->removeAuth($userId);
+
+        return $this->responseService->responseJson();
     }
 }
