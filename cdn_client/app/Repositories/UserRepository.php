@@ -25,12 +25,12 @@ class UserRepository extends BaseRepository
 
     public function createUser(InputUserDto $userDto)
     {
-        $this->user->name = $userDto->getName();
-        $this->user->email = $userDto->getEmail();
-        $this->user->password = $this->getPasswordHash($userDto->getPassword());
-        $this->user->status = $userDto->getStatus();
-        $this->user->user_type = $userDto->getUserType();
-        $this->user->remark = $userDto->getRemark();
+        $this->user->name = $userDto->name;
+        $this->user->email = $userDto->email;
+        $this->user->password = $this->getPasswordHash($userDto->password);
+        $this->user->status = $userDto->status;
+        $this->user->user_type = $userDto->userType;
+        $this->user->remark = $userDto->remark;
         $this->user->save();
     }
 
@@ -38,11 +38,11 @@ class UserRepository extends BaseRepository
     {
         $user = $this->isExistUser($id);
 
-        $user->name = $userDto->getName() ?? $user->name;
-        $user->email = $userDto->getEmail() ?? $user->email;
-        $user->status = $userDto->getStatus() ?? $user->status;
-        $user->user_type = $userDto->getUserType() ?? $user->userType;
-        $user->remark = $userDto->getRemark() ?? $user->remark;
+        $user->name = $userDto->name ?? $user->name;
+        $user->email = $userDto->email ?? $user->email;
+        $user->status = $userDto->status ?? $user->status;
+        $user->user_type = $userDto->userType ?? $user->userType;
+        $user->remark = $userDto->remark ?? $user->remark;
         $user->save();
     }
 

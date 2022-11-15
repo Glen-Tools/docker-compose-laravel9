@@ -17,11 +17,11 @@ class LogRepository extends Model
 
     public function create(InputLogDto $inputLogDto)
     {
-        $this->log->feature = $inputLogDto->getFeature();
-        $this->log->operate = $inputLogDto->getOperate();
-        $this->log->table = $inputLogDto->getTable();
-        $this->log->content = $inputLogDto->getContent();
-        $this->log->user_id = $inputLogDto->getUserId();
+        $this->log->feature = $inputLogDto->feature;
+        $this->log->operate = $inputLogDto->operate;
+        $this->log->table = $inputLogDto->table;
+        $this->log->content = $inputLogDto->content;
+        $this->log->user_id = $inputLogDto->userId;
         $this->log->save();
     }
 }

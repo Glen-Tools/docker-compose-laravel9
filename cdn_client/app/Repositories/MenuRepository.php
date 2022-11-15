@@ -23,14 +23,14 @@ class MenuRepository extends BaseRepository
 
     public function createMenu(InputMenuDto $menuDto)
     {
-        $this->menu->name = $menuDto->getName();
-        $this->menu->key = $menuDto->getKey();
-        $this->menu->url = $menuDto->getUrl();
-        $this->menu->feature = $menuDto->getFeature();
-        $this->menu->status = $menuDto->getStatus();
-        $this->menu->parent = $menuDto->getParent();
-        $this->menu->weight = $menuDto->getWeight();
-        $this->menu->remark = $menuDto->getRemark();
+        $this->menu->name = $menuDto->name;
+        $this->menu->key = $menuDto->key;
+        $this->menu->url = $menuDto->url;
+        $this->menu->feature = $menuDto->feature;
+        $this->menu->status = $menuDto->status;
+        $this->menu->parent = $menuDto->parent;
+        $this->menu->weight = $menuDto->weight;
+        $this->menu->remark = $menuDto->remark;
         $this->menu->save();
     }
 
@@ -42,14 +42,14 @@ class MenuRepository extends BaseRepository
             throw new ParameterException(trans('error.data_not_found', ['title' => 'Menu']), Response::HTTP_BAD_REQUEST);
         }
 
-        $menu->name = $menuDto->getName() ?? $menu->name;
-        $menu->key = $menuDto->getKey() ?? $menu->key;
-        $menu->url = $menuDto->getUrl() ?? $menu->url;
-        $menu->feature = $menuDto->getFeature() ?? $menu->feature;
-        $menu->status = $menuDto->getStatus() ?? $menu->status;
-        $menu->parent = $menuDto->getParent() ?? $menu->parent;
-        $menu->weight = $menuDto->getWeight() ?? $menu->weight;
-        $menu->remark = $menuDto->getRemark() ?? $menu->remark;
+        $menu->name = $menuDto->name ?? $menu->name;
+        $menu->key = $menuDto->key ?? $menu->key;
+        $menu->url = $menuDto->url ?? $menu->url;
+        $menu->feature = $menuDto->feature ?? $menu->feature;
+        $menu->status = $menuDto->status ?? $menu->status;
+        $menu->parent = $menuDto->parent ?? $menu->parent;
+        $menu->weight = $menuDto->weight ?? $menu->weight;
+        $menu->remark = $menuDto->remark ?? $menu->remark;
         $menu->save();
     }
 
@@ -111,7 +111,7 @@ class MenuRepository extends BaseRepository
 
     public function deleteMenuById($id)
     {
-        RoleMenu::where("menu_id",$id)->delete();
+        RoleMenu::where("menu_id", $id)->delete();
         $this->menu->destroy($id);
     }
 }

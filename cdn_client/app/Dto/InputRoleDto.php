@@ -4,118 +4,18 @@ namespace App\Dto;
 
 class InputRoleDto
 {
-    protected ?string $name;
-    protected ?string $key;
-    protected ?bool $status;
-    protected mixed $weight;
-    protected ?string $remark;
+    public readonly string $name;
+    public readonly string $key;
+    public readonly bool $status;
+    public readonly mixed $weight;
+    public readonly ?string $remark;
 
-    public function __construct(string $name,string $key,bool $status,mixed $weight,string $remark = "")
+    public function __construct(string $name, string $key, bool $status, mixed $weight, string $remark = "")
     {
         $this->name = $name;
         $this->key = $key;
         $this->status = $status;
         $this->weight = $weight;
         $this->remark = $remark;
-    }
-
-    /**
-     * Set the value of name
-     *
-     * @return  self
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of key
-     *
-     * @return  self
-     */
-    public function setKey($key)
-    {
-        $this->key = $key;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of status
-     *
-     * @return  self
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of weight
-     *
-     * @return  self
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of remark
-     *
-     * @return  self
-     */
-    public function setRemark($remark)
-    {
-        $this->remark = $remark;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of name
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Get the value of key
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * Get the value of status
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Get the value of weight
-     */
-    public function getWeight()
-    {
-        return $this->weight;
-    }
-
-    /**
-     * Get the value of remark
-     */
-    public function getRemark()
-    {
-        return $this->remark;
     }
 }

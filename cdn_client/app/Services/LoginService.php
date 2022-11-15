@@ -19,8 +19,8 @@ class LoginService
 
     public function login(InputLoginDto $inputLoginDto): OutputUserInfoDto
     {
-        $outputUserInfoDto = $this->getUserInfoByLogin($inputLoginDto->getAccount());
-        $isLogin = $this->userRepository->validPassword($outputUserInfoDto->id, $inputLoginDto->getPassword());
+        $outputUserInfoDto = $this->getUserInfoByLogin($inputLoginDto->account);
+        $isLogin = $this->userRepository->validPassword($outputUserInfoDto->id, $inputLoginDto->password);
         if (!$isLogin) {
             throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
         }

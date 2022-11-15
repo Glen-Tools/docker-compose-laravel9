@@ -45,15 +45,15 @@ class UserService
         }
 
         // 確認新密碼、判斷一般使用者
-        if (($userDto->getNewPassord() != $userDto->getCheckPassord()) ||
+        if (($userDto->newPassord != $userDto->checkPassord) ||
             ($userInfo->getUserType() == UserType::User->value &&
-                !$this->userRepository->validPassword($userInfo->getId(), $userDto->getPassword())
+                !$this->userRepository->validPassword($userInfo->getId(), $userDto->password)
             )
         ) {
             throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
         }
 
-        $this->userRepository->updateUserPassword($userDto->getNewPassord(), $id);
+        $this->userRepository->updateUserPassword($userDto->newPassord, $id);
     }
 
     public function getUserById(int $id): Collection

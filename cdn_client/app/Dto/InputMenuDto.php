@@ -4,16 +4,16 @@ namespace App\Dto;
 
 class InputMenuDto
 {
-    protected ?string $name;
-    protected ?string $key;
-    protected ?string $url;
-    protected ?string $feature;
-    protected ?bool $status;
-    protected ?int $parent;
-    protected mixed $weight;
-    protected ?string $remark;
+    public readonly string $name;
+    public readonly string $key;
+    public readonly ?string $url;
+    public readonly string $feature;
+    public readonly bool $status;
+    public readonly ?int $parent;
+    public readonly mixed $weight;
+    public readonly ?string $remark;
 
-    public function __construct(string $name,string $key,string $url,string $feature,bool $status,int $parent,mixed $weight,string $remark = "")
+    public function __construct(string $name, string $key, string $url, string $feature, bool $status, int $parent, mixed $weight, string $remark = "")
     {
         $this->name = $name;
         $this->key = $key;
@@ -23,165 +23,5 @@ class InputMenuDto
         $this->parent = $parent;
         $this->weight = $weight;
         $this->remark = $remark;
-    }
-
-    /**
-     * Set the value of name
-     *
-     * @return  self
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of key
-     *
-     * @return  self
-     */
-    public function setKey($key)
-    {
-        $this->key = $key;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of url
-     *
-     * @return  self
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of feature
-     *
-     * @return  self
-     */
-    public function setFeature($feature)
-    {
-        $this->feature = $feature;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of status
-     *
-     * @return  self
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of parent
-     *
-     * @return  self
-     */
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of weight
-     *
-     * @return  self
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of remark
-     *
-     * @return  self
-     */
-    public function setRemark($remark)
-    {
-        $this->remark = $remark;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of remark
-     */
-    public function getRemark()
-    {
-        return $this->remark;
-    }
-
-    /**
-     * Get the value of weight
-     */
-    public function getWeight()
-    {
-        return $this->weight;
-    }
-
-    /**
-     * Get the value of parent
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * Get the value of status
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Get the value of feature
-     */
-    public function getFeature()
-    {
-        return $this->feature;
-    }
-
-    /**
-     * Get the value of url
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * Get the value of key
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * Get the value of name
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 }

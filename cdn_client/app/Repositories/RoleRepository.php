@@ -24,11 +24,11 @@ class RoleRepository extends BaseRepository
 
     public function createRole(InputRoleDto $roleDto)
     {
-        $this->role->name = $roleDto->getName();
-        $this->role->key = $roleDto->getKey();
-        $this->role->status = $roleDto->getStatus();
-        $this->role->weight = $roleDto->getWeight();
-        $this->role->remark = $roleDto->getRemark();
+        $this->role->name = $roleDto->name;
+        $this->role->key = $roleDto->key;
+        $this->role->status = $roleDto->status;
+        $this->role->weight = $roleDto->weight;
+        $this->role->remark = $roleDto->remark;
         $this->role->save();
     }
 
@@ -40,13 +40,12 @@ class RoleRepository extends BaseRepository
             throw new ParameterException(trans('error.data_not_found', ['title' => 'Menu']), Response::HTTP_BAD_REQUEST);
         }
 
-        $role->name = $roleDto->getName() ?? $role->name;
-        $role->key = $roleDto->getKey() ?? $role->key;
-        $role->status = $roleDto->getStatus() ?? $role->status;
-        $role->weight = $roleDto->getWeight() ?? $role->weight;
-        $role->remark = $roleDto->getRemark() ?? $role->remark;
+        $role->name = $roleDto->name ?? $role->name;
+        $role->key = $roleDto->key ?? $role->key;
+        $role->status = $roleDto->status ?? $role->status;
+        $role->weight = $roleDto->weight ?? $role->weight;
+        $role->remark = $roleDto->remark ?? $role->remark;
         $role->save();
-
     }
 
     public function getRoleById(int $id)
@@ -103,8 +102,8 @@ class RoleRepository extends BaseRepository
 
     public function deleteRoleById($id)
     {
-        RoleUser::where("role_id",$id)->delete();
-        RoleMenu::where("role_id",$id)->delete();
+        RoleUser::where("role_id", $id)->delete();
+        RoleMenu::where("role_id", $id)->delete();
         $this->role->destroy($id);
     }
 }

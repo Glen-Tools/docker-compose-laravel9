@@ -205,6 +205,7 @@ class UserController extends BaseController
         $userDto = new InputUserDto(
             $data["name"],
             $data["email"],
+            "",
             $data["status"],
             $data["userType"],
             $data["remark"] ?? "",

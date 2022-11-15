@@ -114,10 +114,10 @@ class JwtService
     private function validJwtPayload(InputPayloadDto $payload, JwtType $type): bool
     {
         $now = Carbon::now()->timestamp;
-        $exp = $payload->getExp();
-        $nbf = $payload->getNbf();
-        $iat = $payload->getIat();
-        $tokenType = $payload->getTokenType();
+        $exp = $payload->exp;
+        $nbf = $payload->nbf;
+        $iat = $payload->iat;
+        $tokenType = $payload->tokenType;
         if (
             $exp >= $now &&
             $nbf <= $now &&
@@ -132,7 +132,7 @@ class JwtService
 
     public function setUserIdToRequest(string $jwt, Request $request)
     {
-        $userId = $this->parseJwtPayload($jwt)->getUserId();
+        $userId = $this->parseJwtPayload($jwt)->userId;
         $request->merge([$this::REQUEST_USER_ID => (int)$userId]);
     }
 
@@ -183,7 +183,7 @@ class JwtService
     public function getUserIdByJwtPayload(string $jwt): int
     {
         $inputPayloadDto = $this->parseJwtPayload($jwt);
-        return $inputPayloadDto->getUserId();
+        return $inputPayloadDto->userId;
     }
 
     private function parseJwtPayload(string $jwt): InputPayloadDto

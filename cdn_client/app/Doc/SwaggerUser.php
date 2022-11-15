@@ -113,8 +113,8 @@ class SwaggerUser
      *      @OA\Property(
      *          property="userType",
      *          description="userType",
-     *          type="bool",
-     *          format="bool",
+     *          type="integer",
+     *          format="integer",
      *          example="true",
      *      ),
      *      @OA\Property(
@@ -155,8 +155,8 @@ class SwaggerUser
      *      @OA\Property(
      *          property="userType",
      *          description="userType",
-     *          type="bool",
-     *          format="bool",
+     *          type="integer",
+     *          format="integer",
      *          example="true",
      *      ),
      *      @OA\Property(
