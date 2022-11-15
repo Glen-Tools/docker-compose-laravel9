@@ -191,15 +191,19 @@ class JwtService
         $arrJwt = explode(".", $jwt);
         $jwtData = json_decode($this->utilService->base64url_decode($arrJwt[1]));
 
-        //Payload data
-        $inputPayloadDto = new InputPayloadDto(
-            $jwtData->iss,
-            $jwtData->exp,
-            $jwtData->nbf,
-            $jwtData->iat,
-            $jwtData->tokenType,
-            $jwtData->userId,
-        );
+        try {
+            //Payload data
+            $inputPayloadDto = new InputPayloadDto(
+                $jwtData->iss,
+                $jwtData->exp,
+                $jwtData->nbf,
+                $jwtData->iat,
+                $jwtData->tokenType,
+                $jwtData->userId,
+            );
+        } catch (\Throwable $th) {
+            throw new ParameterException(trans('error.unauthorized'), Response::HTTP_UNAUTHORIZED);
+        }
 
         return $inputPayloadDto;
     }
