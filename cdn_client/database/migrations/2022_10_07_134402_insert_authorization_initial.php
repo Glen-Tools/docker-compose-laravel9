@@ -168,7 +168,7 @@ return new class extends Migration
                     "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
                     "parent" => 0,  //父類(id)
-                    "weight" => 99,  //權重(優先順序 重=高)
+                    "weight" => 89,  //權重(優先順序 重=高)
                 ],
                 [
                     'id' => 12,
@@ -178,7 +178,7 @@ return new class extends Migration
                     "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
                     "parent" => 0,  //父類(id)
-                    "weight" => 98,  //權重(優先順序 重=高)
+                    "weight" => 88,  //權重(優先順序 重=高)
                 ],
                 [
                     'id' => 13,
@@ -188,7 +188,7 @@ return new class extends Migration
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
                     "parent" => 0,  //父類(id)
-                    "weight" => 97,  //權重(優先順序 重=高)
+                    "weight" => 87,  //權重(優先順序 重=高)
                 ],
                 [
                     'id' => 14,
@@ -198,7 +198,7 @@ return new class extends Migration
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
                     "parent" => 0,  //父類(id)
-                    "weight" => 96,  //權重(優先順序 重=高)
+                    "weight" => 86,  //權重(優先順序 重=高)
                 ],
                 [
                     'id' => 15,
@@ -208,7 +208,7 @@ return new class extends Migration
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
                     "parent" => 0,  //父類(id)
-                    "weight" => 95,  //權重(優先順序 重=高)
+                    "weight" => 85,  //權重(優先順序 重=高)
                 ]
             ]
         );
