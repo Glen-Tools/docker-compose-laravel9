@@ -30,7 +30,7 @@ return new class extends Migration
                     'id' => 2,
                     'name' => 'user',
                     'email' => 'user@gmail.com',
-                    'password' => '$2y$12$6f6HMmYcqpmGA/fmrBKjNe05mC0mWd5uZT.WOYA1aulxM7ZmS6hzC', //user
+                    'password' => '$2y$12$zs4W3t65F948F0I7IMEd8OrYco4yJhwVVxpBzVv/MCRrU5iwhpiP.', //user123
                     'status' => 1,      //狀態(開,關)
                     'user_type' => 2    //管理者=1,一般使用者=2]
                 ]
@@ -65,7 +65,7 @@ return new class extends Migration
                     "name" => "管理",
                     "key" => "management",
                     "url" => "", //網址
-                    "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "feature" => "T", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
                     "parent" => 0,  //父類(id)
                     "weight" => 999,  //權重(優先順序 重=高)

@@ -181,14 +181,14 @@ class SwaggerUser
      *          example="!QAZ2wsx"
      *      ),
      *      @OA\Property(
-     *          property="newPassord",
+     *          property="newPassword",
      *          description="new Passord",
      *          type="string",
      *          format="string",
      *          example="@WSX1qaz"
      *      ),
      *      @OA\Property(
-     *          property="checkPassord",
+     *          property="checkPassword",
      *          description="check Passord",
      *          type="string",
      *          format="string",
