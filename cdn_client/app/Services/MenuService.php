@@ -8,20 +8,25 @@ use App\Dto\OutputPageDto;
 use App\Dto\OutputMenuListDto;
 use App\Enums\ListType;
 use App\Repositories\MenuRepository;
+use App\Repositories\RoleMenuRepository;
 use App\Exceptions\ParameterException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use stdClass;
 
 class MenuService
 {
     protected $menuRepository;
+    protected $roleMenuRepository;
     protected $utilService;
 
     public function __construct(
         MenuRepository $menuRepository,
+        RoleMenuRepository $roleMenuRepository,
         UtilService $utilService
     ) {
         $this->menuRepository = $menuRepository;
+        $this->roleMenuRepository = $roleMenuRepository;
         $this->utilService = $utilService;
     }
 
@@ -87,6 +92,8 @@ class MenuService
     {
         $count = $this->menuRepository->getMenuListByPage($pageManagement, ListType::ListCount);
         $pageCount = ceil($count / $pageManagement->getLimit());
+        $pageManagement->setCount($count);
+        $pageManagement->setPageCount($pageCount);
 
         $page = $this->utilService->setOutputPageDto($pageManagement);
         return $page;
@@ -94,6 +101,9 @@ class MenuService
 
     public function deleteMenuById(int $id)
     {
-        $this->menuRepository->deleteMenuById($id);
+        DB::transaction(function () use ($id) {
+            $this->roleMenuRepository->deleteMenuById($id);
+            $this->menuRepository->deleteMenuById($id);
+        });
     }
 }

@@ -8,21 +8,30 @@ use App\Dto\OutputPageDto;
 use App\Dto\OutputRoleListDto;
 use App\Enums\ListType;
 use App\Repositories\RoleRepository;
+use App\Repositories\RoleUserRepository;
+use App\Repositories\RoleMenuRepository;
 use App\Exceptions\ParameterException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use stdClass;
 
 class RoleService
 {
 
     protected $roleRepository;
+    protected $roleUserRepository;
+    protected $roleMenuRepository;
     protected $utilService;
 
     public function __construct(
         RoleRepository $roleRepository,
+        RoleUserRepository $roleUserRepository,
+        RoleMenuRepository $roleMenuRepository,
         UtilService $utilService
     ) {
         $this->roleRepository = $roleRepository;
+        $this->roleUserRepository = $roleUserRepository;
+        $this->roleMenuRepository = $roleMenuRepository;
         $this->utilService = $utilService;
     }
 
@@ -82,21 +91,19 @@ class RoleService
     {
         $count = $this->roleRepository->getRoleListByPage($pageManagement, ListType::ListCount);
         $pageCount = ceil($count / $pageManagement->getLimit());
+        $pageManagement->setCount($count);
+        $pageManagement->setPageCount($pageCount);
 
-        $page = new OutputPageDto(
-            $pageManagement->getPage(),
-            $pageCount,
-            $count,
-            $pageManagement->getLimit(),
-            $pageManagement->getSearch(),
-            $pageManagement->getSort(),
-            $pageManagement->getSortColumn()
-        );
+        $page = $this->utilService->setOutputPageDto($pageManagement);
         return $page;
     }
 
     public function deleteRoleById(int $id)
     {
-        $this->roleRepository->deleteRoleById($id);
+        DB::transaction(function () use ($id) {
+            $this->roleUserRepository->deleteRoleById($id);
+            $this->roleMenuRepository->deleteRoleById($id);
+            $this->roleRepository->deleteRoleById($id);
+        });
     }
 }

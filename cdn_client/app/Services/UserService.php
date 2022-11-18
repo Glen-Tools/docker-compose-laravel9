@@ -10,21 +10,26 @@ use App\Dto\InputUserInfoDto;
 use App\Enums\ListType;
 use App\Enums\UserType;
 use App\Repositories\UserRepository;
+use App\Repositories\RoleUserRepository;
 use App\Exceptions\ParameterException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
 use stdClass;
 
 class UserService
 {
     protected $userRepository;
+    protected $roleUserRepository;
     protected $utilService;
 
     public function __construct(
         UserRepository $userRepository,
+        RoleUserRepository $roleUserRepository,
         UtilService $utilService
     ) {
         $this->userRepository = $userRepository;
+        $this->roleUserRepository = $roleUserRepository;
         $this->utilService = $utilService;
     }
 
@@ -116,6 +121,9 @@ class UserService
 
     public function deleteUserById(int $id)
     {
-        $this->userRepository->deleteUserById($id);
+        DB::transaction(function () use ($id) {
+            $this->roleUserRepository->deleteRoleUserByUserId($id);
+            $this->userRepository->deleteUserById($id);
+        });
     }
 }
