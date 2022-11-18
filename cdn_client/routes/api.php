@@ -37,12 +37,15 @@ Route::prefix('v1')->group(function () {
             Route::get('/auth/menu', [AuthorizationController::class, 'getAuthMenuList']);
             Route::get('/logout', [LoginController::class, 'logout']);
             Route::get('/jwt/check', [LoginController::class, 'validToken']);
+
+            //自己(self) 密碼修改
+            Route::patch('/user/password/self', [UserController::class, 'updateSelfPassword']);
         });
 
         //jwt 登入與頁面權限驗證
         Route::middleware([JwtValid::class, AuthorizationValid::class])->group(function () {
 
-            //使用者 密碼修改
+            //密碼修改
             Route::patch('/user/password/{id}', [UserController::class, 'updatePassword']);
             Route::apiResource('user', UserController::class);
             Route::apiResource('role', RoleController::class);
