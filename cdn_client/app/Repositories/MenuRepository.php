@@ -99,6 +99,8 @@ class MenuRepository extends BaseRepository
             $menuOrm = $menuOrm->orderBy($orderByColums[$SortColumn], $Sort);
         } else {
             $menuOrm = $menuOrm->orderBy("id", $Sort);
+            $inPageManagement->setSortColumn("id");
+            $inPageManagement->setSort($Sort);
         }
 
         //筆數

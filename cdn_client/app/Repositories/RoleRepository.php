@@ -89,6 +89,8 @@ class RoleRepository extends BaseRepository
             $roleOrm = $roleOrm->orderBy($orderByColums[$SortColumn], $Sort);
         } else {
             $roleOrm = $roleOrm->orderBy("id", $Sort);
+            $inPageManagement->setSortColumn("id");
+            $inPageManagement->setSort($Sort);
         }
 
         //筆數
