@@ -45,20 +45,27 @@ class UserService
 
     public function updateUserPassword(InputUserInfoDto $userInfo, InputUserPasswordDto $userDto, int $id)
     {
-        if ($id != $userInfo->getId() && $userInfo->getUserType() == UserType::User->value) {
-            throw new ParameterException(trans('error.password_update'), Response::HTTP_UNAUTHORIZED);
+        // 確認身份
+        if (($userInfo->getUserType() != UserType::Admin->value)) {
+            throw new ParameterException(trans('error.user_authority_insufficinet'), Response::HTTP_UNAUTHORIZED);
         }
 
-        // 確認新密碼、判斷一般使用者
-        if (($userDto->newPassword != $userDto->checkPassword) ||
-            ($userInfo->getUserType() == UserType::User->value &&
-                !$this->userRepository->validPassword($userInfo->getId(), $userDto->password)
-            )
-        ) {
+        // 確認新密碼
+        if (($userDto->newPassword != $userDto->checkPassword)) {
             throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
         }
 
         $this->userRepository->updateUserPassword($userDto->newPassword, $id);
+    }
+
+    public function updateSelfPassword(InputUserInfoDto $userInfo, InputUserPasswordDto $userDto)
+    {
+        // 確認新密碼
+        if (($userDto->newPassword != $userDto->checkPassword)) {
+            throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->userRepository->updateUserPassword($userDto->newPassword, $userInfo->getId());
     }
 
     public function getUserById(int $id): Collection

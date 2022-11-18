@@ -156,13 +156,11 @@ class UserController extends BaseController
 
         //驗證
         $this->utilService->ColumnValidator($data, [
-            'password' => 'nullable|max:50|min:5',
             'newPassword' => 'required|max:50|min:5',
             'checkPassword' => 'required|max:50|min:5',
         ]);
 
         $userPasswordDto = new InputUserPasswordDto(
-            $data["password"] ?? "",
             $data["newPassword"],
             $data["checkPassword"],
         );
@@ -170,6 +168,40 @@ class UserController extends BaseController
         $InputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);
 
         $this->userService->updateUserPassword($InputUserInfoDto, $userPasswordDto, $id);
+        return $this->responseService->responseJson();
+    }
+
+    /**
+     * @OA\Patch(
+     *  tags={"User"},
+     *  path="/api/v1/user/password/self",
+     *  summary="修改自身密碼(User Update)",
+     *  security={{"Authorization":{}}},
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UpdateUserPassword")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function updateSelfPassword(Request $request)
+    {
+        //取得api data
+        $data = $request->all();
+
+        //驗證
+        $this->utilService->ColumnValidator($data, [
+            'newPassword' => 'required|max:50|min:5',
+            'checkPassword' => 'required|max:50|min:5',
+        ]);
+
+        $userPasswordDto = new InputUserPasswordDto(
+            $data["newPassword"],
+            $data["checkPassword"],
+        );
+
+        $InputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);
+
+        $this->userService->updateSelfPassword($InputUserInfoDto, $userPasswordDto);
         return $this->responseService->responseJson();
     }
 
