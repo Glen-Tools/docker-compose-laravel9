@@ -174,13 +174,6 @@ class SwaggerUser
      * @OA\Schema(
      *      schema="UpdateUserPassword",
      *      @OA\Property(
-     *          property="password",
-     *          description="password",
-     *          type="string",
-     *          format="string",
-     *          example="!QAZ2wsx"
-     *      ),
-     *      @OA\Property(
      *          property="newPassword",
      *          description="new Passord",
      *          type="string",
