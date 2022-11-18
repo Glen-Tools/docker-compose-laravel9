@@ -45,7 +45,7 @@ class UserService
         }
 
         // 確認新密碼、判斷一般使用者
-        if (($userDto->newPassord != $userDto->checkPassord) ||
+        if (($userDto->newPassword != $userDto->checkPassword) ||
             ($userInfo->getUserType() == UserType::User->value &&
                 !$this->userRepository->validPassword($userInfo->getId(), $userDto->password)
             )
@@ -53,7 +53,7 @@ class UserService
             throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
         }
 
-        $this->userRepository->updateUserPassword($userDto->newPassord, $id);
+        $this->userRepository->updateUserPassword($userDto->newPassword, $id);
     }
 
     public function getUserById(int $id): Collection

@@ -157,14 +157,14 @@ class UserController extends BaseController
         //驗證
         $this->utilService->ColumnValidator($data, [
             'password' => 'nullable|max:50|min:5',
-            'newPassord' => 'required|max:50|min:5',
-            'checkPassord' => 'required|max:50|min:5',
+            'newPassword' => 'required|max:50|min:5',
+            'checkPassword' => 'required|max:50|min:5',
         ]);
 
         $userPasswordDto = new InputUserPasswordDto(
             $data["password"] ?? "",
-            $data["newPassord"],
-            $data["checkPassord"],
+            $data["newPassword"],
+            $data["checkPassword"],
         );
 
         $InputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);

@@ -5,13 +5,13 @@ namespace App\Dto;
 class InputUserPasswordDto
 {
     public readonly ?string $password;
-    public readonly string $newPassord;
-    public readonly string $checkPassord;
+    public readonly string $newPassword;
+    public readonly string $checkPassword;
 
-    public function __construct(string $password, string $newPassord, string $checkPassord)
+    public function __construct(string $password, string $newPassword, string $checkPassword)
     {
         $this->password = $password;
-        $this->newPassord = $newPassord;
-        $this->checkPassord = $checkPassord;
+        $this->newPassword = $newPassword;
+        $this->checkPassword = $checkPassword;
     }
 }
