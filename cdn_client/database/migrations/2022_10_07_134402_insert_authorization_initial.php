@@ -30,7 +30,7 @@ return new class extends Migration
                     'id' => 2,
                     'name' => 'user',
                     'email' => 'user@gmail.com',
-                    'password' => '$2y$12$6f6HMmYcqpmGA/fmrBKjNe05mC0mWd5uZT.WOYA1aulxM7ZmS6hzC', //user
+                    'password' => '$2y$12$zs4W3t65F948F0I7IMEd8OrYco4yJhwVVxpBzVv/MCRrU5iwhpiP.', //user123
                     'status' => 1,      //狀態(開,關)
                     'user_type' => 2    //管理者=1,一般使用者=2]
                 ]
@@ -62,153 +62,203 @@ return new class extends Migration
             [
                 [
                     'id' => 1,
-                    "name" => "使用者頁面",
-                    "key" => "user_list",
-                    "url" => "api/v1/user", //網址
-                    "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "name" => "管理",
+                    "key" => "management",
+                    "url" => "", //網址
+                    "feature" => "T", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
                     "parent" => 0,  //父類(id)
-                    "weight" => 99,  //權重(優先順序 重=高)
+                    "weight" => 999,  //權重(優先順序 重=高)
                 ],
                 [
                     'id' => 2,
-                    "name" => "使用者資訊",
-                    "key" => "user_info",
-                    "url" => "api/v1/user/{user}", //網址
+                    "name" => "使用者頁面",
+                    "key" => "user_page",
+                    "url" => "", //網址
                     "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 98,  //權重(優先順序 重=高)
+                    "parent" => 1,  //父類(id)
+                    "weight" => 998,  //權重(優先順序 重=高)
                 ],
                 [
                     'id' => 3,
+                    "name" => "權限頁面",
+                    "key" => "role_page",
+                    "url" => "", //網址
+                    "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "status" => 1,  //狀態(開,關)
+                    "parent" => 1,  //父類(id)
+                    "weight" => 997,  //權重(優先順序 重=高)
+                ],
+                [
+                    'id' => 4,
+                    "name" => "菜單頁面",
+                    "key" => "menu_page",
+                    "url" => "", //網址
+                    "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "status" => 1,  //狀態(開,關)
+                    "parent" => 1,  //父類(id)
+                    "weight" => 996,  //權重(優先順序 重=高)
+                ],
+                [
+                    'id' => 5,
+                    "name" => "使用者清單",
+                    "key" => "user_list",
+                    "url" => "api/v1/user", //網址
+                    "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "status" => 1,  //狀態(開,關)
+                    "parent" => 2,  //父類(id)
+                    "weight" => 995,  //權重(優先順序 重=高)
+                ],
+                [
+                    'id' => 6,
+                    "name" => "使用者資訊",
+                    "key" => "user_info",
+                    "url" => "api/v1/user/{user}", //網址
+                    "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "status" => 1,  //狀態(開,關)
+                    "parent" => 2,  //父類(id)
+                    "weight" => 994,  //權重(優先順序 重=高)
+                ],
+                [
+                    'id' => 7,
                     "name" => "使用者新增",
                     "key" => "user_create",
                     "url" => "api/v1/user", //網址
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 97,  //權重(優先順序 重=高)
+                    "parent" => 2,  //父類(id)
+                    "weight" => 993,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 4,
+                    'id' => 8,
                     "name" => "使用者修改",
                     "key" => "user_update",
                     "url" => "api/v1/user/{user}", //網址
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 96,  //權重(優先順序 重=高)
+                    "parent" => 2,  //父類(id)
+                    "weight" => 992,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 5,
+                    'id' => 9,
                     "name" => "使用者刪除",
                     "key" => "user_delete",
                     "url" => "api/v1/user/{user}", //網址
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 95,  //權重(優先順序 重=高)
+                    "parent" => 2,  //父類(id)
+                    "weight" => 991,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 6,
-                    "name" => "權限頁面",
+                    'id' => 10,
+                    "name" => "使用者密碼修改",
+                    "key" => "user_password_update",
+                    "url" => "api/v1/user/password/{id}", //網址
+                    "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "status" => 1,  //狀態(開,關)
+                    "parent" => 2,  //父類(id)
+                    "weight" => 990,  //權重(優先順序 重=高)
+                ],
+                [
+                    'id' => 11,
+                    "name" => "權限清單",
                     "key" => "role_list",
                     "url" => "api/v1/role", //網址
-                    "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 94,  //權重(優先順序 重=高)
+                    "parent" => 3,  //父類(id)
+                    "weight" => 989,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 7,
+                    'id' => 12,
                     "name" => "權限資訊",
                     "key" => "role_info",
                     "url" => "api/v1/role/{role}", //網址
-                    "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 93,  //權重(優先順序 重=高)
+                    "parent" => 3,  //父類(id)
+                    "weight" => 988,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 8,
+                    'id' => 13,
                     "name" => "權限新增",
                     "key" => "role_create",
                     "url" => "api/v1/role", //網址
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 92,  //權重(優先順序 重=高)
+                    "parent" => 3,  //父類(id)
+                    "weight" => 987,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 9,
+                    'id' => 14,
                     "name" => "權限修改",
                     "key" => "role_update",
                     "url" => "api/v1/role/{role}", //網址
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 91,  //權重(優先順序 重=高)
+                    "parent" => 3,  //父類(id)
+                    "weight" => 986,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 10,
+                    'id' => 15,
                     "name" => "權限刪除",
                     "key" => "role_delete",
                     "url" => "api/v1/role/{role}", //網址
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 90,  //權重(優先順序 重=高)
+                    "parent" => 3,  //父類(id)
+                    "weight" => 985,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 11,
-                    "name" => "菜單頁面",
+                    'id' => 16,
+                    "name" => "菜單清單",
                     "key" => "menu_list",
                     "url" => "api/v1/menu", //網址
-                    "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 89,  //權重(優先順序 重=高)
+                    "parent" => 4,  //父類(id)
+                    "weight" => 984,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 12,
+                    'id' => 17,
                     "name" => "菜單資訊",
                     "key" => "menu_info",
                     "url" => "api/v1/menu/{menu}", //網址
-                    "feature" => "P", //功能(T=標題、P=頁面、F=按鍵功能)
+                    "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 88,  //權重(優先順序 重=高)
+                    "parent" => 4,  //父類(id)
+                    "weight" => 983,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 13,
+                    'id' => 18,
                     "name" => "菜單新增",
                     "key" => "menu_create",
                     "url" => "api/v1/menu", //網址
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 87,  //權重(優先順序 重=高)
+                    "parent" => 4,  //父類(id)
+                    "weight" => 982,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 14,
+                    'id' => 19,
                     "name" => "菜單修改",
                     "key" => "menu_update",
                     "url" => "api/v1/menu/{menu}", //網址
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 86,  //權重(優先順序 重=高)
+                    "parent" => 4,  //父類(id)
+                    "weight" => 981,  //權重(優先順序 重=高)
                 ],
                 [
-                    'id' => 15,
+                    'id' => 20,
                     "name" => "菜單刪除",
                     "key" => "menu_delete",
                     "url" => "api/v1/menu/{menu}", //網址
                     "feature" => "F", //功能(T=標題、P=頁面、F=按鍵功能)
                     "status" => 1,  //狀態(開,關)
-                    "parent" => 0,  //父類(id)
-                    "weight" => 85,  //權重(優先順序 重=高)
+                    "parent" => 4,  //父類(id)
+                    "weight" => 980,  //權重(優先順序 重=高)
                 ]
             ]
         );
@@ -221,8 +271,8 @@ return new class extends Migration
                     "user_id" => 1
                 ],
                 [
-                    "role_id" => 1,
-                    "user_id" => 2
+                    "role_id" => 2,
+                    "user_id" => 1
                 ],
                 [
                     "role_id" => 2,
@@ -294,6 +344,26 @@ return new class extends Migration
                     "role_id" => 1,
                     "menu_id" => 15
                 ],
+                [
+                    "role_id" => 1,
+                    "menu_id" => 16
+                ],
+                [
+                    "role_id" => 1,
+                    "menu_id" => 17
+                ],
+                [
+                    "role_id" => 1,
+                    "menu_id" => 18
+                ],
+                [
+                    "role_id" => 1,
+                    "menu_id" => 19
+                ],
+                [
+                    "role_id" => 1,
+                    "menu_id" => 20
+                ]
             ]
         );
     }
@@ -319,6 +389,6 @@ return new class extends Migration
         DB::table('roles')->where("id", "<=", 2)->delete();
 
         //menus delete
-        DB::table('menus')->where("id", "<=", 15)->delete();
+        DB::table('menus')->where("id", "<=", 20)->delete();
     }
 };

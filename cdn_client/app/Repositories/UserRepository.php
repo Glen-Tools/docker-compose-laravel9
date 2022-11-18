@@ -153,9 +153,9 @@ class UserRepository extends BaseRepository
             ->where('users.status', 1)
             ->where('r.status', 1)
             ->where('m.status', 1)
+            ->orderBy("m.feature", "desc")
             ->orderBy("m.parent", "asc")
             ->orderBy("m.weight", "desc")
-            ->orderBy("m.id", "asc")
             ->select("m.id", "m.name", "m.key", "m.url", "m.feature", "m.status", "m.parent", "m.weight")
             ->distinct("m.id")
             ->get();
