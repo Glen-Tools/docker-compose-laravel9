@@ -363,11 +363,7 @@ return new class extends Migration
                 [
                     "role_id" => 1,
                     "menu_id" => 20
-                ],
-                [
-                    "role_id" => 2,
-                    "menu_id" => 10
-                ],
+                ]
             ]
         );
     }
