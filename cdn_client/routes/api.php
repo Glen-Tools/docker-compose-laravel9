@@ -4,6 +4,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AuthorizationController;
 use App\Http\Middleware\AuthorizationValid;
 use App\Http\Middleware\JwtValid;
 use App\Http\Middleware\LanguageChange;
@@ -33,6 +34,7 @@ Route::prefix('v1')->group(function () {
 
         //jwt 登入驗證
         Route::middleware(JwtValid::class)->group(function () {
+            Route::get('/auth/menu', [AuthorizationController::class, 'getAuthMenuList']);
             Route::get('/logout', [LoginController::class, 'logout']);
             Route::get('/jwt/check', [LoginController::class, 'validToken']);
         });
@@ -40,12 +42,9 @@ Route::prefix('v1')->group(function () {
         //jwt 登入與頁面權限驗證
         Route::middleware([JwtValid::class, AuthorizationValid::class])->group(function () {
 
-            Route::apiResource('user', UserController::class);
-
             //使用者 密碼修改
             Route::patch('/user/password/{id}', [UserController::class, 'updatePassword']);
-
-
+            Route::apiResource('user', UserController::class);
             Route::apiResource('role', RoleController::class);
             Route::apiResource('menu', MenuController::class);
         });
