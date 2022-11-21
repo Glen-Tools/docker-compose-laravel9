@@ -84,8 +84,8 @@ class MenuRepository extends BaseRepository
         $menuTypeWhere = array("name" => "name", "key" => "key", "url" => "url", "feature" => "feature", "status" => "status", "parent" => "parent");
         $menuOrm = (isset($Search["status"])) ? $menuOrm->where($menuTypeWhere["status"], $Search["status"]) : $menuOrm;
         $menuOrm = (isset($Search["name"])) ? $menuOrm->where($menuTypeWhere["name"], "like", $this->stringMixLike($Search["name"])) : $menuOrm;
+        $menuOrm = (isset($Search["key"])) ? $menuOrm->where($menuTypeWhere["key"], "like", $this->stringMixLike($Search["key"])) : $menuOrm;
         $menuOrm = (isset($Search["url"])) ? $menuOrm->where($menuTypeWhere["url"], "like", $this->stringMixLike($Search["url"])) : $menuOrm;
-        $menuOrm = (isset($Search["feature"])) ? $menuOrm->where($menuTypeWhere["feature"], "like", $this->stringMixLike($Search["feature"])) : $menuOrm;
 
         //判斷是否取總數
         $isGetListCount = $this->isGetListCount($type);
