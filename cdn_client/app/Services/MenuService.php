@@ -102,7 +102,7 @@ class MenuService
     public function deleteMenuById(int $id)
     {
         DB::transaction(function () use ($id) {
-            $this->roleMenuRepository->deleteMenuById($id);
+            $this->roleMenuRepository->deleteRoleMenuByMenuId($id);
             $this->menuRepository->deleteMenuById($id);
         });
     }

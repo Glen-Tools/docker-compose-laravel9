@@ -101,8 +101,8 @@ class RoleService
     public function deleteRoleById(int $id)
     {
         DB::transaction(function () use ($id) {
-            $this->roleUserRepository->deleteRoleById($id);
-            $this->roleMenuRepository->deleteRoleById($id);
+            $this->roleUserRepository->deleteRoleUserByRoleId($id);
+            $this->roleMenuRepository->deleteRoleMenuByRoleId($id);
             $this->roleRepository->deleteRoleById($id);
         });
     }
