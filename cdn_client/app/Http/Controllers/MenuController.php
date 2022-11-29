@@ -120,7 +120,7 @@ class MenuController extends BaseController
         $menuDto = new InputMenuDto(
             $data["name"],
             $data["key"],
-            $data["url"],
+            $data["url"] ?? "",
             $data["feature"],
             $data["status"],
             $data["parent"] ?? 0,
@@ -186,7 +186,7 @@ class MenuController extends BaseController
         $menuDto = new InputMenuDto(
             $data["name"],
             $data["key"],
-            $data["url"],
+            $data["url"] ?? "",
             $data["feature"],
             $data["status"],
             $data["parent"] ?? 0,
