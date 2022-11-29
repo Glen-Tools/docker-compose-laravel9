@@ -110,7 +110,7 @@ class MenuRepository extends BaseRepository
         return $menuOrm->get();
     }
 
-    public function getAllMenu()
+    public function getMenuAllList()
     {
         return $this->menu->select(
             "id",

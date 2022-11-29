@@ -80,10 +80,10 @@ class MenuController extends BaseController
      * )
      * @return OutputMenuListDto
      */
-    public function getAllList(Request $request)
+    public function getMenuAllList(Request $request)
     {
         $InputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);
-        $data = $this->menuService->getAllMenu($InputUserInfoDto);
+        $data = $this->menuService->getMenuAll($InputUserInfoDto);
 
         return $this->responseService->responseJson($data);
     }
