@@ -110,6 +110,22 @@ class MenuRepository extends BaseRepository
         return $menuOrm->get();
     }
 
+    public function getAllMenu()
+    {
+        return $this->menu->select(
+            "id",
+            "name",
+            "key",
+            "feature",
+            "status",
+            "parent"
+        )
+            ->orderBy("parent", "asc")
+            ->orderBy("feature", "desc")
+            ->orderBy("weight", "desc")
+            ->get();
+    }
+
     public function deleteMenuById($id)
     {
         $this->menu->destroy($id);

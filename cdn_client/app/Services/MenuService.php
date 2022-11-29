@@ -5,8 +5,9 @@ namespace App\Services;
 use App\Dto\InputPageDto;
 use App\Dto\InputMenuDto;
 use App\Dto\OutputPageDto;
-use App\Dto\OutputMenuListDto;
+use App\Dto\InputUserInfoDto;
 use App\Enums\ListType;
+use App\Enums\UserType;
 use App\Repositories\MenuRepository;
 use App\Repositories\RoleMenuRepository;
 use App\Exceptions\ParameterException;
@@ -97,6 +98,15 @@ class MenuService
 
         $page = $this->utilService->setOutputPageDto($pageManagement);
         return $page;
+    }
+
+    public function getAllMenu(InputUserInfoDto $userInfo)
+    {
+        // 確認身份
+        if (($userInfo->getUserType() != UserType::Admin->value)) {
+            throw new ParameterException(trans('error.user_authority_insufficinet'), Response::HTTP_UNAUTHORIZED);
+        }
+        return $this->menuRepository->getAllMenu();
     }
 
     public function deleteMenuById(int $id)

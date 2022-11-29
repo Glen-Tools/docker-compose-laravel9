@@ -7,20 +7,24 @@ use App\Dto\OutputMenuListDto;
 use App\Services\ResponseService;
 use App\Services\MenuService;
 use App\Services\UtilService;
+use App\Services\JwtService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class MenuController extends BaseController
 {
+    private $jwtService;
     private $menuService;
     private $utilService;
     private $responseService;
 
     public function __construct(
+        JwtService $jwtService,
         MenuService $menuService,
         UtilService $utilService,
-        ResponseService $responseService
+        ResponseService $responseService,
     ) {
+        $this->jwtService = $jwtService;
         $this->menuService = $menuService;
         $this->utilService = $utilService;
         $this->responseService = $responseService;
@@ -67,6 +71,26 @@ class MenuController extends BaseController
     /**
      * @OA\Get(
      *  tags={"Menu"},
+     *  path="/api/v1/menu/all",
+     *  summary="Menu所有清單 (Menu All List)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/AllMenu", example="AllMenu")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     * @return OutputMenuListDto
+     */
+    public function getAllList(Request $request)
+    {
+        $InputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);
+        $data = $this->menuService->getAllMenu($InputUserInfoDto);
+
+        return $this->responseService->responseJson($data);
+    }
+
+    /**
+     * @OA\Get(
+     *  tags={"Menu"},
      *  path="/api/v1/menu/{id}",
      *  summary="Menu資料 (Menu Info)",
      *  security={{"Authorization":{}}},
@@ -85,7 +109,7 @@ class MenuController extends BaseController
         $this->utilService->ColumnValidator($data, [
             'name' => 'required|unique:menus|max:100',
             'key' => 'required|unique:menus|max:150',
-            'url' => 'required|max:500',
+            'url' => 'max:500|nullable',
             'feature' => ['required', 'max:10', Rule::in(['T', 'P', 'F'])],
             'status' => 'required|boolean',
             'parent' => 'integer|nullable',

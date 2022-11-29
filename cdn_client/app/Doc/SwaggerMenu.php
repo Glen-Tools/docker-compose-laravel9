@@ -82,6 +82,38 @@ class SwaggerMenu
     public $ShowMenuList;
 
     /**
+     * @OA\Examples(
+     *   summary="AllMenu",
+     *   example="AllMenu",
+     *   value={
+     *      "data": {
+     *        "menuList": {
+     *          {
+     *              "id": 1,
+     *              "name": "ffttttt1",
+     *              "key": "gg2222223",
+     *              "feature": "F",
+     *              "status": 1,
+     *              "parent": 0,
+     *          },
+     *          {
+     *              "id": 2,
+     *              "name": "testbb",
+     *              "key": "1234567",
+     *              "feature": "T",
+     *              "status": 1,
+     *              "parent": 0,
+     *          }
+     *        },
+     *      },
+     *      "message": "",
+     *      "success": true
+     *    }
+     * )
+     */
+    public $AllMenu;
+
+    /**
      * @OA\Schema(
      *      schema="CreateMenu",
      *      @OA\Property(

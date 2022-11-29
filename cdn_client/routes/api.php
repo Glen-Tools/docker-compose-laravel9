@@ -40,6 +40,9 @@ Route::prefix('v1')->group(function () {
 
             //自己(self) 密碼修改
             Route::patch('/user/password/self', [UserController::class, 'updateSelfPassword']);
+
+            //取得所有 MenuList （後端管理者使用)
+            Route::get('/menu/all', [MenuController::class, 'getAllList']);
         });
 
         //jwt 登入與頁面權限驗證
