@@ -14,6 +14,7 @@ use App\Services\UserService;
 use App\Services\UtilService;
 use App\Services\CacheMamageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -77,8 +78,14 @@ class LoginController extends Controller
         $userId = $outputUserInfoDto->id;
         $jwtToken = $this->jwtService->genJwtToken($userId, JwtType::JwtToken);
         $refreshToken = $this->jwtService->genJwtToken($userId, JwtType::JwtRefreshToken);
-        //todo 有時間在做 驗證 captcha
 
+        //存入 login ip and time
+        //todo REMOTE_ADDR 拿到的是docker default gateway ip
+        $ip = $request->ip();
+        $this->jwtService->setUserIdToRequest($jwtToken, $request);
+        $this->loginService->setLoginInfo($userId, $ip);
+
+        //todo 有時間在做 驗證 captcha
         $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
         $outputLoginDto = new OutputLoginDto($outputUserInfoDto, $outputJwtDto);
 

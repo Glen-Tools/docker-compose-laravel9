@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
 use App\Dto\InputPageDto;
 use App\Dto\InputUserDto;
 use App\Enums\ListType;
@@ -49,6 +50,14 @@ class UserRepository extends BaseRepository
     {
         $user = $this->isExistUser($id);
         $user->password = $this->getPasswordHash($password);
+        $user->save();
+    }
+
+    public function updateUserLoginInfo(string $ip, int $id)
+    {
+        $user = $this->isExistUser($id);
+        $user->login_ip = $ip ?? "";
+        $user->login_time = Carbon::now();
         $user->save();
     }
 

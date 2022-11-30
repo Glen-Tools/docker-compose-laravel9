@@ -24,8 +24,13 @@ class LoginService
         if (!$isLogin) {
             throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
         }
-
         return $outputUserInfoDto;
+    }
+
+    public function setLoginInfo(int $userId, string $ip): void
+    {
+        $this->userRepository->updateUserLoginInfo($ip, $userId);
+        return;
     }
 
     public function getUserInfoByLogin(string $account): OutputUserInfoDto
