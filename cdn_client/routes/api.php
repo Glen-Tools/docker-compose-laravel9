@@ -5,8 +5,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AuthorizationController;
-use App\Http\Middleware\AuthorizationValid;
 use App\Http\Middleware\JwtValid;
+use App\Http\Middleware\BackendValid;
+use App\Http\Middleware\AuthorizationValid;
 use App\Http\Middleware\LanguageChange;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +33,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/login', [LoginController::class, 'login']);
         Route::get('/jwt', [LoginController::class, 'refreshJwtToken']);
 
-        //jwt 登入驗證
+        //jwt 權限
         Route::middleware(JwtValid::class)->group(function () {
             Route::get('/auth/menu', [AuthorizationController::class, 'getAuthMenuList']);
             Route::get('/logout', [LoginController::class, 'logout']);
@@ -40,14 +41,16 @@ Route::prefix('v1')->group(function () {
 
             //自己(self) 密碼修改
             Route::patch('/user/password/self', [UserController::class, 'updateSelfPassword']);
+        });
 
+        //jwt 與 後端權限(userType=1)
+        Route::middleware([JwtValid::class, BackendValid::class])->group(function () {
             //取得所有 MenuList （後端管理者使用)
             Route::get('/menu/all', [MenuController::class, 'getMenuAllList']);
         });
 
-        //jwt 登入與頁面權限驗證
+        //jwt 與 頁面權限
         Route::middleware([JwtValid::class, AuthorizationValid::class])->group(function () {
-
             //密碼修改
             Route::patch('/user/password/{id}', [UserController::class, 'updatePassword']);
             Route::apiResource('user', UserController::class);

@@ -100,12 +100,8 @@ class MenuService
         return $page;
     }
 
-    public function getMenuAll(InputUserInfoDto $userInfo)
+    public function getMenuAll()
     {
-        // 確認身份
-        if (($userInfo->getUserType() != UserType::Admin->value)) {
-            throw new ParameterException(trans('error.user_authority_insufficinet'), Response::HTTP_UNAUTHORIZED);
-        }
         return $this->menuRepository->getMenuAllList();
     }
 
