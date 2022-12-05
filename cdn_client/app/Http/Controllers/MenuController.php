@@ -82,7 +82,7 @@ class MenuController extends BaseController
      */
     public function getMenuAllList(Request $request)
     {
-        $data = $this->menuService->getMenuAll();
+        $data["menuList"] = $this->menuService->getMenuAll();
         return $this->responseService->responseJson($data);
     }
 
@@ -145,7 +145,7 @@ class MenuController extends BaseController
     public function show(Request $request, $id)
     {
         parent::show($request, $id);
-        $data = $this->menuService->getMenuById($id);
+        $data["menuInfo"] = $this->menuService->getMenuById($id);
         return $this->responseService->responseJson($data);
     }
 

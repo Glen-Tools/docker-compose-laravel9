@@ -89,7 +89,7 @@ class UserController extends BaseController
     public function show(Request $request, $id)
     {
         parent::show($request, $id);
-        $data = $this->userService->getUserById($id);
+        $data["userInfo"] = $this->userService->getUserById($id);
         return $this->responseService->responseJson($data);
     }
 

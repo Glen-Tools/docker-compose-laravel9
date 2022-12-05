@@ -4,8 +4,9 @@ namespace App\Services;
 
 use App\Dto\InputPageDto;
 use App\Dto\InputMenuDto;
-use App\Dto\OutputPageDto;
 use App\Dto\InputUserInfoDto;
+use App\Dto\OutputPageDto;
+use App\Dto\OutputMenuInfoDto;
 use App\Enums\ListType;
 use App\Enums\UserType;
 use App\Repositories\MenuRepository;
@@ -49,22 +50,21 @@ class MenuService
             throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
         }
 
-        $data->transform(function ($item) {
-            $menu = new stdClass();
-            $menu->id = $item->id;
-            $menu->name = $item->name;
-            $menu->key = $item->key;
-            $menu->url = $item->url;
-            $menu->feature = $item->feature;
-            $menu->status = $item->status;
-            $menu->parent = $item->parent;
-            $menu->weight = $item->weight;
-            $menu->remark = $item->remark;
-            $menu->createdAt = $item->created_at;
-            $menu->updatedAt = $item->updated_at;
-            return $menu;
-        });
-        return $data;
+        $outputMenuInfoDto = new OutputMenuInfoDto(
+            $data->id,
+            $data->name,
+            $data->key,
+            $data->url,
+            $data->feature,
+            $data->status,
+            $data->parent,
+            $data->weight,
+            $data->remark,
+            $data->created_at,
+            $data->updated_at,
+        );
+
+        return $outputMenuInfoDto;
     }
 
     public function getMenuList(InputPageDto $pageManagement)

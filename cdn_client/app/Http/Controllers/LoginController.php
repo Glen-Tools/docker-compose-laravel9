@@ -74,8 +74,8 @@ class LoginController extends Controller
             $data["captchaId"] ?? "",
         );
 
-        $outputUserInfoDto = $this->loginService->login($inputLoginDto);
-        $userId = $outputUserInfoDto->id;
+        $outputAuthUserInfoDto = $this->loginService->login($inputLoginDto);
+        $userId = $outputAuthUserInfoDto->id;
         $jwtToken = $this->jwtService->genJwtToken($userId, JwtType::JwtToken);
         $refreshToken = $this->jwtService->genJwtToken($userId, JwtType::JwtRefreshToken);
 
@@ -87,7 +87,7 @@ class LoginController extends Controller
 
         //todo 有時間在做 驗證 captcha
         $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
-        $outputLoginDto = new OutputLoginDto($outputUserInfoDto, $outputJwtDto);
+        $outputLoginDto = new OutputLoginDto($outputAuthUserInfoDto, $outputJwtDto);
 
         return $this->responseService->responseJson($outputLoginDto);
     }

@@ -66,7 +66,7 @@ class MenuRepository extends BaseRepository
             "remark",
             "created_at",
             "updated_at"
-        )->where("id", $id)->get();
+        )->where("id", $id)->first();
     }
 
     public function getMenuListByPage(InputPageDto $inPageManagement, ListType $type)

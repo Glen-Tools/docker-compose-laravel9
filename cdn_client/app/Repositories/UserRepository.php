@@ -85,7 +85,7 @@ class UserRepository extends BaseRepository
             "remark",
             "created_at",
             "updated_at"
-        )->where("id", $id)->get();
+        )->where("id", $id)->first();
     }
 
     public function getUserListByPage(InputPageDto $inPageManagement, ListType $type)
