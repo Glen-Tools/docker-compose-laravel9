@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Dto\InputLoginDto;
-use App\Dto\OutputUserInfoDto;
+use App\Dto\OutputAuthUserInfoDto;
 use App\Exceptions\ParameterException;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Response;
@@ -17,7 +17,7 @@ class LoginService
         $this->userRepository = $userRepository;
     }
 
-    public function login(InputLoginDto $inputLoginDto): OutputUserInfoDto
+    public function login(InputLoginDto $inputLoginDto): OutputAuthUserInfoDto
     {
         $outputUserInfoDto = $this->getUserInfoByLogin($inputLoginDto->account);
         $isLogin = $this->userRepository->validPassword($outputUserInfoDto->id, $inputLoginDto->password);
@@ -33,14 +33,14 @@ class LoginService
         return;
     }
 
-    public function getUserInfoByLogin(string $account): OutputUserInfoDto
+    public function getUserInfoByLogin(string $account): OutputAuthUserInfoDto
     {
         $user = $this->userRepository->getUserByAccount($account);
         if (empty($user)) {
             throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
         }
 
-        $outputUserInfoDto = new OutputUserInfoDto(
+        $outputUserInfoDto = new OutputAuthUserInfoDto(
             $user->id,
             $user->name,
             $user->email,

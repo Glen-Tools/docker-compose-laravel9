@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Dto\InputLoginDto;
 use App\Dto\OutputJwtDto;
 use App\Dto\OutputLoginDto;
-use App\Dto\OutputUserInfoDto;
+use App\Dto\OutputAuthUserInfoDto;
 use App\Enums\JwtType;
 use App\Services\JwtService;
 use App\Services\LoginService;
@@ -125,7 +125,7 @@ class LoginController extends Controller
         $refreshToken = $this->jwtService->genJwtToken($userId, JwtType::JwtRefreshToken);
         $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
         $outputLoginDto = new OutputLoginDto(
-            new OutputUserInfoDto(
+            new OutputAuthUserInfoDto(
                 $userInfo->getId(),
                 $userInfo->getName(),
                 $userInfo->getEmail(),

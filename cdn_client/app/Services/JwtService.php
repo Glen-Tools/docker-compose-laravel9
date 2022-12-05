@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Dto\InputPayloadDto;
 use App\Dto\InputUserInfoDto;
-use App\Dto\OutputUserInfoDto;
 use App\Enums\JwtType;
 use App\Exceptions\ParameterException;
 use App\Repositories\UserRepository;
