@@ -23,7 +23,7 @@ return new class extends Migration
             $table->smallInteger('user_type')->comment("管理者=1,一般使用者=2");
             $table->string('login_ip', 20)->nullable();
             $table->timestamp('login_time')->nullable();
-            $table->string('remark', 5000)->nullable()->comment("備註");
+            $table->string('remark', 5000)->default("")->comment("備註");
             $table->timestamps();
         });
     }
