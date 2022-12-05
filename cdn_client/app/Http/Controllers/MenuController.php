@@ -8,6 +8,7 @@ use App\Services\ResponseService;
 use App\Services\MenuService;
 use App\Services\UtilService;
 use App\Services\JwtService;
+use App\Enums\MenuFeature;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -108,7 +109,7 @@ class MenuController extends BaseController
             'name' => 'required|unique:menus|max:100',
             'key' => 'required|unique:menus|max:150',
             'url' => 'max:500|nullable',
-            'feature' => ['required', 'max:10', Rule::in(['T', 'P', 'F'])],
+            'feature' => ['required', 'max:10', Rule::in(array_column(MenuFeature::cases(), 'value'))],
             'status' => 'required|boolean',
             'parent' => 'integer|nullable',
             'weight' => 'integer|nullable',
@@ -174,7 +175,7 @@ class MenuController extends BaseController
             'name' => 'required|max:100|unique:menus,name,' . $id, //當id不存在,在debug模式會顯示name 已經存在
             'key' => 'required|max:150|unique:menus,key,' . $id, //當id不存在,在debug模式會顯示key 已經存在
             'url' => 'max:500|nullable',
-            'feature' => ['required', 'max:10', Rule::in(['T', 'P', 'F'])],
+            'feature' => ['required', 'max:10', Rule::in(array_column(MenuFeature::cases(), 'value'))],
             'status' => 'required|boolean',
             'parent' => 'integer|nullable',
             'weight' => 'integer|nullable',

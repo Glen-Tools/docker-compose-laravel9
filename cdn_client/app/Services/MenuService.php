@@ -59,7 +59,7 @@ class MenuService
             $data->status,
             $data->parent,
             $data->weight,
-            $data->remark,
+            $data->remark ?? "",
             $data->created_at,
             $data->updated_at,
         );

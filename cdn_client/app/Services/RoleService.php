@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Dto\InputPageDto;
 use App\Dto\InputRoleDto;
 use App\Dto\OutputPageDto;
+use App\Dto\OutputRoleInfoDto;
 use App\Dto\OutputRoleListDto;
 use App\Enums\ListType;
 use App\Repositories\RoleRepository;
@@ -49,23 +50,22 @@ class RoleService
     {
         $data = $this->roleRepository->getRoleById($id);
 
-        if (empty($data->toArray())) {
+        if (empty($data)) {
             throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
         }
 
-        $data->transform(function ($item) {
-            $role = new stdClass();
-            $role->id = $item->id;
-            $role->name = $item->name;
-            $role->key = $item->key;
-            $role->status = $item->status;
-            $role->weight = $item->weight;
-            $role->remark = $item->remark;
-            $role->createdAt = $item->created_at;
-            $role->updatedAt = $item->updated_at;
-            return $role;
-        });
-        return $data;
+        $outputRoleInfoDto = new OutputRoleInfoDto(
+            $data->id,
+            $data->name,
+            $data->key,
+            $data->status,
+            $data->weight,
+            $data->remark ?? "",
+            $data->createdAt,
+            $data->updatedAt,
+        );
+
+        return $outputRoleInfoDto;
     }
 
     public function getRoleList(InputPageDto $pageManagement)
@@ -105,5 +105,16 @@ class RoleService
             $this->roleMenuRepository->deleteRoleMenuByRoleId($id);
             $this->roleRepository->deleteRoleById($id);
         });
+    }
+
+    public function getRoleMenuByRoleId(int $id)
+    {
+        $data = $this->roleMenuRepository->getRoleMenuByMenuId($id);
+
+        if (empty($data)) {
+            return [];
+        }
+
+        return  $data->pluck("menu_id")->all();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dto\InputRoleDto;
 use App\Dto\OutputRoleListDto;
+use App\Dto\OutputRoleInfoMenuDto;
 use App\Services\ResponseService;
 use App\Services\RoleService;
 use App\Services\UtilService;
@@ -115,7 +116,10 @@ class RoleController extends BaseController
     public function show(Request $request, $id)
     {
         parent::show($request, $id);
-        $data = $this->roleService->getRoleById($id);
+        $roleInfo = $this->roleService->getRoleById($id);
+        $roleMenu = $this->roleService->getRoleMenuByRoleId($id);
+
+        $data = new OutputRoleInfoMenuDto($roleInfo, $roleMenu);
         return $this->responseService->responseJson($data);
     }
 
