@@ -156,7 +156,7 @@ class JwtService
         }
 
         $data =  $this->userRepository->getUserById($userId);
-        $userInfo = (object)($data[0]);
+        $userInfo = $data;
         $inputUserInfoDto = new InputUserInfoDto(
             $userInfo->id,
             $userInfo->name,

@@ -19,12 +19,12 @@ class LoginService
 
     public function login(InputLoginDto $inputLoginDto): OutputAuthUserInfoDto
     {
-        $outputUserInfoDto = $this->getUserInfoByLogin($inputLoginDto->account);
-        $isLogin = $this->userRepository->validPassword($outputUserInfoDto->id, $inputLoginDto->password);
+        $outputAuthUserInfoDto = $this->getUserInfoByLogin($inputLoginDto->account);
+        $isLogin = $this->userRepository->validPassword($outputAuthUserInfoDto->id, $inputLoginDto->password);
         if (!$isLogin) {
             throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
         }
-        return $outputUserInfoDto;
+        return $outputAuthUserInfoDto;
     }
 
     public function setLoginInfo(int $userId, string $ip): void
@@ -40,13 +40,13 @@ class LoginService
             throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
         }
 
-        $outputUserInfoDto = new OutputAuthUserInfoDto(
+        $outputAuthUserInfoDto = new OutputAuthUserInfoDto(
             $user->id,
             $user->name,
             $user->email,
             $user->user_type,
         );
 
-        return   $outputUserInfoDto;
+        return   $outputAuthUserInfoDto;
     }
 }
