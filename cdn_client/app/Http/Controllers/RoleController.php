@@ -8,6 +8,8 @@ use App\Dto\OutputRoleInfoMenuDto;
 use App\Services\ResponseService;
 use App\Services\RoleService;
 use App\Services\UtilService;
+use App\Services\CacheMamageService;
+
 use Illuminate\Http\Request;
 
 class RoleController extends BaseController
@@ -15,15 +17,18 @@ class RoleController extends BaseController
     private $roleService;
     private $utilService;
     private $responseService;
+    protected $cacheMamageService;
 
     public function __construct(
         RoleService $roleService,
         UtilService $utilService,
-        ResponseService $responseService
+        ResponseService $responseService,
+        CacheMamageService $cacheMamageService
     ) {
         $this->roleService = $roleService;
         $this->utilService = $utilService;
         $this->responseService = $responseService;
+        $this->cacheMamageService = $cacheMamageService;
     }
 
     /**
@@ -165,6 +170,10 @@ class RoleController extends BaseController
         );
 
         $this->roleService->updateRole($roleDto, $id);
+
+        //刪除 所有人的menu cache
+        $this->cacheMamageService->removeCacheMenuAllUser();
+
         return $this->responseService->responseJson();
     }
 
@@ -184,6 +193,10 @@ class RoleController extends BaseController
     {
         parent::destroy($request, $id);
         $this->roleService->deleteRoleById($id);
+
+        //刪除 所有人的menu cache
+        $this->cacheMamageService->removeCacheMenuAllUser();
+
         return $this->responseService->responseJson();
     }
 }

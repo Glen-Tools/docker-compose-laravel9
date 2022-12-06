@@ -117,6 +117,10 @@ class UtilService
 
     public function getTreeNodeList(Collection $nodes, array $selecteds): array
     {
+        if (($key = array_search(0, $selecteds)) !== false) {
+            unset($selecteds[$key]);
+        }
+
         $data = [];
         foreach ($selecteds as $value) {
             $parents = [];
@@ -132,7 +136,7 @@ class UtilService
     {
         $node = $treeNodes->firstWhere("id", $id);
         array_push($parents, $id);
-        if ($node->parent != 0 && !empty($node->parent)) {
+        if (!empty($node->parent) && $node->parent != 0) {
             $this->getTreeParents($treeNodes, $node->parent, $parents);
         }
     }

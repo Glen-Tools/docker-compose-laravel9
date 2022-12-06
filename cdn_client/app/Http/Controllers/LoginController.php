@@ -171,7 +171,7 @@ class LoginController extends Controller
         $userId = $inputUserInfoDto->getId();
 
         //移除cache
-        $this->cacheMamageService->removeAuth($userId);
+        $this->cacheMamageService->removeCacheAuth($userId);
 
         return $this->responseService->responseJson();
     }

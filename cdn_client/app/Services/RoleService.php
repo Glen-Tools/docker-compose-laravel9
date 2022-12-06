@@ -59,7 +59,6 @@ class RoleService
 
     public function updateRole(InputRoleDto $roleDto, int $id)
     {
-
         DB::transaction(function () use ($roleDto, $id) {
             $this->roleRepository->updateRole($roleDto, $id);
             $this->roleMenuRepository->deleteRoleMenuByRoleId($id);
@@ -72,10 +71,6 @@ class RoleService
                 $this->roleMenuRepository->createRoleMenuList($roleMenuList);
             }
         });
-
-        //權限 cache 刪除
-
-
     }
 
     public function getRoleById(int $id)

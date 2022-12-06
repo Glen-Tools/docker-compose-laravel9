@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 class AuthorizationService
 {
 
-    protected const CACHE_AUTH_USER_MENU = "CACHE_AUTH_USER_MENU";
+    public const CACHE_AUTH_USER_MENU = "CACHE_AUTH_USER_MENU";
     protected const CACHE_TIME = 7200;
 
     private const AUTU_ROUTE_MENU_COMPARISON = array(

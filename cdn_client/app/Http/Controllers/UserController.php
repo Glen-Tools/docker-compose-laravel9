@@ -245,8 +245,8 @@ class UserController extends BaseController
 
         $this->userService->updateUser($userDto, $id);
 
-        //移除 userInfo cache
-        $this->jwtService->removeCacheUserInfo($id);
+        //移除 權限相關 cache
+        $this->cacheMamageService->removeCacheAuth($id);
         return $this->responseService->responseJson();
     }
 
@@ -267,8 +267,8 @@ class UserController extends BaseController
         parent::destroy($request, $id);
         $this->userService->deleteUserById($id);
 
-        ///移除 權限相關 cache
-        $this->cacheMamageService->removeAuth($id);
+        //移除 權限相關 cache
+        $this->cacheMamageService->removeCacheAuth($id);
 
         return $this->responseService->responseJson();
     }
