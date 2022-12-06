@@ -34,14 +34,28 @@ class UserService
         $this->utilService = $utilService;
     }
 
-    public function createUser(InputUserDto $userDto)
+    public function createUser(InputUserDto $userDto,)
     {
-        $this->userRepository->createUser($userDto);
+        DB::transaction(function () use ($userDto) {
+            $id = $this->userRepository->createUser($userDto);
+            $roleUserList = $this->utilService->getStoreKeyValue($id,  $userDto->roleUser,  "user_id", "role_id");
+
+            if (count($roleUserList) > 0) {
+                $this->roleUserRepository->createRoleUserList($roleUserList);
+            }
+        });
     }
 
     public function updateUser(InputUserDto $userDto, int $id)
     {
-        $this->userRepository->updateUser($userDto, $id);
+        DB::transaction(function () use ($userDto, $id) {
+            $this->userRepository->updateUser($userDto, $id);
+            $roleUserList = $this->utilService->getStoreKeyValue($id,  $userDto->roleUser,  "user_id", "role_id");
+
+            if (count($roleUserList) > 0) {
+                $this->roleUserRepository->createRoleUserList($roleUserList);
+            }
+        });
     }
 
     public function updateUserPassword(InputUserInfoDto $userInfo, InputUserPasswordDto $userDto, int $id)
@@ -134,5 +148,16 @@ class UserService
             $this->roleUserRepository->deleteRoleUserByUserId($id);
             $this->userRepository->deleteUserById($id);
         });
+    }
+
+    public function getRoleUserByUserId(int $id)
+    {
+        $data = $this->roleUserRepository->getRoleUserByUserId($id);
+
+        if (empty($data)) {
+            return [];
+        }
+
+        return  $data->pluck("role_id")->all();
     }
 }

@@ -131,6 +131,24 @@ class RoleController extends BaseController
     }
 
     /**
+     * @OA\Get(
+     *  tags={"Role"},
+     *  path="/api/v1/role/all",
+     *  summary="Role所有清單 (Role All List)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/AllRole", example="AllRole")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     * @return OutputMenuListDto
+     */
+    public function getRoleAllList(Request $request)
+    {
+        $data["roleList"] = $this->roleService->getRoleAll();
+        return $this->responseService->responseJson($data);
+    }
+
+    /**
      * @OA\Put(
      *  tags={"Role"},
      *  path="/api/v1/role/{id}",

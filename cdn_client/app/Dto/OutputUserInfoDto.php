@@ -9,12 +9,12 @@ class OutputUserInfoDto
     public string $email;
     public int $status;
     public string $userType;
-    public ?string $loginIp;
+    public string $loginIp;
     public mixed $passwordUpdateTime;
     public mixed $loginTime;
     public mixed $createdAt;
     public mixed $updatedAt;
-    public ?string $remark;
+    public string $remark;
 
     public function __construct(
         int $id,

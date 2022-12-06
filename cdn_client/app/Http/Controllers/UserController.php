@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dto\InputUserDto;
 use App\Dto\OutputUserListDto;
 use App\Dto\InputUserPasswordDto;
+use App\Dto\OutputUserInfoRoleDto;
 use App\Services\ResponseService;
 use App\Services\UserService;
 use App\Services\UtilService;
@@ -89,7 +90,9 @@ class UserController extends BaseController
     public function show(Request $request, $id)
     {
         parent::show($request, $id);
-        $data["userInfo"] = $this->userService->getUserById($id);
+        $userInfo = $this->userService->getUserById($id);
+        $roleUser = $this->userService->getRoleUserByUserId($id);
+        $data = new OutputUserInfoRoleDto($userInfo, $roleUser);
         return $this->responseService->responseJson($data);
     }
 
@@ -118,6 +121,7 @@ class UserController extends BaseController
             'status' => 'required|boolean',
             'userType' => ['required', Rule::in([1, 2])], //管理者=1,一般使用者=2
             'remark' => 'string|max:5000|nullable',
+            'roleUser' => 'array|nullable',
         ]);
 
         $userDto = new InputUserDto(
@@ -127,6 +131,7 @@ class UserController extends BaseController
             $data["status"],
             $data["userType"],
             $data["remark"] ?? "",
+            $data["roleUser"] ?? []
         );
 
         $this->userService->createUser($userDto);
@@ -232,6 +237,7 @@ class UserController extends BaseController
             'status' => 'required|boolean',
             'userType' => ['required', Rule::in([1, 2])], //管理者=1,一般使用者=2
             'remark' => 'string|max:5000|nullable',
+            'roleUser' => 'array|nullable',
         ]);
 
         $userDto = new InputUserDto(
@@ -241,6 +247,7 @@ class UserController extends BaseController
             $data["status"],
             $data["userType"],
             $data["remark"] ?? "",
+            $data["roleUser"] ?? []
         );
 
         $this->userService->updateUser($userDto, $id);

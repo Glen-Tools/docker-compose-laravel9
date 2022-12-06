@@ -23,4 +23,16 @@ class RoleUserRepository extends Model
     {
         $this->roleUser->where("role_id", $id)->delete();
     }
+
+    public function getRoleUserByUserId(int $id)
+    {
+        return  $this->roleUser
+            ->where("user_id", $id)
+            ->get();
+    }
+
+    public function createRoleUserList(array $data)
+    {
+        $this->roleUser->insert($data);
+    }
 }

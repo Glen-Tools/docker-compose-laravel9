@@ -47,6 +47,8 @@ Route::prefix('v1')->group(function () {
         Route::middleware([JwtValid::class, BackendValid::class])->group(function () {
             //取得所有 MenuList （後端管理者使用)
             Route::get('/menu/all', [MenuController::class, 'getMenuAllList']);
+            //取得所有 MenuList （後端管理者使用)
+            Route::get('/role/all', [RoleController::class, 'getRoleAllList']);
         });
 
         //jwt 與 頁面權限

@@ -109,4 +109,16 @@ class RoleRepository extends BaseRepository
     {
         $this->role->destroy($id);
     }
+
+    public function getRoleAllList()
+    {
+        return $this->role->select(
+            "id",
+            "name",
+            "key",
+            "status",
+        )
+            ->orderBy("weight", "desc")
+            ->get();
+    }
 }

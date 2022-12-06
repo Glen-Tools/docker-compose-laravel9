@@ -40,6 +40,28 @@ class SwaggerRole
      *              "name": "管理者",
      *              "key": "!QAZ2wsx",
      *              "status": 1,
+     *          }
+     *        },
+     *      },
+     *      "message": "",
+     *      "success": true
+     *    }
+     * )
+     */
+    public $AllRole;
+
+    /**
+     * @OA\Examples(
+     *   summary="ShowRoleList",
+     *   example="ShowRoleList",
+     *   value={
+     *      "data": {
+     *        "roleList": {
+     *          {
+     *              "id": 1,
+     *              "name": "管理者",
+     *              "key": "!QAZ2wsx",
+     *              "status": 1,
      *              "weight": null,
      *              "createdAt": "2022-10-05T09:24:37.000000Z",
      *              "updatedAt": "2022-10-05T09:24:37.000000Z"

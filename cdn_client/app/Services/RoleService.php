@@ -144,4 +144,9 @@ class RoleService
 
         return  $data->pluck("menu_id")->all();
     }
+
+    public function getRoleAll()
+    {
+        return $this->roleRepository->getRoleAllList();
+    }
 }

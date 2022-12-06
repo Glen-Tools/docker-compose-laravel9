@@ -32,6 +32,12 @@ class UserRepository extends BaseRepository
         $this->user->user_type = $userDto->userType;
         $this->user->remark = $userDto->remark;
         $this->user->save();
+
+        if (!$this->user->save()) {
+            throw new ParameterException(trans('error.sql_insert'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->user->id;
     }
 
     public function updateUser(InputUserDto $userDto, int $id)
