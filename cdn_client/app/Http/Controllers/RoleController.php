@@ -86,7 +86,8 @@ class RoleController extends BaseController
             'key' => 'required|unique:roles|max:150',
             'status' => 'required|boolean',
             'weight' => 'integer|nullable',
-            'remark' => 'string|max:5000|nullable'
+            'remark' => 'string|max:5000|nullable',
+            'roleMenu' => 'array|nullable',
         ]);
 
         $roleDto = new InputRoleDto(
@@ -95,6 +96,7 @@ class RoleController extends BaseController
             $data["status"],
             $data["weight"] ?? null,
             $data["remark"] ?? "",
+            $data["roleMenu"] ?? []
         );
 
         $this->roleService->createRole($roleDto);
@@ -149,7 +151,8 @@ class RoleController extends BaseController
             'key' => 'required|max:150|unique:menus,key,' . $id, //當id不存在,在debug模式會顯示key 已經存在
             'status' => 'required|boolean',
             'weight' => 'integer|nullable',
-            'remark' => 'string|max:5000|nullable'
+            'remark' => 'string|max:5000|nullable',
+            'roleMenu' => 'array|nullable',
         ]);
 
         $roleDto = new InputRoleDto(
@@ -158,6 +161,7 @@ class RoleController extends BaseController
             $data["status"],
             $data["weight"] ?? null,
             $data["remark"] ?? "",
+            $data["roleMenu"] ?? [],
         );
 
         $this->roleService->updateRole($roleDto, $id);

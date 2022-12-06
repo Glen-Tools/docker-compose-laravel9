@@ -10,6 +10,8 @@ use Illuminate\Validation\Rules\Enum;
 use Illuminate\Support\Facades\Validator;
 
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class UtilService
@@ -110,5 +112,37 @@ class UtilService
     function base64url_decode($data)
     {
         return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+    }
+
+
+    public function getTreeNodeList(Collection $nodes, array $selecteds): array
+    {
+        $data = [];
+        foreach ($selecteds as $value) {
+            $parents = [];
+            $this->getTreeParents($nodes, $value, $parents);
+            // Log::info("$value:" . implode(",", $parents));
+            $data = array_unique(array_merge($data, $parents), SORT_NUMERIC);
+            // Log::info($data);
+        }
+        return  $data;
+    }
+
+    public function getTreeParents(Collection $treeNodes, int $id, array &$parents)
+    {
+        $node = $treeNodes->firstWhere("id", $id);
+        array_push($parents, $id);
+        if ($node->parent != 0 && !empty($node->parent)) {
+            $this->getTreeParents($treeNodes, $node->parent, $parents);
+        }
+    }
+
+    public function getStoreKeyValue(int $id, array $selecteds, string $keyName, string $valueName): array
+    {
+        $data = [];
+        foreach ($selecteds as $value) {
+            array_push($data, [$keyName => $id, $valueName => $value]);
+        }
+        return $data;
     }
 }

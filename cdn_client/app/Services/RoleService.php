@@ -11,39 +11,71 @@ use App\Enums\ListType;
 use App\Repositories\RoleRepository;
 use App\Repositories\RoleUserRepository;
 use App\Repositories\RoleMenuRepository;
+use App\Repositories\MenuRepository;
 use App\Exceptions\ParameterException;
+
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use stdClass;
 
 class RoleService
 {
-
     protected $roleRepository;
     protected $roleUserRepository;
     protected $roleMenuRepository;
+    protected $menuRepository;
     protected $utilService;
 
     public function __construct(
         RoleRepository $roleRepository,
         RoleUserRepository $roleUserRepository,
         RoleMenuRepository $roleMenuRepository,
+        MenuRepository $menuRepository,
         UtilService $utilService
     ) {
         $this->roleRepository = $roleRepository;
         $this->roleUserRepository = $roleUserRepository;
         $this->roleMenuRepository = $roleMenuRepository;
+        $this->menuRepository = $menuRepository;
         $this->utilService = $utilService;
     }
 
     public function createRole(InputRoleDto $roleDto)
     {
-        $this->roleRepository->createRole($roleDto);
+        DB::transaction(function () use ($roleDto) {
+            $roleId = $this->roleRepository->createRole($roleDto);
+            $menuList = $this->menuRepository->getMenuAllList();
+            $selectedNodes = $this->utilService->getTreeNodeList($menuList,  $roleDto->roleMenu);
+            $roleMenuList = $this->utilService->getStoreKeyValue($roleId,  $selectedNodes, "role_id", "menu_id");
+
+            // Log::info($selectedNodes);
+            // Log::info($roleMenuList);
+            if (count($roleMenuList) > 0) {
+                $this->roleMenuRepository->createRoleMenuList($roleMenuList);
+            }
+        });
     }
 
     public function updateRole(InputRoleDto $roleDto, int $id)
     {
-        $this->roleRepository->updateRole($roleDto, $id);
+
+        DB::transaction(function () use ($roleDto, $id) {
+            $this->roleRepository->updateRole($roleDto, $id);
+            $this->roleMenuRepository->deleteRoleMenuByRoleId($id);
+
+            $menuList = $this->menuRepository->getMenuAllList();
+            $selectedNodes = $this->utilService->getTreeNodeList($menuList,  $roleDto->roleMenu);
+            $roleMenuList = $this->utilService->getStoreKeyValue($id,  $selectedNodes, "role_id", "menu_id");
+
+            if (count($roleMenuList) > 0) {
+                $this->roleMenuRepository->createRoleMenuList($roleMenuList);
+            }
+        });
+
+        //權限 cache 刪除
+
+
     }
 
     public function getRoleById(int $id)

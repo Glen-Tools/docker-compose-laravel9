@@ -27,7 +27,12 @@ class RoleRepository extends BaseRepository
         $this->role->status = $roleDto->status;
         $this->role->weight = $roleDto->weight;
         $this->role->remark = $roleDto->remark;
-        $this->role->save();
+
+        if (!$this->role->save()) {
+            throw new ParameterException(trans('error.sql_insert'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->role->id;
     }
 
     public function updateRole(InputRoleDto $roleDto, int $id)

@@ -33,4 +33,9 @@ class RoleMenuRepository extends Model
             ->where("role_id", $id)
             ->get();
     }
+
+    public function createRoleMenuList(array $data)
+    {
+        $this->roleMenu->insert($data);
+    }
 }
