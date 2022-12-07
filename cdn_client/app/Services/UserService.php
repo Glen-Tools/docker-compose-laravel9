@@ -50,6 +50,7 @@ class UserService
     {
         DB::transaction(function () use ($userDto, $id) {
             $this->userRepository->updateUser($userDto, $id);
+            $this->roleUserRepository->deleteRoleUserByUserId($id);
             $roleUserList = $this->utilService->getStoreKeyValue($id,  $userDto->roleUser,  "user_id", "role_id");
 
             if (count($roleUserList) > 0) {
