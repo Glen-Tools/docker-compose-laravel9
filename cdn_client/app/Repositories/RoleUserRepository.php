@@ -14,14 +14,14 @@ class RoleUserRepository extends Model
         $this->roleUser = $roleUser;
     }
 
-    public function deleteRoleUserByUserId(int $id)
+    public function deleteRoleUserByUserIds(array $ids)
     {
-        $this->roleUser->where("user_id", $id)->delete();
+        $this->roleUser->whereIn("user_id", $ids)->delete();
     }
 
-    public function deleteRoleUserByRoleId(int $id)
+    public function deleteRoleUserByRoleIds(array $id)
     {
-        $this->roleUser->where("role_id", $id)->delete();
+        $this->roleUser->whereIn("role_id", $id)->delete();
     }
 
     public function getRoleUserByUserId(int $id)

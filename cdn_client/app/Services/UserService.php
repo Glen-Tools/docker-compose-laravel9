@@ -50,7 +50,7 @@ class UserService
     {
         DB::transaction(function () use ($userDto, $id) {
             $this->userRepository->updateUser($userDto, $id);
-            $this->roleUserRepository->deleteRoleUserByUserId($id);
+            $this->roleUserRepository->deleteRoleUserByUserIds([$id]);
             $roleUserList = $this->utilService->getStoreKeyValue($id,  $userDto->roleUser,  "user_id", "role_id");
 
             if (count($roleUserList) > 0) {
@@ -143,11 +143,11 @@ class UserService
         return $page;
     }
 
-    public function deleteUserById(int $id)
+    public function deleteUserByIds(array $ids)
     {
-        DB::transaction(function () use ($id) {
-            $this->roleUserRepository->deleteRoleUserByUserId($id);
-            $this->userRepository->deleteUserById($id);
+        DB::transaction(function () use ($ids) {
+            $this->roleUserRepository->deleteRoleUserByUserIds($ids);
+            $this->userRepository->deleteUserByIds($ids);
         });
     }
 

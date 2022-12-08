@@ -105,11 +105,11 @@ class MenuService
         return $this->menuRepository->getMenuAllList();
     }
 
-    public function deleteMenuById(int $id)
+    public function deleteMenuByIds(array $ids)
     {
-        DB::transaction(function () use ($id) {
-            $this->roleMenuRepository->deleteRoleMenuByMenuId($id);
-            $this->menuRepository->deleteMenuById($id);
+        DB::transaction(function () use ($ids) {
+            $this->roleMenuRepository->deleteRoleMenuByMenuIds($ids);
+            $this->menuRepository->deleteMenuByIds($ids);
         });
     }
 }

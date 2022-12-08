@@ -61,7 +61,7 @@ class RoleService
     {
         DB::transaction(function () use ($roleDto, $id) {
             $this->roleRepository->updateRole($roleDto, $id);
-            $this->roleMenuRepository->deleteRoleMenuByRoleId($id);
+            $this->roleMenuRepository->deleteRoleMenuByRoleIds([$id]);
 
             $menuList = $this->menuRepository->getMenuAllList();
             $selectedNodes = $this->utilService->getTreeNodeList($menuList,  $roleDto->roleMenu);
@@ -125,12 +125,12 @@ class RoleService
         return $page;
     }
 
-    public function deleteRoleById(int $id)
+    public function deleteRoleByIds(array $ids)
     {
-        DB::transaction(function () use ($id) {
-            $this->roleUserRepository->deleteRoleUserByRoleId($id);
-            $this->roleMenuRepository->deleteRoleMenuByRoleId($id);
-            $this->roleRepository->deleteRoleById($id);
+        DB::transaction(function () use ($ids) {
+            $this->roleUserRepository->deleteRoleUserByRoleIds($ids);
+            $this->roleMenuRepository->deleteRoleMenuByRoleIds($ids);
+            $this->roleRepository->deleteRoleByIds($ids);
         });
     }
 

@@ -8,6 +8,7 @@ use App\Services\ResponseService;
 use App\Services\MenuService;
 use App\Services\UtilService;
 use App\Services\JwtService;
+use App\Services\CacheMamageService;
 use App\Enums\MenuFeature;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -18,17 +19,20 @@ class MenuController extends BaseController
     private $menuService;
     private $utilService;
     private $responseService;
+    protected $cacheMamageService;
 
     public function __construct(
         JwtService $jwtService,
         MenuService $menuService,
         UtilService $utilService,
         ResponseService $responseService,
+        CacheMamageService $cacheMamageService
     ) {
         $this->jwtService = $jwtService;
         $this->menuService = $menuService;
         $this->utilService = $utilService;
         $this->responseService = $responseService;
+        $this->cacheMamageService = $cacheMamageService;
     }
 
     /**
@@ -212,7 +216,41 @@ class MenuController extends BaseController
     public function destroy(Request $request, $id)
     {
         parent::destroy($request, $id);
-        $this->menuService->deleteMenuById($id);
+        $this->menuService->deleteMenuByIds($id);
+
+        //刪除 所有人的menu cache
+        $this->cacheMamageService->removeCacheMenuAllUser();
+
+        return $this->responseService->responseJson();
+    }
+
+    /**
+     * @OA\Delete(
+     *  tags={"Menu"},
+     *  path="/api/v1/menu/multiple/ids",
+     *  summary="刪除多個菜單(Menu Delete)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="id[]",in="query",name="id[]",description="id",@OA\Schema(type="array",@OA\Items(type="integer"))),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function destroyMultiple(Request $request)
+    {
+        $data = $request->all();
+
+        //驗證
+        $this->utilService->ColumnValidator($data, [
+            'id' => 'required|array',
+        ]);
+
+        $deleteIds = $data["id"];
+        $this->menuService->deleteMenuByIds($deleteIds);
+
+        //刪除 所有人的menu cache
+        $this->cacheMamageService->removeCacheMenuAllUser();
+
         return $this->responseService->responseJson();
     }
 }

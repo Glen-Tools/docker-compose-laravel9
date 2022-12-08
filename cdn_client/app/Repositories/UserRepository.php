@@ -140,6 +140,11 @@ class UserRepository extends BaseRepository
         $this->user->destroy($id);
     }
 
+    public function deleteUserByIds(array $ids)
+    {
+        $this->user->whereIn("id", $ids)->delete();
+    }
+
     public function getUserByAccount(string $account)
     {
         //account = email

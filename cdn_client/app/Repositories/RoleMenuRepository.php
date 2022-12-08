@@ -15,14 +15,14 @@ class RoleMenuRepository extends Model
         $this->roleMenu = $roleMenu;
     }
 
-    public function deleteRoleMenuByMenuId(int $id)
+    public function deleteRoleMenuByMenuIds(array $ids)
     {
-        $this->roleMenu->where("menu_id", $id)->delete();
+        $this->roleMenu->whereIn("menu_id", $ids)->delete();
     }
 
-    public function deleteRoleMenuByRoleId(int $id)
+    public function deleteRoleMenuByRoleIds(array $ids)
     {
-        $this->roleMenu->where("role_id", $id)->delete();
+        $this->roleMenu->whereIn("role_id", $ids)->delete();
     }
 
     public function getRoleMenuByMenuId(int $id)

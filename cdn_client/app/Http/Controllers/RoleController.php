@@ -72,7 +72,7 @@ class RoleController extends BaseController
      * @OA\Get(
      *  tags={"Role"},
      *  path="/api/v1/role/{id}",
-     *  summary="角色資料 (Role Info)",
+     *  summary="權限資料 (Role Info)",
      *  security={{"Authorization":{}}},
      *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowRoleById", example="ShowRoleById")})),
@@ -112,7 +112,7 @@ class RoleController extends BaseController
      * @OA\Post(
      *  tags={"Role"},
      *  path="/api/v1/role",
-     *  summary="新增角色(Role Create)",
+     *  summary="新增權限(Role Create)",
      *  security={{"Authorization":{}}},
      *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateRole")),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
@@ -152,7 +152,7 @@ class RoleController extends BaseController
      * @OA\Put(
      *  tags={"Role"},
      *  path="/api/v1/role/{id}",
-     *  summary="修改角色(Role Update)",
+     *  summary="修改權限(Role Update)",
      *  security={{"Authorization":{}}},
      *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
      *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UpdateRole")),
@@ -199,7 +199,7 @@ class RoleController extends BaseController
      * @OA\Delete(
      *  tags={"Role"},
      *  path="/api/v1/role/{id}",
-     *  summary="刪除使用者(Role Delete)",
+     *  summary="刪除權限(Role Delete)",
      *  security={{"Authorization":{}}},
      *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
@@ -210,7 +210,37 @@ class RoleController extends BaseController
     public function destroy(Request $request, $id)
     {
         parent::destroy($request, $id);
-        $this->roleService->deleteRoleById($id);
+        $this->roleService->deleteRoleByIds([$id]);
+
+        //刪除 所有人的menu cache
+        $this->cacheMamageService->removeCacheMenuAllUser();
+
+        return $this->responseService->responseJson();
+    }
+
+    /**
+     * @OA\Delete(
+     *  tags={"Role"},
+     *  path="/api/v1/role/multiple/ids",
+     *  summary="刪除多個權限(Role Delete)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="id[]",in="query",name="id[]",description="id",@OA\Schema(type="array",@OA\Items(type="integer"))),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function destroyMultiple(Request $request)
+    {
+        $data = $request->all();
+
+        //驗證
+        $this->utilService->ColumnValidator($data, [
+            'id' => 'required|array',
+        ]);
+
+        $deleteIds = $data["id"];
+        $this->roleService->deleteRoleByIds($deleteIds);
 
         //刪除 所有人的menu cache
         $this->cacheMamageService->removeCacheMenuAllUser();

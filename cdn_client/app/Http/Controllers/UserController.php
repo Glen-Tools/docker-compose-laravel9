@@ -272,10 +272,43 @@ class UserController extends BaseController
     public function destroy(Request $request, $id)
     {
         parent::destroy($request, $id);
-        $this->userService->deleteUserById($id);
+        $this->userService->deleteUserByIds([$id]);
 
         //移除 權限相關 cache
         $this->cacheMamageService->removeCacheAuth($id);
+
+        return $this->responseService->responseJson();
+    }
+
+    /**
+     * @OA\Delete(
+     *  tags={"User"},
+     *  path="/api/v1/user/multiple/ids",
+     *  summary="刪除多位使用者(User Delete)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Parameter(parameter="id[]",in="query",name="id[]",description="id",@OA\Schema(type="array",@OA\Items(type="integer"))),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function destroyMultiple(Request $request)
+    {
+        $data = $request->all();
+
+        //驗證
+        $this->utilService->ColumnValidator($data, [
+            'id' => 'required|array',
+        ]);
+
+        $deleteIds = $data["id"];
+        $this->userService->deleteUserByIds($deleteIds);
+
+        // 移除 權限相關 cache
+        foreach ($deleteIds as $id) {
+            parent::destroy($request, $id);
+            $this->cacheMamageService->removeCacheAuth($id);
+        }
 
         return $this->responseService->responseJson();
     }

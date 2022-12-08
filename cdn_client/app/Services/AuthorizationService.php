@@ -17,17 +17,20 @@ class AuthorizationService
         "UserController@store" => "user_create",
         "UserController@update" => "user_update",
         "UserController@destroy" => "user_delete",
+        "UserController@destroyMultiple" => "user_delete",
         "UserController@updatePassword" => "user_password_update",
         "RoleController@index" => "role_list",
         "RoleController@show" => "role_info",
         "RoleController@store" => "role_create",
         "RoleController@update" => "role_update",
         "RoleController@destroy" => "role_delete",
+        "RoleController@destroyMultiple" => "role_delete",
         "MenuController@index" => "menu_list",
         "MenuController@show" => "menu_info",
         "MenuController@store" => "menu_create",
         "MenuController@update" => "menu_update",
         "MenuController@destroy" => "menu_delete",
+        "MenuController@destroyMultiple" => "menu_delete",
     );
 
     private $userRepository;

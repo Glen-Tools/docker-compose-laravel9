@@ -110,6 +110,11 @@ class RoleRepository extends BaseRepository
         $this->role->destroy($id);
     }
 
+    public function deleteRoleByIds(array $ids)
+    {
+        $this->role->whereIn("id", $ids)->delete();
+    }
+
     public function getRoleAllList()
     {
         return $this->role->select(

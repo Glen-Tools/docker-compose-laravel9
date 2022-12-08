@@ -130,4 +130,9 @@ class MenuRepository extends BaseRepository
     {
         $this->menu->destroy($id);
     }
+
+    public function deleteMenuByIds(array $ids)
+    {
+        $this->menu->whereIn("id", $ids)->delete();
+    }
 }
