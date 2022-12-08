@@ -155,8 +155,11 @@ class JwtService
             );
         }
 
-        $data =  $this->userRepository->getUserById($userId);
-        $userInfo = $data;
+        $userInfo =  $this->userRepository->getUserById($userId);
+        if (empty($userInfo)) {
+            throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
+        }
+
         $inputUserInfoDto = new InputUserInfoDto(
             $userInfo->id,
             $userInfo->name,
