@@ -30,8 +30,8 @@ class SwaggerRole
 
     /**
      * @OA\Examples(
-     *   summary="ShowRoleList",
-     *   example="ShowRoleList",
+     *   summary="AllRole",
+     *   example="AllRole",
      *   value={
      *      "data": {
      *        "roleList": {
