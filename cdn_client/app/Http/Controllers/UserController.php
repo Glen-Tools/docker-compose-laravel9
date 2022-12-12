@@ -170,9 +170,7 @@ class UserController extends BaseController
             $data["checkPassword"],
         );
 
-        $InputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);
-
-        $this->userService->updateUserPassword($InputUserInfoDto, $userPasswordDto, $id);
+        $this->userService->updateUserPassword($userPasswordDto, $id);
         return $this->responseService->responseJson();
     }
 
@@ -206,7 +204,7 @@ class UserController extends BaseController
 
         $InputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);
 
-        $this->userService->updateSelfPassword($InputUserInfoDto, $userPasswordDto);
+        $this->userService->updateUserPassword($userPasswordDto, $InputUserInfoDto->id);
         return $this->responseService->responseJson();
     }
 

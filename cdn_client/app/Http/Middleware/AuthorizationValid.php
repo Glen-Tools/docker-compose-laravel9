@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AuthorizationValid
+class MenuAuthValid
 {
 
     private $jwtService;

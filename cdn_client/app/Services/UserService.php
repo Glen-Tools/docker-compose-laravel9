@@ -59,29 +59,14 @@ class UserService
         });
     }
 
-    public function updateUserPassword(InputUserInfoDto $userInfo, InputUserPasswordDto $userDto, int $id)
+    public function updateUserPassword(InputUserPasswordDto $userDto, int $id)
     {
-        // 確認身份
-        if (($userInfo->getUserType() != UserType::Admin->value)) {
-            throw new ParameterException(trans('error.user_authority_insufficinet'), Response::HTTP_UNAUTHORIZED);
-        }
-
         // 確認新密碼
         if (($userDto->newPassword != $userDto->checkPassword)) {
             throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
         }
 
         $this->userRepository->updateUserPassword($userDto->newPassword, $id);
-    }
-
-    public function updateSelfPassword(InputUserInfoDto $userInfo, InputUserPasswordDto $userDto)
-    {
-        // 確認新密碼
-        if (($userDto->newPassword != $userDto->checkPassword)) {
-            throw new ParameterException(trans('error.password'), Response::HTTP_BAD_REQUEST);
-        }
-
-        $this->userRepository->updateUserPassword($userDto->newPassword, $userInfo->getId());
     }
 
     public function getUserById(int $id)

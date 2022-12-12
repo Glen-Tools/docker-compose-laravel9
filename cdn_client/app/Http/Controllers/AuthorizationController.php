@@ -7,7 +7,7 @@ use App\Services\ResponseService;
 use App\Services\AuthorizationService;
 use Illuminate\Http\Request;
 
-class AuthorizationController extends Controller
+class AuthMenuController extends Controller
 {
     protected $jwtService;
     private $responseService;

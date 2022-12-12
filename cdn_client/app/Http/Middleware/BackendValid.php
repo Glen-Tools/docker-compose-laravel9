@@ -9,7 +9,7 @@ use App\Exceptions\ParameterException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class BackendValid
+class BackendAuthValid
 {
     private $jwtService;
 

@@ -4,10 +4,10 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\AuthorizationController;
+use App\Http\Controllers\AuthMenuController;
 use App\Http\Middleware\JwtValid;
-use App\Http\Middleware\BackendValid;
-use App\Http\Middleware\AuthorizationValid;
+use App\Http\Middleware\BackendAuthValid;
+use App\Http\Middleware\MenuAuthValid;
 use App\Http\Middleware\LanguageChange;
 use Illuminate\Support\Facades\Route;
 
@@ -35,7 +35,7 @@ Route::prefix('v1')->group(function () {
 
         //jwt 權限
         Route::middleware(JwtValid::class)->group(function () {
-            Route::get('/auth/menu', [AuthorizationController::class, 'getAuthMenuList']);
+            Route::get('/auth/menu', [AuthMenuController::class, 'getAuthMenuList']);
             Route::get('/logout', [LoginController::class, 'logout']);
             Route::get('/jwt/check', [LoginController::class, 'validToken']);
 
@@ -44,7 +44,7 @@ Route::prefix('v1')->group(function () {
         });
 
         //jwt,後端權限(userType=1) （後端管理者使用)
-        Route::middleware([JwtValid::class, BackendValid::class])->group(function () {
+        Route::middleware([JwtValid::class, BackendAuthValid::class])->group(function () {
             //取得所有 MenuList
             Route::get('/menu/all', [MenuController::class, 'getMenuAllList']);
             //取得所有 RoleList
@@ -52,7 +52,7 @@ Route::prefix('v1')->group(function () {
         });
 
         //jwt,頁面權限,後端權限(userType=1) （後端管理者使用)
-        Route::middleware([JwtValid::class, AuthorizationValid::class, BackendValid::class])->group(function () {
+        Route::middleware([JwtValid::class, MenuAuthValid::class, BackendAuthValid::class])->group(function () {
 
             //CRUD user,role,menu
             Route::apiResource('user', UserController::class);
