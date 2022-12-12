@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Dto\InputUserDto;
-use App\Dto\OutputUserListDto;
+use App\Dto\InputUserRoleDto;
+use App\Dto\InputUserSelfDto;
 use App\Dto\InputUserPasswordDto;
+use App\Dto\OutputUserListDto;
 use App\Dto\OutputUserInfoRoleDto;
 use App\Services\ResponseService;
 use App\Services\UserService;
@@ -238,7 +240,7 @@ class UserController extends BaseController
             'roleUser' => 'array|nullable',
         ]);
 
-        $userDto = new InputUserDto(
+        $userDto = new InputUserRoleDto(
             $data["name"],
             $data["email"],
             "",
@@ -249,6 +251,44 @@ class UserController extends BaseController
         );
 
         $this->userService->updateUser($userDto, $id);
+
+        //移除 權限相關 cache
+        $this->cacheMamageService->removeCacheAuth($id);
+        return $this->responseService->responseJson();
+    }
+
+    /**
+     * @OA\Put(
+     *  tags={"User"},
+     *  path="/api/v1/user/profile/self",
+     *  summary="修改使用者自身(User Profile Update)",
+     *  security={{"Authorization":{}}},
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UpdateSelfProfile")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function updateSelfProfile(Request $request)
+    {
+        //取得api data
+        $data = $request->all();
+
+        $InputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);
+        $id = $InputUserInfoDto->id;
+
+        //驗證
+        $this->utilService->ColumnValidator($data, [
+            'name' => 'required|max:50',
+            'email' => 'required|max:100|email:rfc,dns|unique:users,email,' . $id, //當id不存在,在debug模式會顯示email 已經存在
+        ]);
+
+        $userDto = new InputUserSelfDto(
+            $data["name"],
+            $data["email"],
+        );
+
+        $this->userService->updateUserSelf($userDto, $id);
 
         //移除 權限相關 cache
         $this->cacheMamageService->removeCacheAuth($id);

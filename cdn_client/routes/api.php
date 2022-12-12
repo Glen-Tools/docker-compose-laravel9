@@ -39,7 +39,8 @@ Route::prefix('v1')->group(function () {
             Route::get('/logout', [LoginController::class, 'logout']);
             Route::get('/jwt/check', [LoginController::class, 'validToken']);
 
-            //自己(self) 密碼修改
+            //使用者資料(self)修改
+            Route::put('/user/profile/self', [UserController::class, 'updateSelfProfile']);
             Route::patch('/user/password/self', [UserController::class, 'updateSelfPassword']);
         });
 

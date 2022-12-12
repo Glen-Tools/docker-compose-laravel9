@@ -5,6 +5,7 @@ namespace App\Repositories;
 use Carbon\Carbon;
 use App\Dto\InputPageDto;
 use App\Dto\InputUserDto;
+use App\Dto\InputUserSelfDto;
 use App\Enums\ListType;
 use App\Exceptions\ParameterException;
 use App\Models\User;
@@ -49,6 +50,15 @@ class UserRepository extends BaseRepository
         $user->status = $userDto->status ?? $user->status;
         $user->user_type = $userDto->userType ?? $user->userType;
         $user->remark = $userDto->remark ?? $user->remark;
+        $user->save();
+    }
+
+    public function updateUserSelf(InputUserSelfDto $userDto, int $id)
+    {
+        $user = $this->isExistUser($id);
+
+        $user->name = $userDto->name ?? $user->name;
+        $user->email = $userDto->email ?? $user->email;
         $user->save();
     }
 

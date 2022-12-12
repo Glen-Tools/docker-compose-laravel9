@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Dto\InputPageDto;
 use App\Dto\InputUserDto;
+use App\Dto\InputUserSelfDto;
 use App\Dto\InputUserPasswordDto;
 use App\Dto\InputUserInfoDto;
 use App\Dto\OutputPageDto;
@@ -57,6 +58,11 @@ class UserService
                 $this->roleUserRepository->createRoleUserList($roleUserList);
             }
         });
+    }
+
+    public function updateUserSelf(InputUserSelfDto $userDto, int $id)
+    {
+        $this->userRepository->updateUserSelf($userDto, $id);
     }
 
     public function updateUserPassword(InputUserPasswordDto $userDto, int $id)

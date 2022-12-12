@@ -172,6 +172,27 @@ class SwaggerUser
 
     /**
      * @OA\Schema(
+     *      schema="UpdateSelfProfile",
+     *      @OA\Property(
+     *          property="name",
+     *          description="name",
+     *          type="string",
+     *          format="string",
+     *          example="Gary"
+     *      ),
+     *      @OA\Property(
+     *          property="email",
+     *          description="email",
+     *          type="string",
+     *          format="string",
+     *          example="gary.shih@wvt.com.tw"
+     *      ),
+     * )
+     */
+    public $UpdateSelfProfile;
+
+    /**
+     * @OA\Schema(
      *      schema="UpdateUserPassword",
      *      @OA\Property(
      *          property="newPassword",
