@@ -23,7 +23,7 @@ class CacheMamageService
 
     /**
      * removeCacheAuth
-     * 移除權限相關 cache
+     * 移除權限相關(userInfo、menu) cache
      * @param  int $id
      * @return void
      */

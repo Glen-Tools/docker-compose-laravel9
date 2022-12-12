@@ -198,6 +198,9 @@ class MenuController extends BaseController
         );
 
         $this->menuService->updateMenu($menuDto, $id);
+        //刪除 所有人的menu cache
+        $this->cacheMamageService->removeCacheMenuAllUser();
+
         return $this->responseService->responseJson();
     }
 
