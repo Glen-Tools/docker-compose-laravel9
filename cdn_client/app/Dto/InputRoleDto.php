@@ -9,15 +9,13 @@ class InputRoleDto
     public readonly bool $status;
     public readonly int $weight;
     public readonly ?string $remark;
-    public readonly array $roleMenu;
 
-    public function __construct(string $name, string $key, bool $status, int $weight, string $remark, array $roleMenu)
+    public function __construct(string $name, string $key, bool $status, int $weight, string $remark)
     {
         $this->name = $name;
         $this->key = $key;
         $this->status = $status;
         $this->weight = $weight;
         $this->remark = $remark;
-        $this->roleMenu = $roleMenu;
     }
 }

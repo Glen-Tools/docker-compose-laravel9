@@ -40,6 +40,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/jwt/check', [LoginController::class, 'validToken']);
 
             //使用者資料(self)修改
+            Route::get('/user/profile/self', [UserController::class, 'showSelfProfile']);
             Route::put('/user/profile/self', [UserController::class, 'updateSelfProfile']);
             Route::patch('/user/password/self', [UserController::class, 'updateSelfPassword']);
         });

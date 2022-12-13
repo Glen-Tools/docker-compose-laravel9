@@ -10,19 +10,21 @@ class SwaggerMenu
      *   example="ShowMenuById",
      *   value={
      *     "data":{
-     *       {
-     *       "id": 1,
-     *       "name": "ffttttt1",
-     *       "key": "gg2222223",
-     *       "url": "bbbbb.php",
-     *       "feature": "F",
-     *       "status": 1,
-     *       "parent": 0,
-     *       "weight": 1,
-     *       "remark": "",
-     *       "createdAt": "2022-09-29T08:58:00.000000Z",
-     *       "updatedAt": "2022-09-29T08:58:31.000000Z"
-     *       }
+     *        "menuInfo": {
+     *           {
+     *           "id": 1,
+     *           "name": "ffttttt1",
+     *           "key": "gg2222223",
+     *           "url": "bbbbb.php",
+     *           "feature": "F",
+     *           "status": 1,
+     *           "parent": 0,
+     *           "weight": 1,
+     *           "remark": "",
+     *           "createdAt": "2022-09-29T08:58:00.000000Z",
+     *           "updatedAt": "2022-09-29T08:58:31.000000Z"
+     *           }
+     *         }
      *     },
      *     "message": "",
      *     "success": true
@@ -121,7 +123,7 @@ class SwaggerMenu
      *          description="name",
      *          type="string",
      *          format="string",
-     *          example="修改密碼"
+     *          example="test"
      *      ),
      *      @OA\Property(
      *          property="key",
@@ -160,8 +162,8 @@ class SwaggerMenu
      *      @OA\Property(
      *          property="weight",
      *          description="weight",
-     *          type="string",
-     *          example="",
+     *          type="int",
+     *          example=0,
      *      ),
      *      @OA\Property(
      *          property="remark",
@@ -220,8 +222,8 @@ class SwaggerMenu
      *      @OA\Property(
      *          property="weight",
      *          description="weight",
-     *          type="string",
-     *          example="",
+     *          type="int",
+     *          example=0,
      *      ),
      *      @OA\Property(
      *          property="remark",

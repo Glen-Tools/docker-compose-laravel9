@@ -9,24 +9,27 @@ class SwaggerUser
      *   summary="ShowUserById",
      *   example="ShowUserById",
      *   value={
-     *     "data":{
-     *       {
-     *       "id": 3,
-     *       "name": "test",
-     *       "email": "testqwq@gmail.com",
-     *       "status": 1,
-     *       "remark": "",
-     *       "userType": 2,
-     *       "loginIp": null,
-     *       "loginTime": null,
-     *       "passwordUpdateTime": null,
-     *       "createdAt": "2022-09-26T06:59:17.000000Z",
-     *       "updatedAt": "2022-09-26T06:59:17.000000Z"
+     *     "data": {
+     *       "userInfo": {
+     *          "id": 2,
+     *          "name": "Gary",
+     *          "email": "gary.shih@wvt.com.tw",
+     *          "status": 1,
+     *          "userType": "2",
+     *          "loginIp": "172.20.0.1",
+     *          "passwordUpdateTime": null,
+     *          "loginTime": "2022-12-13 10:01:29",
+     *          "createdAt": null,
+     *          "updatedAt": "2022-12-13T02:01:44.000000Z",
+     *          "remark": "",
+     *       },
+     *       "roleUser": {
+     *          1,2
      *       }
      *     },
      *     "message": "",
      *     "success": true
-     *  }
+     *     }
      * )
      */
     public $ShowUserById;
@@ -124,6 +127,11 @@ class SwaggerUser
      *          format="string",
      *          example="管理者帳號",
      *      ),
+     *      @OA\Property(
+     *          property="roleUser",
+     *          description="roleUser",
+     *          example={1,2},
+     *      ),
      * )
      */
     public $CreateUser;
@@ -165,6 +173,11 @@ class SwaggerUser
      *          type="string",
      *          format="string",
      *          example="管理者帳號",
+     *      ),
+     *      @OA\Property(
+     *          property="roleUser",
+     *          description="roleUser",
+     *          example={1,2},
      *      ),
      * )
      */

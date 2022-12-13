@@ -92,14 +92,14 @@ class MenuController extends BaseController
     }
 
     /**
-     * @OA\Get(
+     * @OA\Post(
      *  tags={"Menu"},
-     *  path="/api/v1/menu/{id}",
-     *  summary="Menu資料 (Menu Info)",
+     *  path="/api/v1/menu",
+     *  summary="新增Menu(Menu Create)",
      *  security={{"Authorization":{}}},
-     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
-     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowMenuById", example="ShowMenuById")})),
-     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateMenu")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
@@ -127,7 +127,7 @@ class MenuController extends BaseController
             $data["feature"],
             $data["status"],
             $data["parent"] ?? 0,
-            $data["weight"] ?? null,
+            $data["weight"] ?? 0,
             $data["remark"] ?? "",
         );
 
@@ -136,14 +136,14 @@ class MenuController extends BaseController
     }
 
     /**
-     * @OA\Post(
+     * @OA\Get(
      *  tags={"Menu"},
-     *  path="/api/v1/menu",
-     *  summary="新增Menu(Menu Create)",
+     *  path="/api/v1/menu/{id}",
+     *  summary="Menu資料 (Menu Info)",
      *  security={{"Authorization":{}}},
-     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateMenu")),
-     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
-     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowMenuById", example="ShowMenuById")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
@@ -193,7 +193,7 @@ class MenuController extends BaseController
             $data["feature"],
             $data["status"],
             $data["parent"] ?? 0,
-            $data["weight"] ?? null,
+            $data["weight"] ?? 0,
             $data["remark"] ?? "",
         );
 

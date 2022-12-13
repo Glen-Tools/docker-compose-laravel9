@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Dto\InputRoleDto;
+use App\Dto\InputRoleMenuDto;
 use App\Dto\OutputRoleListDto;
 use App\Dto\OutputRoleInfoMenuDto;
 use App\Services\ResponseService;
@@ -68,15 +68,16 @@ class RoleController extends BaseController
         return $this->responseService->responseJson($outputRoleListDto);
     }
 
+
     /**
-     * @OA\Get(
+     * @OA\Post(
      *  tags={"Role"},
-     *  path="/api/v1/role/{id}",
-     *  summary="權限資料 (Role Info)",
+     *  path="/api/v1/role",
+     *  summary="新增權限(Role Create)",
      *  security={{"Authorization":{}}},
-     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
-     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowRoleById", example="ShowRoleById")})),
-     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateRole")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
@@ -95,11 +96,11 @@ class RoleController extends BaseController
             'roleMenu' => 'array|nullable',
         ]);
 
-        $roleDto = new InputRoleDto(
+        $roleDto = new InputRoleMenuDto(
             $data["name"],
             $data["key"],
             $data["status"],
-            $data["weight"] ?? null,
+            $data["weight"] ?? 0,
             $data["remark"] ?? "",
             $data["roleMenu"] ?? []
         );
@@ -109,14 +110,14 @@ class RoleController extends BaseController
     }
 
     /**
-     * @OA\Post(
+     * @OA\Get(
      *  tags={"Role"},
-     *  path="/api/v1/role",
-     *  summary="新增權限(Role Create)",
+     *  path="/api/v1/role/{id}",
+     *  summary="權限資料 (Role Info)",
      *  security={{"Authorization":{}}},
-     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/CreateRole")),
-     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
-     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Parameter(parameter="page",in="path",name="id",required=true,description="id",@OA\Schema(type="integer")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowRoleById", example="ShowRoleById")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
@@ -178,11 +179,11 @@ class RoleController extends BaseController
             'roleMenu' => 'array|nullable',
         ]);
 
-        $roleDto = new InputRoleDto(
+        $roleDto = new InputRoleMenuDto(
             $data["name"],
             $data["key"],
             $data["status"],
-            $data["weight"] ?? null,
+            $data["weight"] ?? 0,
             $data["remark"] ?? "",
             $data["roleMenu"] ?? [],
         );

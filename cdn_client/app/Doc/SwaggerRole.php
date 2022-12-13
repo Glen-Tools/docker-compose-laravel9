@@ -10,14 +10,17 @@ class SwaggerRole
      *   example="ShowRoleById",
      *   value={
      *     "data":{
-     *       {
-     *       "id": 1,
-     *       "name": "管理者",
-     *       "key": "!QAZ2wsx",
-     *       "status": 1,
-     *       "weight": null,
-     *       "createdAt": "2022-10-05T09:24:37.000000Z",
-     *       "updatedAt": "2022-10-05T09:24:37.000000Z"
+     *       "roleInfo":{
+     *          "id": 1,
+     *          "name": "管理者",
+     *          "key": "!QAZ2wsx",
+     *          "status": 1,
+     *          "weight": null,
+     *          "createdAt": "2022-10-05T09:24:37.000000Z",
+     *          "updatedAt": "2022-10-05T09:24:37.000000Z"
+     *       },
+     *       "roleMenu": {
+     *          1,2
      *       }
      *     },
      *     "message": "",
@@ -111,14 +114,19 @@ class SwaggerRole
      *      @OA\Property(
      *          property="weight",
      *          description="weight",
-     *          type="string",
-     *          example="",
+     *          type="int",
+     *          example=0,
      *      ),
      *      @OA\Property(
      *          property="remark",
      *          description="remark",
      *          type="string",
      *          example="",
+     *      ),
+     *      @OA\Property(
+     *          property="roleMenu",
+     *          description="roleMenu",
+     *          example={1,2},
      *      ),
      * )
      */
@@ -151,14 +159,19 @@ class SwaggerRole
      *      @OA\Property(
      *          property="weight",
      *          description="weight",
-     *          type="string",
-     *          example="",
+     *          type="int",
+     *          example=0,
      *      ),
      *      @OA\Property(
      *          property="remark",
      *          description="remark",
      *          type="string",
      *          example="",
+     *      ),
+     *      @OA\Property(
+     *          property="roleMenu",
+     *          description="roleMenu",
+     *          example={1,2},
      *      ),
      * )
      */

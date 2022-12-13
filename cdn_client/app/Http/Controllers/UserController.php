@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Dto\InputUserDto;
 use App\Dto\InputUserRoleDto;
 use App\Dto\InputUserSelfDto;
 use App\Dto\InputUserPasswordDto;
@@ -99,6 +98,28 @@ class UserController extends BaseController
     }
 
     /**
+     * @OA\Get(
+     *  tags={"User"},
+     *  path="/api/v1/user/profile/self",
+     *  summary="使用者自身資料 (User Self Info)",
+     *  security={{"Authorization":{}}},
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/ShowUserById", example="ShowUserById")})),
+     *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function showSelfProfile(Request $request)
+    {
+        $InputUserInfoDto = $this->jwtService->getUserInfoByRequest($request);
+        $id = $InputUserInfoDto->id;
+
+        $userInfo = $this->userService->getUserById($id);
+        $roleUser = $this->userService->getRoleUserByUserId($id);
+        $data = new OutputUserInfoRoleDto($userInfo, $roleUser);
+        return $this->responseService->responseJson($data);
+    }
+
+    /**
      * @OA\Post(
      *  tags={"User"},
      *  path="/api/v1/user",
@@ -126,7 +147,7 @@ class UserController extends BaseController
             'roleUser' => 'array|nullable',
         ]);
 
-        $userDto = new InputUserDto(
+        $userDto = new InputUserRoleDto(
             $data["name"],
             $data["email"],
             $data["password"],
@@ -180,7 +201,7 @@ class UserController extends BaseController
      * @OA\Patch(
      *  tags={"User"},
      *  path="/api/v1/user/password/self",
-     *  summary="修改自身密碼(User Update)",
+     *  summary="修改自身密碼(User Self Update)",
      *  security={{"Authorization":{}}},
      *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UpdateUserPassword")),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
