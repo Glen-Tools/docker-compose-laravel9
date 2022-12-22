@@ -6,6 +6,7 @@ use App\Enums\LanguageType;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 class LanguageChange
 {
@@ -21,7 +22,7 @@ class LanguageChange
 
         $lang = $request->header('Language');
 
-        //語言包切換 
+        //語言包切換
         if (
             isset($lang) &&
             $langValue = LanguageType::getLanguageTypeValueByKey($lang)

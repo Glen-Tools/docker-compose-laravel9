@@ -11,6 +11,8 @@ use App\Http\Middleware\MenuAuthValid;
 use App\Http\Middleware\LanguageChange;
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Str;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes

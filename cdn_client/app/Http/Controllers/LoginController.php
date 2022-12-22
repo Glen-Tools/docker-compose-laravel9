@@ -81,6 +81,8 @@ class LoginController extends Controller
 
         //存入 login ip and time
         //todo REMOTE_ADDR 拿到的是docker default gateway ip
+        // $request->getClientIp();
+        // $request->ip();
         $ip = $request->ip();
         $this->jwtService->setUserIdToRequest($jwtToken, $request);
         $this->loginService->setLoginInfo($userId, $ip);
