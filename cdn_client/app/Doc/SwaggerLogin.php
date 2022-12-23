@@ -61,4 +61,67 @@ class SwaggerLogin
      * )
      */
     public $UserLogin;
+
+    /**
+     * @OA\Schema(
+     *      schema="RegisterUser",
+     *      @OA\Property(
+     *          property="name",
+     *          description="name",
+     *          type="string",
+     *          format="string",
+     *          example="gary"
+     *      ),
+     *      @OA\Property(
+     *          property="account",
+     *          description="account",
+     *          type="string",
+     *          format="string",
+     *          example="gary@gmail.com"
+     *      ),
+     *      @OA\Property(
+     *          property="password",
+     *          description="password",
+     *          type="string",
+     *          format="string",
+     *          example="gary123"
+     *      ),
+     *      @OA\Property(
+     *          property="validation",
+     *          description="validation",
+     *          type="string",
+     *          format="string",
+     *          example="hNZK5FAW"
+     *      ),
+     * )
+     */
+    public $RegisterUser;
+
+    /**
+     * @OA\Schema(
+     *      schema="ResetPassword",
+     *      @OA\Property(
+     *          property="account",
+     *          description="account",
+     *          type="string",
+     *          format="string",
+     *          example="gary@gmail.com"
+     *      ),
+     *      @OA\Property(
+     *          property="newPassword",
+     *          description="new Passord",
+     *          type="string",
+     *          format="string",
+     *          example="@WSX1qaz"
+     *      ),
+     *      @OA\Property(
+     *          property="checkPassword",
+     *          description="check Passord",
+     *          type="string",
+     *          format="string",
+     *          example="@WSX1qaz"
+     *      ),
+     * )
+     */
+    public $ResetPassword;
 }

@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Dto\InputUserRoleDto;
 use App\Dto\InputLoginDto;
 use App\Dto\OutputAuthUserInfoDto;
 use App\Dto\InputEmailValidationDto;
+
 use App\Mail\ValidationEmail;
 use App\Exceptions\ParameterException;
 use App\Repositories\UserRepository;
@@ -82,15 +84,16 @@ class LoginService
         return $this::CACHE_PASSWORD_FORGOT_CODE . "_$account";
     }
 
-    public function regInValidationCode(string $account)
+    public function regInValidCode(string $account)
     {
         $checkUser = $this->exsitUser($account);
-        if ($checkUser) {
+        $cacheName = $this->getRegInCodeCacheNameByAccount($account);
+        $checkAccount =  $this->cacheService->getByJson($cacheName);
+        if ($checkUser || isset($checkAccount)) {
             throw new ParameterException(trans('error.user_has_exsit'), Response::HTTP_BAD_REQUEST);
         }
 
         $ValidationCode = Str::random(8);
-        $cacheName = $this->getRegInCodeCacheNameByAccount($account);
         $this->cacheService->putByJson($cacheName, $ValidationCode, $this::CACHE_TIME);
 
         $mailContent = trans('email.register_in.page_content', ["code" => $ValidationCode]) .
@@ -107,7 +110,7 @@ class LoginService
         Mail::to($account)->send(new ValidationEmail((array)$mailData));
     }
 
-    public function pwdForgotValiCodeAndEmail(string $account)
+    public function pwdForgotValidCodeAndEmail(string $account)
     {
         $checkUser = $this->exsitUser($account);
         if (!$checkUser) {
@@ -130,5 +133,13 @@ class LoginService
 
         //send email
         Mail::to($account)->send(new ValidationEmail((array)$mailData));
+    }
+
+    public function validCacheValueByCacheName(string $cacheName, string $ValidationCode, string $errLang)
+    {
+        $cacheValidation =  $this->cacheService->getByJson($cacheName);
+        if ($cacheValidation != $ValidationCode) {
+            throw new ParameterException($errLang, Response::HTTP_BAD_REQUEST);
+        }
     }
 }

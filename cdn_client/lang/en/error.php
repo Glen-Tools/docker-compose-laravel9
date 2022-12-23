@@ -27,6 +27,11 @@ return [
     "user_authority_insufficinet"    => "Insufficient user authority.",
     "user_not_found"                 => "User not found.",
     "user_has_exsit"                 => "User has exsit",
+    "validation_code"                => ":type validation code error",
+
+    "register_in"                    => "Register in",
+    "forgot_password"                => "Reset password",
+
     "sql_insert"                     => "SQL insert error.",
     "sql_update"                     => "SQL update error.",
     "sql_delete"                     => "SQL delete error.",

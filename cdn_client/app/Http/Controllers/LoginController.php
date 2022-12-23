@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Dto\InputUserRoleDto;
 use App\Dto\InputLoginDto;
 use App\Dto\OutputJwtDto;
 use App\Dto\OutputLoginDto;
 use App\Dto\OutputAuthUserInfoDto;
+use App\Dto\InputUserPasswordDto;
 use App\Enums\JwtType;
+use App\Enums\UserType;
 use App\Services\JwtService;
 use App\Services\LoginService;
 use App\Services\ResponseService;
 use App\Services\UserService;
 use App\Services\UtilService;
 use App\Services\CacheMamageService;
-use App\Exceptions\ParameterException;
-use Illuminate\Http\Response;
+use App\Services\CacheService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -27,6 +29,7 @@ class LoginController extends Controller
     protected $jwtService;
     protected $userService;
     protected $cacheMamageService;
+    private $cacheService;
 
     public function __construct(
         UtilService $utilService,
@@ -34,7 +37,8 @@ class LoginController extends Controller
         ResponseService $responseService,
         JwtService $jwtService,
         UserService $userService,
-        CacheMamageService $cacheMamageService
+        CacheMamageService $cacheMamageService,
+        CacheService $cacheService
     ) {
         $this->utilService = $utilService;
         $this->loginService = $loginService;
@@ -42,6 +46,7 @@ class LoginController extends Controller
         $this->jwtService = $jwtService;
         $this->userService = $userService;
         $this->cacheMamageService = $cacheMamageService;
+        $this->cacheService = $cacheService;
     }
 
     /**
@@ -187,7 +192,6 @@ class LoginController extends Controller
      *  summary="忘記密碼驗證碼(Forget password validation code)",
      *  @OA\Parameter(parameter="account",in="path",name="account",required=true,description="account",@OA\Schema(type="string")),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
-     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
@@ -198,7 +202,7 @@ class LoginController extends Controller
             'account' => 'required|max:100|email:rfc,dns',
         ]);
 
-        $this->loginService->pwdForgotValiCodeAndEmail($account);
+        $this->loginService->pwdForgotValidCodeAndEmail($account);
 
         return $this->responseService->responseJson();
     }
@@ -210,7 +214,6 @@ class LoginController extends Controller
      *  summary="註冊帳號驗證碼(register account validation code)",
      *  @OA\Parameter(parameter="account",in="path",name="account",required=true,description="account",@OA\Schema(type="string")),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
-     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
@@ -221,7 +224,7 @@ class LoginController extends Controller
             'account' => 'required|max:100|email:rfc,dns',
         ]);
 
-        $this->loginService->regInValidationCode($account);
+        $this->loginService->regInValidCode($account);
 
         return $this->responseService->responseJson();
     }
@@ -231,10 +234,9 @@ class LoginController extends Controller
      * @OA\Post(
      *  tags={"Login"},
      *  path="/api/v1/register",
-     *  summary="使用者註冊(User Register)",
-     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UserLogin")),
-     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/RefreshJwtToken", example="RefreshJwtToken")})),
-     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  summary="一般使用者註冊(Customer Register)",
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/RegisterUser")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
@@ -242,5 +244,70 @@ class LoginController extends Controller
     {
         //取得api data
         $data = $request->all();
+
+        //驗證
+        $this->utilService->ColumnValidator($data, [
+            'name' => 'required|max:50',
+            'account' => 'required|max:100|email:rfc,dns',
+            'password' => 'required|max:50|min:5',
+            'validation' => 'required|min:8',
+        ]);
+
+        $userDto = new InputUserRoleDto(
+            $data["name"],
+            $data["account"],
+            $data["password"],
+            true,
+            UserType::User->value,
+            "",
+            []
+        );
+
+        $cacheName = $this->loginService->getRegInCodeCacheNameByAccount($userDto->email);
+
+        $this->loginService->validCacheValueByCacheName($cacheName, $data['validation'], trans('error.validation_code', ['type' => trans('error.register_in')]));
+        $this->userService->createUser($userDto);
+        $this->cacheService->removeCache($cacheName);
+
+        return $this->responseService->responseJson();
+    }
+
+    /**
+     * @OA\Post(
+     *  tags={"Login"},
+     *  path="/api/v1/password/forgot",
+     *  summary="忘記(重置)密碼(User Register)",
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/ResetPassword")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function resetPassword(Request $request)
+    {
+        //取得api data
+        $data = $request->all();
+
+        //驗證
+        $this->utilService->ColumnValidator($data, [
+            'account' => 'required|max:100|email:rfc,dns',
+            'newPassword' => 'required|max:50|min:5',
+            'checkPassword' => 'required|max:50|min:5',
+        ]);
+
+        $userPasswordDto = new InputUserPasswordDto(
+            $data["newPassword"],
+            $data["checkPassword"],
+        );
+
+        $account = $data["account"];
+        $cacheName = $this->loginService->getPwdForgotCodeCacheNameByAccount($account);
+
+        $this->loginService->validCacheValueByCacheName($cacheName, $data['validation'], trans('error.validation_code', ['type' => trans('error.forgot_password')]));
+
+        $outputAuthUserInfoDto = $this->loginService->getUserInfoByLogin($account);
+        $this->userService->updateUserPassword($userPasswordDto, $outputAuthUserInfoDto->id);
+        $this->cacheService->removeCache($cacheName);
+
+        return $this->responseService->responseJson();
     }
 }

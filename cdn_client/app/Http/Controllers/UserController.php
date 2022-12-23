@@ -140,7 +140,7 @@ class UserController extends BaseController
         $this->utilService->ColumnValidator($data, [
             'name' => 'required|max:50',
             'email' => 'required|unique:users|max:100|email:rfc,dns',
-            'password' => 'required|max:50',
+            'password' => 'required|max:50|min:5',
             'status' => 'required|boolean',
             'userType' => ['required', Rule::in([1, 2])], //管理者=1,一般使用者=2
             'remark' => 'string|max:5000|nullable',
