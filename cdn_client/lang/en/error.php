@@ -26,6 +26,7 @@ return [
     "generate_refresh_jwt"           => "Generate Refresh jwt error.",
     "user_authority_insufficinet"    => "Insufficient user authority.",
     "user_not_found"                 => "User not found.",
+    "user_has_exsit"                 => "User has exsit",
     "sql_insert"                     => "SQL insert error.",
     "sql_update"                     => "SQL update error.",
     "sql_delete"                     => "SQL delete error.",

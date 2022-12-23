@@ -13,6 +13,8 @@ use App\Services\ResponseService;
 use App\Services\UserService;
 use App\Services\UtilService;
 use App\Services\CacheMamageService;
+use App\Exceptions\ParameterException;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -100,7 +102,7 @@ class LoginController extends Controller
      *  path="/api/v1/jwt",
      *  summary="更新JwtToken (RefreshJwtToken)",
      *  security={{"Authorization":{}}},
-     *  @OA\Parameter(parameter="page",in="query",name="refreshtoken",required=true,description="refreshtoken",@OA\Schema(type="string")),
+     *  @OA\Parameter(parameter="refreshtoken",in="query",name="refreshtoken",required=true,description="refreshtoken",@OA\Schema(type="string")),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/RefreshJwtToken", example="RefreshJwtToken")})),
      *  @OA\Response(response=401,description="Unauthorized", @OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
@@ -157,7 +159,7 @@ class LoginController extends Controller
 
     /**
      * @OA\Get(
-     *  tags={"LoginOut"},
+     *  tags={"Login"},
      *  path="/api/v1/logout",
      *  summary="使用者登出 (User Logout)",
      *  security={{"Authorization":{}}},
@@ -176,5 +178,69 @@ class LoginController extends Controller
         $this->cacheMamageService->removeCacheAuth($userId);
 
         return $this->responseService->responseJson();
+    }
+
+    /**
+     * @OA\Get(
+     *  tags={"Login"},
+     *  path="/api/v1/password/validation/{account}",
+     *  summary="忘記密碼驗證碼(Forget password validation code)",
+     *  @OA\Parameter(parameter="account",in="path",name="account",required=true,description="account",@OA\Schema(type="string")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function pwdValiCode($account)
+    {
+        $data["account"] = $account;
+        $this->utilService->ColumnValidator($data, [
+            'account' => 'required|max:100|email:rfc,dns',
+        ]);
+
+        $this->loginService->pwdForgotValiCodeAndEmail($account);
+
+        return $this->responseService->responseJson();
+    }
+
+    /**
+     * @OA\Get(
+     *  tags={"Login"},
+     *  path="/api/v1/register/validation/{account}",
+     *  summary="註冊帳號驗證碼(register account validation code)",
+     *  @OA\Parameter(parameter="account",in="path",name="account",required=true,description="account",@OA\Schema(type="string")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function regValiCode($account)
+    {
+        $data["account"] = $account;
+        $this->utilService->ColumnValidator($data, [
+            'account' => 'required|max:100|email:rfc,dns',
+        ]);
+
+        $this->loginService->regInValidationCode($account);
+
+        return $this->responseService->responseJson();
+    }
+
+
+    /**
+     * @OA\Post(
+     *  tags={"Login"},
+     *  path="/api/v1/register",
+     *  summary="使用者註冊(User Register)",
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UserLogin")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/RefreshJwtToken", example="RefreshJwtToken")})),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function register(Request $request)
+    {
+        //取得api data
+        $data = $request->all();
     }
 }

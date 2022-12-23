@@ -26,6 +26,7 @@ return [
     "generate_refresh_jwt"           => "產生 Refresh jwt 錯誤",
     "user_authority_insufficinet"    => "使用者權限不足",
     "user_not_found"                 => "找不到使用者",
+    "user_has_exsit"                 => "使用者已經存在",
     "sql_insert"                     => "SQL語法新增錯誤",
     "sql_update"                     => "SQL語法修改錯誤",
     "sql_delete"                     => "SQL語法刪除錯誤",

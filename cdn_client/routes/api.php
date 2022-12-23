@@ -32,6 +32,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/test', function () {
         });
 
+        Route::post('/register', [LoginController::class, 'login']);
+        Route::post('/password/forgot', [LoginController::class, 'login']);
+        Route::get('/register/validation/{account}', [LoginController::class, 'regValiCode']);
+        Route::get('/password/validation/{account}', [LoginController::class, 'pwdValiCode']);
+
         Route::post('/login', [LoginController::class, 'login']);
         Route::get('/jwt', [LoginController::class, 'refreshJwtToken']);
 
