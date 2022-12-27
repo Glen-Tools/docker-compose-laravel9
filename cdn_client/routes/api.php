@@ -32,8 +32,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/test', function () {
         });
 
-        Route::post('/register', [LoginController::class, 'login']);
-        Route::post('/password/forgot', [LoginController::class, 'login']);
+        Route::post('/register', [LoginController::class, 'register']);
+        Route::post('/password/forgot', [LoginController::class, 'resetPassword']);
         Route::get('/register/validation/{account}', [LoginController::class, 'regValiCode']);
         Route::get('/password/validation/{account}', [LoginController::class, 'pwdValiCode']);
 
@@ -60,21 +60,24 @@ Route::prefix('v1')->group(function () {
             Route::get('/role/all', [RoleController::class, 'getRoleAllList']);
         });
 
-        //jwt,頁面權限,後端權限(userType=1) （後端管理者使用)
-        Route::middleware([JwtValid::class, MenuAuthValid::class, BackendAuthValid::class])->group(function () {
+        //jwt,頁面權限
+        Route::middleware([JwtValid::class, MenuAuthValid::class])->group(function () {
 
-            //CRUD user,role,menu
-            Route::apiResource('user', UserController::class);
-            Route::apiResource('role', RoleController::class);
-            Route::apiResource('menu', MenuController::class);
+            //後端權限(userType=1) （後端管理者使用)
+            Route::middleware([BackendAuthValid::class])->group(function () {
+                //CRUD user,role,menu
+                Route::apiResource('user', UserController::class);
+                Route::apiResource('role', RoleController::class);
+                Route::apiResource('menu', MenuController::class);
 
-            //密碼修改
-            Route::patch('/user/password/{id}', [UserController::class, 'updatePassword']);
+                //密碼修改
+                Route::patch('/user/password/{id}', [UserController::class, 'updatePassword']);
 
-            //刪除多筆
-            Route::delete('/user/multiple/ids', [UserController::class, 'destroyMultiple']);
-            Route::delete('/role/multiple/ids', [RoleController::class, 'destroyMultiple']);
-            Route::delete('/menu/multiple/ids', [MenuController::class, 'destroyMultiple']);
+                //刪除多筆
+                Route::delete('/user/multiple/ids', [UserController::class, 'destroyMultiple']);
+                Route::delete('/role/multiple/ids', [RoleController::class, 'destroyMultiple']);
+                Route::delete('/menu/multiple/ids', [MenuController::class, 'destroyMultiple']);
+            });
         });
     });
 });
