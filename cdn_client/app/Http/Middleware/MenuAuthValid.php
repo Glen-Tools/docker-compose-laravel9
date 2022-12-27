@@ -8,7 +8,7 @@ use App\Services\JwtService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 
 class MenuAuthValid
 {
@@ -33,14 +33,7 @@ class MenuAuthValid
      */
     public function handle(Request $request, Closure $next)
     {
-        $route = $request->route();
-        $actionName = explode('\\', $route->getActionName());
-
-        if (empty($actionName)) {
-            throw new NotFoundHttpException(trans('error.not_found'), null, Response::HTTP_NOT_FOUND);
-        }
-
-        $controllerMethod = $actionName[count($actionName) - 1];
+        $controllerMethod = $this->authorizationService->getControllerFunc($request);
         $authRouteMenuComparison = $this->authorizationService->getAuthRouteMenuComparison();
 
         $userInfo = $this->jwtService->getUserInfoByRequest($request);

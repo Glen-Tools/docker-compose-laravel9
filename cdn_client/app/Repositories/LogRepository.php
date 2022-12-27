@@ -17,6 +17,8 @@ class LogRepository extends Model
 
     public function create(InputLogDto $inputLogDto)
     {
+        $this->log->url = $inputLogDto->url;
+        $this->log->method = $inputLogDto->method;
         $this->log->feature = $inputLogDto->feature;
         $this->log->operate = $inputLogDto->operate;
         $this->log->table = $inputLogDto->table;

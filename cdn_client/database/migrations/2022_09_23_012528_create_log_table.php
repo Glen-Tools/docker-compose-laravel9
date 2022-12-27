@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('log', function (Blueprint $table) {
             $table->id();
+            $table->string("url", 400)->nullable()->comment("網址");
+            $table->string("method", 30)->nullable()->comment("request method");
             $table->string("feature", 100)->nullable()->comment("功能名稱");
             $table->string("operate", 100)->nullable()->comment("操作");
             $table->string("table", 100)->nullable()->comment("table");

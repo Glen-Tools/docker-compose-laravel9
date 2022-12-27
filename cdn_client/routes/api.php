@@ -5,11 +5,13 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AuthMenuController;
+use App\Http\Controllers\TestController;
 use App\Http\Middleware\JwtValid;
 use App\Http\Middleware\BackendAuthValid;
 use App\Http\Middleware\MenuAuthValid;
 use App\Http\Middleware\LanguageChange;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use Illuminate\Support\Str;
 
@@ -29,8 +31,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware(LanguageChange::class)->group(function () {
 
         //test language
-        Route::get('/test', function () {
-        });
+        Route::get('/test', [TestController::class, 'test']);
 
         Route::post('/register', [LoginController::class, 'register']);
         Route::post('/password/forgot', [LoginController::class, 'resetPassword']);

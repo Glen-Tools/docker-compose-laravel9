@@ -3,26 +3,31 @@
 namespace App\Observers;
 
 use App\Dto\InputLogDto;
+use App\Dto\InputUserInfoDto;
 use App\Services\JwtService;
 use App\Services\LogService;
+use App\Services\AuthorizationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BaseObserver
 {
-
     protected $request;
     protected $logService;
     protected $tableName;
-    protected $userInfo;
+    protected $jwtService;
+    protected $authorizationService;
 
     public function __construct(
         Request $request,
         LogService $logService,
-        JwtService $jwtService
+        JwtService $jwtService,
+        AuthorizationService $authorizationService
     ) {
         $this->request = $request;
         $this->logService = $logService;
-        $this->userInfo = $jwtService->getUserInfoByRequest($request);
+        $this->jwtService = $jwtService;
+        $this->authorizationService = $authorizationService;
     }
 
     /**
@@ -72,24 +77,49 @@ class BaseObserver
      */
     public function forceDeleted($table)
     {
-        //
+        $this->setLogInfo("deleted");
     }
 
     protected function setLogInfo(string $operate)
     {
         $uri = $this->request->path();
         $queryString = $this->request->getQueryString();
-        $feature = "$uri?$queryString";
+        if ($queryString) $uri = "$uri?$queryString";
+
+        $feature = $this->authorizationService->getControllerFunc($this->request);
+        $method = $this->request->method();
+
         $content = json_encode($this->request->all());
 
+        $userInfo = $this->getUserInfo();
+
         $inputLogDto = new InputLogDto(
+            $uri,
+            $method,
             $feature,
             $operate,
             $this->tableName,
             $content,
-            $this->userInfo->getId()
+            $userInfo->getId()
         );
 
         $this->logService->create($inputLogDto);
+    }
+
+    protected function getUserInfo(): InputUserInfoDto
+    {
+        $controllerMethod = $this->authorizationService->getControllerFunc($this->request);
+
+        $authOperate = $this->authorizationService->getAuthRouteMenuComparison();
+        $userInfo = new InputUserInfoDto(0, "", "", 0);
+
+        foreach (array_keys($authOperate) as  $value) {
+            if ($value == $controllerMethod) {
+                $userInfo = $this->jwtService->getUserInfoByRequest($this->request);
+                break;
+            }
+        }
+
+        return  $userInfo;
     }
 }

@@ -3,6 +3,10 @@
 namespace App\Services;
 
 use App\Repositories\UserRepository;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 use Illuminate\Support\Facades\Cache;
 
 class AuthorizationService
@@ -73,5 +77,16 @@ class AuthorizationService
     {
         $cacheName = $this->getUserMenusCacheNameById($id);
         $this->cacheService->removeCache($cacheName);
+    }
+
+    public function getControllerFunc(Request $request): string
+    {
+        $route = $request->route();
+        $actionName = explode('\\', $route->getActionName());
+        if (empty($actionName)) {
+            throw new NotFoundHttpException(trans('error.not_found'), null, Response::HTTP_NOT_FOUND);
+        }
+        $controllerMethod = $actionName[count($actionName) - 1];
+        return $controllerMethod;
     }
 }
