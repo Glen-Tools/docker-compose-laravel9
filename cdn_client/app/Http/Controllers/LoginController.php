@@ -18,6 +18,8 @@ use App\Services\UtilService;
 use App\Services\CacheMamageService;
 use App\Services\CacheService;
 use Illuminate\Http\Request;
+use App\Exceptions\ParameterException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
@@ -195,14 +197,18 @@ class LoginController extends Controller
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
      * )
      */
-    public function pwdValiCode($account)
+    public function pwdValiCode(Request $request, $account)
     {
+        //取得url
+        $data = $request->query();
+
         $data["account"] = $account;
         $this->utilService->ColumnValidator($data, [
             'account' => 'required|max:100|email:rfc,dns',
+            'url' => 'required',
         ]);
 
-        $this->loginService->pwdForgotValidCodeAndEmail($account);
+        $this->loginService->pwdForgotValidCodeAndEmail($account, $data["url"]);
 
         return $this->responseService->responseJson();
     }
@@ -289,9 +295,9 @@ class LoginController extends Controller
 
         //驗證
         $this->utilService->ColumnValidator($data, [
-            'account' => 'required|max:100|email:rfc,dns',
             'newPassword' => 'required|max:50|min:5',
             'checkPassword' => 'required|max:50|min:5',
+            'validation' => 'required|min:8',
         ]);
 
         $userPasswordDto = new InputUserPasswordDto(
@@ -299,10 +305,13 @@ class LoginController extends Controller
             $data["checkPassword"],
         );
 
-        $account = $data["account"];
-        $cacheName = $this->loginService->getPwdForgotCodeCacheNameByAccount($account);
+        $validation = $data["validation"];
+        $cacheName = $this->loginService->getPwdForgotCodeCacheNameByAccount($validation);
+        $account = $this->cacheService->getByJson($cacheName);
 
-        $this->loginService->validCacheValueByCacheName($cacheName, $data['validation'], trans('error.validation_code', ['type' => trans('error.forgot_password')]));
+        if (empty($account)) {
+            throw new ParameterException(trans('error.validation_code', ['type' => trans('error.forgot_password')]), Response::HTTP_BAD_REQUEST);
+        }
 
         $outputAuthUserInfoDto = $this->loginService->getUserInfoByLogin($account);
         $this->userService->updateUserPassword($userPasswordDto, $outputAuthUserInfoDto->id);

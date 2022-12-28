@@ -27,7 +27,7 @@ return [
     "user_authority_insufficinet"    => "使用者權限不足",
     "user_not_found"                 => "找不到使用者",
     "user_has_exsit"                 => "使用者已經存在",
-    "validation_code"                => ":type認證碼錯誤",
+    "validation_code"                => ":type 認證碼錯誤",
 
     "register_in"                    => "註冊",
     "forgot_password"                => "重置密碼",

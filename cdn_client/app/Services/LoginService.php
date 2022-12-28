@@ -79,30 +79,28 @@ class LoginService
         return $this::CACHE_REGISTER_IN_CODE . "_$account";
     }
 
-    public function getPwdForgotCodeCacheNameByAccount(string $account)
+    public function getPwdForgotCodeCacheNameByAccount(string $ValidationCode)
     {
-        return $this::CACHE_PASSWORD_FORGOT_CODE . "_$account";
+        return $this::CACHE_PASSWORD_FORGOT_CODE . "_$ValidationCode";
     }
 
     public function regInValidCode(string $account)
     {
         $checkUser = $this->exsitUser($account);
-        $cacheName = $this->getRegInCodeCacheNameByAccount($account);
-        $checkAccount =  $this->cacheService->getByJson($cacheName);
-        if ($checkUser || isset($checkAccount)) {
+        if ($checkUser) {
             throw new ParameterException(trans('error.user_has_exsit'), Response::HTTP_BAD_REQUEST);
         }
+
+        $cacheName = $this->getRegInCodeCacheNameByAccount($account);
 
         $ValidationCode = Str::random(8);
         $this->cacheService->putByJson($cacheName, $ValidationCode, $this::CACHE_TIME);
 
-        $mailContent = trans('email.register_in.page_content', ["code" => $ValidationCode]) .
-            "\r\n" . trans('email.validation_code', ["expireTime" => $this::CACHE_TIME / 60]);
+        $mailContent = trans('email.register_in.page_content', ["code" => $ValidationCode, "expireTime" => $this::CACHE_TIME / 60]);
 
         $mailData = new InputEmailValidationDto(
-            trans('email.validation_view'),
+            'email.validation',
             trans('email.register_in.subject', ["app_name" => env("MAIL_WEB_NAME")]),
-            trans('email.register_in.title', ["app_name" => env("MAIL_WEB_NAME"), "account" => $account]),
             $mailContent
         );
 
@@ -110,24 +108,22 @@ class LoginService
         Mail::to($account)->send(new ValidationEmail((array)$mailData));
     }
 
-    public function pwdForgotValidCodeAndEmail(string $account)
+    public function pwdForgotValidCodeAndEmail(string $account, string $url)
     {
         $checkUser = $this->exsitUser($account);
         if (!$checkUser) {
             throw new ParameterException(trans('error.user_not_found'), Response::HTTP_BAD_REQUEST);
         }
 
-        $ValidationCode = Str::random(8);
-        $cacheName = $this->getPwdForgotCodeCacheNameByAccount($account);
-        $this->cacheService->putByJson($cacheName, $ValidationCode, $this::CACHE_TIME);
+        $ValidationCode = Str::random(15);
+        $cacheName = $this->getPwdForgotCodeCacheNameByAccount($ValidationCode);
+        $this->cacheService->putByJson($cacheName, $account, $this::CACHE_TIME);
 
-        $mailContent = trans('email.fogot_password.page_content', ["code" => $ValidationCode]) .
-            "\r\n" . trans('email.validation_code', ["expireTime" => $this::CACHE_TIME / 60]);
+        $mailContent = trans('email.fogot_password.page_content', ["url" => "$url/$ValidationCode", "expireTime" => $this::CACHE_TIME / 60]);
 
         $mailData = new InputEmailValidationDto(
-            trans('email.validation_view'),
+            'email.validation',
             trans('email.fogot_password.subject', ["app_name" => env("MAIL_WEB_NAME")]),
-            trans('email.fogot_password.title', ["app_name" => env("MAIL_WEB_NAME"), "account" => $account]),
             $mailContent
         );
 
