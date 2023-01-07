@@ -21,8 +21,8 @@ docker-compose up -d
 ##### admin@{domain} {password}
 ./setup.sh email add admin@mail.jiyipinjie.com Ab123456
 
-##### 收信時轉寄 由 admin@mail.test.jiyipinjie.com '要轉入的信箱'
-./setup.sh alias add admin@mail.test.jiyipinjie.com user@gmail.com
+##### 收信時轉寄 由 admin@{domain} '要轉入的信箱'
+./setup.sh alias add admin@mail.jiyipinjie.com user@gmail.com
 
 ##### 產生 DKIM  keysize 1024 domain '自己的domain'
 ./setup.sh config dkim keysize 1024 domain 'mail.jiyipinjie.com'
