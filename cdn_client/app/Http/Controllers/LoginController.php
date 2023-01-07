@@ -190,6 +190,29 @@ class LoginController extends Controller
     /**
      * @OA\Get(
      *  tags={"Login"},
+     *  path="/api/v1/password/forgot/check/{valicode}",
+     *  summary="忘記密碼cachekey 確認(Forget password validation code)",
+     *  @OA\Parameter(parameter="valicode",in="path",name="valicode",required=true,description="valicode",@OA\Schema(type="string")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(ref="#/components/schemas/ResponseSuccess")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function pwdCheckValiCode(Request $request, $valicode)
+    {
+
+        $cacheName = $this->loginService->getPwdForgotCodeCacheNameByAccount($valicode);
+        $account = $this->cacheService->getByJson($cacheName);
+
+        if (empty($account)) {
+            throw new ParameterException(trans('error.validation_code', ['type' => trans('error.user_authority_insufficinet')]), Response::HTTP_BAD_REQUEST);
+        }
+
+        return $this->responseService->responseJson();
+    }
+
+    /**
+     * @OA\Get(
+     *  tags={"Login"},
      *  path="/api/v1/password/validation/{account}",
      *  summary="忘記密碼驗證碼(Forget password validation code)",
      *  @OA\Parameter(parameter="account",in="path",name="account",required=true,description="account",@OA\Schema(type="string")),

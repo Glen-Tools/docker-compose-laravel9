@@ -37,6 +37,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/password/forgot', [LoginController::class, 'resetPassword']);
         Route::get('/register/validation/{account}', [LoginController::class, 'regValiCode']);
         Route::get('/password/forgot/validation/{account}', [LoginController::class, 'pwdValiCode']);
+        Route::get('/password/forgot/check/{valicode}', [LoginController::class, 'pwdCheckValiCode']);
 
         Route::post('/login', [LoginController::class, 'login']);
         Route::get('/jwt', [LoginController::class, 'refreshJwtToken']);
