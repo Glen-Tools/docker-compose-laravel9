@@ -10,6 +10,7 @@ use App\Http\Middleware\JwtValid;
 use App\Http\Middleware\BackendAuthValid;
 use App\Http\Middleware\MenuAuthValid;
 use App\Http\Middleware\LanguageChange;
+use App\Http\Middleware\LogRecord;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,7 @@ use Illuminate\Support\Str;
 
 Route::prefix('v1')->group(function () {
 
-    Route::middleware(LanguageChange::class)->group(function () {
+    Route::middleware([LogRecord::class, LanguageChange::class])->group(function () {
 
         //test language
         Route::get('/test', [TestController::class, 'test']);

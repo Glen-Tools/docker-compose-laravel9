@@ -21,7 +21,7 @@ class LogRepository extends Model
         $this->log->method = $inputLogDto->method;
         $this->log->feature = $inputLogDto->feature;
         $this->log->operate = $inputLogDto->operate;
-        $this->log->table = $inputLogDto->table;
+        $this->log->ip = $inputLogDto->ip;
         $this->log->content = $inputLogDto->content;
         $this->log->user_id = $inputLogDto->userId;
         $this->log->save();
