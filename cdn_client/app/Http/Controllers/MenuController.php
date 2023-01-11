@@ -219,7 +219,7 @@ class MenuController extends BaseController
     public function destroy(Request $request, $id)
     {
         parent::destroy($request, $id);
-        $this->menuService->deleteMenuByIds($id);
+        $this->menuService->deleteMenuByIds([$id]);
 
         //刪除 所有人的menu cache
         $this->cacheMamageService->removeCacheMenuAllUser();
