@@ -35,7 +35,7 @@ class UserService
         $this->utilService = $utilService;
     }
 
-    public function createUser(InputUserDto $userDto,)
+    public function createUser($userDto)
     {
         DB::transaction(function () use ($userDto) {
             $id = $this->userRepository->createUser($userDto);
@@ -47,7 +47,7 @@ class UserService
         });
     }
 
-    public function updateUser(InputUserDto $userDto, int $id)
+    public function updateUser($userDto, int $id)
     {
         DB::transaction(function () use ($userDto, $id) {
             $this->userRepository->updateUser($userDto, $id);
