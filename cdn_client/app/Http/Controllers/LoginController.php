@@ -279,7 +279,7 @@ class LoginController extends Controller
             'name' => 'required|max:50',
             'account' => 'required|max:100|email:rfc,dns',
             'password' => 'required|max:50|min:5',
-            'validation' => 'required|min:8',
+            'validation' => 'required',
         ]);
 
         $userDto = new InputUserRoleDto(
