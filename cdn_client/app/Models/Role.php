@@ -8,11 +8,4 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
-    /**
-     * The menus that belong to the role.
-     */
-    public function menus()
-    {
-        return $this->belongsToMany(Menu::class);
-    }
 }

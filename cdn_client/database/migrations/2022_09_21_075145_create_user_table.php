@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name',50);
-            $table->string('email',100)->unique();
-            $table->string('password',100);
+            $table->string('name', 50);
+            $table->string('email', 100)->unique();
+            $table->string('password', 100);
             $table->timestamp('password_update_time')->nullable();
             $table->boolean('status')->comment("狀態(開,關)")->default(1);
             $table->smallInteger('user_type')->comment("管理者=1,一般使用者=2");
-            $table->string('login_ip',20)->nullable();
+            $table->string('login_ip', 20)->nullable();
             $table->timestamp('login_time')->nullable();
-            $table->string('remark',5000)->nullable()->comment("備註");
+            $table->string('remark', 5000)->default("")->comment("備註");
             $table->timestamps();
         });
     }
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('users');
     }
 };

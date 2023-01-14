@@ -4,11 +4,11 @@ namespace App\Dto;
 
 class OutputResponseDto
 {
-    public $data;
-    public $message;
-    public $success;
+    public mixed $data;
+    public string $message;
+    public bool $success;
 
-    public function __construct($data = null, $message = "", $success = true)
+    public function __construct(mixed $data = null,string $message = "",bool $success = true)
     {
         $this->data = $data;
         $this->message = $message;

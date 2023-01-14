@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name',100)->unique()->comment("唯一名稱");
-            $table->string('key',150)->unique()->comment("唯一key");
+            $table->string('name', 100)->unique()->comment("唯一名稱");
+            $table->string('key', 150)->unique()->comment("唯一key");
             $table->boolean('status')->comment("狀態(開,關)")->default(1);
-            $table->smallInteger('weight')->comment("權重(優先順序 重=高)");
-            $table->string('remark',5000)->nullable()->comment("備註");
+            $table->smallInteger('weight')->nullable()->comment("權重(優先順序 重=高)");
+            $table->string('remark', 5000)->default("")->comment("備註");
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('role');
+        Schema::dropIfExists('roles');
     }
 };

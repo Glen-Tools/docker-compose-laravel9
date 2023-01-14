@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
     use HasFactory;
+
     /**
-     * The roles that belong to the user.
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
      */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
+    protected $guarded = ["password"];
 }

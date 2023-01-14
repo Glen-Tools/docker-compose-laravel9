@@ -15,11 +15,16 @@ return new class extends Migration
     {
         Schema::create('log', function (Blueprint $table) {
             $table->id();
-            $table->string("feature",100)->nullable()->comment("功能名稱");
-            $table->string("operate",100)->nullable()->comment("操作");
-            $table->string("table",100)->nullable()->comment("table");
-            $table->string("content");
-            $table->timestamp("create_at");
+            $table->string("url", 400)->nullable()->comment("網址");
+            $table->string("method", 30)->nullable()->comment("request method");
+            $table->string("feature", 100)->nullable()->comment("功能名稱");
+            $table->string("ip", 40)->nullable()->comment("ip");
+            $table->string("operate", 50)->nullable()->comment("操作");
+            // $table->string("operate", 100)->nullable()->comment("操作");
+            // $table->string("table", 100)->nullable()->comment("table");
+            $table->bigInteger("user_id")->nullable()->comment("操作人id");
+            $table->string("content")->comment("內容");
+            $table->timestamp("create_at")->useCurrent();
         });
     }
 

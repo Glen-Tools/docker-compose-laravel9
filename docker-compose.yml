@@ -1,22 +1,24 @@
-version: '3'
+version: '3.8'
 services:
 
   #PHP Service
-  cdn:
+  cdn_client_cdn:
+    user: "1000:1000"
     build:
-      context: ./php
+      context: ./php/fpm
       dockerfile: Dockerfile
     # image: digitalocean.com/php
-    container_name: cdn
+    container_name: cdn_client_cdn
     healthcheck:
       test: php-fpm -t
     depends_on:
-      - redis
-      - db
+      - cdn_client_redis
+      - cdn_client_db
     # restart: unless-stopped
     tty: true
     environment:
-      SERVICE_NAME: cdn
+      TZ: "Asia/Taipei"
+      SERVICE_NAME: cdn_client_cdn
       SERVICE_TAGS: dev
     working_dir: /var/www
     volumes:
@@ -24,51 +26,54 @@ services:
       - ./laravel_env_volume/.env:/var/www/.env
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
       - ./php/fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./php/fpm/log:/var/www/storage/logs
     command:
       - /bin/bash
       - -c
       - |
         composer install
-        composer remove laravel/sanctum
         php artisan migrate
+        php artisan l5-swagger:generate
         php-fpm
-      # composer dumpautoload
       # composer require barryvdh/laravel-debugbar --dev
       # tail -f /dev/null
     networks:
-      - app-network
+      - cdn-client-network
 
   #Nginx
-  nginx:
+  cdn_client_nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: cdn_client_nginx
     depends_on:
-      cdn:
+      cdn_client_cdn:
         condition: service_healthy
     restart: unless-stopped
     tty: true
     ports:
-      - "8023:80"
+      - "8024:80"
+    environment:
+      TZ: "Asia/Taipei"
     volumes:
       - ./cdn_client/:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
       - ./nginx/log/:/var/log/nginx/
     networks:
-      - app-network
+      - cdn-client-network
 
   #MySQL Service
-  db:
+  cdn_client_db:
     image: mariadb:10.6
-    container_name: db
+    container_name: cdn_client_db
     restart: unless-stopped
     tty: true
     ports:
-      - "3310:3306"
+      - "3311:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: "!QAZ2wsx"
-      MARIADB_USER: Gary
-      MARIADB_PASSWORD: Ab123456
-      MYSQL_DATABASE: cdn
+      TZ: "Asia/Taipei"
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
@@ -76,26 +81,28 @@ services:
       - ./db/config/mysql_conf:/etc/mysql/conf.d
       - ./db/config/mysql_init:/docker-entrypoint-initdb.d
     networks:
-      - app-network
+      - cdn-client-network
 
   #Redis
-  redis:
+  cdn_client_redis:
     image: redis:7.0
-    container_name: redis
+    container_name: cdn_client_redis
     restart: always
     ports:
-      - 6377:6379
+      - 6378:6379
     expose:
       - "6379"
+    environment:
+      TZ: "Asia/Taipei"
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis.conf
     command: redis-server /usr/local/etc/redis.conf
     networks:
-      - app-network
+      - cdn-client-network
 
 #Docker Networks
 networks:
-  app-network:
+  cdn-client-network:
     driver: bridge
 #Volumes
 volumes:
