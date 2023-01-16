@@ -77,7 +77,7 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
-      - dbdata:/var/lib/mysql/
+      - ./db/db_dump:/var/lib/mysql/
       - ./db/config/mysql_conf:/etc/mysql/conf.d
       - ./db/config/mysql_init:/docker-entrypoint-initdb.d
     networks:
@@ -104,11 +104,3 @@ services:
 networks:
   cdn-client-network:
     driver: bridge
-#Volumes
-volumes:
-  dbdata:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: './db/db_dump'
