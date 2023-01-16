@@ -8,9 +8,9 @@ groupadd www
 
 useradd -g www -p www www 
 
-chown -r www:root cdn_client
+chown -R www:root cdn_client
 
-chown -r www:root laravel_env_volume
+chown -R www:root laravel_env_volume
 
 #cover env and run docker
 cp cdn_client/.env.production laravel_env_volume/.env
