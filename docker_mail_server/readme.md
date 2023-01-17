@@ -28,7 +28,7 @@ docker-compose up -d
 ./setup.sh config dkim keysize 1024 domain 'mail.jiyipinjie.com'
 
 ##### DKIM path
-opt/mail_server/docker-data/dms/config/opendkim/keys/{domain}/mail.txt
+/docker-data/dms/config/opendkim/keys/{domain}/mail.txt
 回第二步驟 綁定 DKIM
 
 ##### 執行說明項目
