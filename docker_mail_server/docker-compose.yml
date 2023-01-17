@@ -6,7 +6,7 @@ services:
     container_name: mailserver
     # If the FQDN for your mail-server is only two labels (eg: example.com),
     # you can assign this entirely to `hostname` and remove `domainname`.
-    hostname: mail.jiyipinjie.com
+    hostname: ${MAIL_DOMAIN}
     # domainname: jiyipinjie.com
     env_file: mailserver.env
     # More information about the mail-server ports:
@@ -26,7 +26,7 @@ services:
       - ./docker-data/dms/mail-logs/:/var/log/mail/
       - ./docker-data/dms/config/:/tmp/docker-mailserver/
       - /etc/localtime:/etc/localtime:ro
-      - /etc/letsencrypt/archive/mail.jiyipinjie.com:/tmp/ssl:ro
+      - /etc/letsencrypt/archive/${MAIL_DOMAIN}:/tmp/ssl:ro #憑證存放路徑
     restart: always
     stop_grace_period: 1m
     cap_add:

@@ -8,9 +8,9 @@ https://github.com/docker-mailserver/docker-mailserver
 ### 步驟說明
 #### 1.安裝 docker-compose
 
-#### 2.設定 DNS (domain, TXT, _dmarc, DKIM)  
+#### 2.設定 DNS (domain, TXT, _dmarc, DKIM)  需先申請SSL 證書
 ##### 參考
-_dmarc @{domain} 換成自己的 ,DKIM 之後產生, (二級域名設定要注意)
+_dmarc @{domain} 換成自己的 ,DKIM 之後產生, (二級域名設定要注意)  
 ![](./dns.png)
 
 #### 3.build docker-compose
