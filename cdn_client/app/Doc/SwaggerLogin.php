@@ -43,7 +43,7 @@ class SwaggerLogin
 
     /**
      * @OA\Schema(
-     *      schema="UserLogin",
+     *      schema="Login",
      *      @OA\Property(
      *          property="account",
      *          description="account",
@@ -60,7 +60,42 @@ class SwaggerLogin
      *      ),
      * )
      */
-    public $UserLogin;
+    public $Login;
+
+    /**
+     * @OA\Schema(
+     *      schema="LoginWithCaptcha",
+     *      @OA\Property(
+     *          property="account",
+     *          description="account",
+     *          type="string",
+     *          format="string",
+     *          example="admin@gmail.com"
+     *      ),
+     *      @OA\Property(
+     *          property="password",
+     *          description="password",
+     *          type="string",
+     *          format="string",
+     *          example="admin123"
+     *      ),
+     *      @OA\Property(
+     *          property="captchaId",
+     *          description="captchaId",
+     *          type="string",
+     *          format="string",
+     *          example="asdfasdf"
+     *      ),
+     *      @OA\Property(
+     *          property="captcha",
+     *          description="captcha",
+     *          type="string",
+     *          format="string",
+     *          example="asva"
+     *      ),
+     * )
+     */
+    public $LoginWithCaptcha;
 
     /**
      * @OA\Schema(

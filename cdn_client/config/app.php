@@ -200,6 +200,7 @@ return [
         #cache to json before put or get
         App\Providers\QueryServiceProvider::class,
 
+        App\Providers\CaptchaServiceProvider::class,
     ],
 
     /*
@@ -215,6 +216,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Captcha' => App\Facades\Captcha::class,
     ])->toArray(),
 
 ];

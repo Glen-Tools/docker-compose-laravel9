@@ -23,7 +23,7 @@ return new class extends Migration
             // $table->string("operate", 100)->nullable()->comment("操作");
             // $table->string("table", 100)->nullable()->comment("table");
             $table->bigInteger("user_id")->nullable()->comment("操作人id");
-            $table->string("content")->comment("內容");
+            $table->longText("content")->comment("內容");
             $table->timestamp("create_at")->useCurrent();
         });
     }

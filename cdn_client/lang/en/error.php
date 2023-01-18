@@ -29,6 +29,7 @@ return [
     "user_has_exsit"                 => "User has exsit",
     "validation_code"                => ":type validation code error",
 
+    "login"                          => "Login",
     "register_in"                    => "Register in",
     "forgot_password"                => "Reset password",
 

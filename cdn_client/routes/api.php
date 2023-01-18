@@ -5,6 +5,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AuthMenuController;
+use App\Http\Controllers\CaptchaController;
 use App\Http\Controllers\TestController;
 use App\Http\Middleware\JwtValid;
 use App\Http\Middleware\BackendAuthValid;
@@ -34,13 +35,22 @@ Route::prefix('v1')->group(function () {
         //test language
         Route::get('/test', [TestController::class, 'test']);
 
+        //register and password
         Route::post('/register', [LoginController::class, 'register']);
         Route::post('/password/forgot', [LoginController::class, 'resetPassword']);
         Route::get('/register/validation/{account}', [LoginController::class, 'regValiCode']);
         Route::get('/password/forgot/validation/{account}', [LoginController::class, 'pwdValiCode']);
         Route::get('/password/forgot/check/{valicode}', [LoginController::class, 'pwdCheckValiCode']);
 
+        //login
         Route::post('/login', [LoginController::class, 'login']);
+        Route::post('/login/captcha', [LoginController::class, 'loginWithCaptcha']);
+
+        //captcha
+        Route::get('/captcha/create/{config}', [CaptchaController::class, 'getCaptcha']);
+        Route::post('/captcha', [CaptchaController::class, 'checkCaptcha']);
+
+        //refreshJwtToken
         Route::get('/jwt', [LoginController::class, 'refreshJwtToken']);
 
         //jwt 權限

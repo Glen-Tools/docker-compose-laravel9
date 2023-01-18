@@ -17,6 +17,7 @@ use App\Services\UserService;
 use App\Services\UtilService;
 use App\Services\CacheMamageService;
 use App\Services\CacheService;
+use App\Facades\Captcha;
 use Illuminate\Http\Request;
 use App\Exceptions\ParameterException;
 use Illuminate\Http\Response;
@@ -57,7 +58,7 @@ class LoginController extends Controller
      *  path="/api/v1/login",
      *  summary="使用者登入(User Login)",
      *  security={{"Authorization":{}}},
-     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/UserLogin")),
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/Login")),
      *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/RefreshJwtToken", example="RefreshJwtToken")})),
      *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
      *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
@@ -72,8 +73,53 @@ class LoginController extends Controller
         $this->utilService->ColumnValidator($data, [
             'account' => 'required|max:100|email:rfc,dns',
             'password' => 'required|max:100',
-            'captcha' => 'max:50|nullable',
-            'captchaId' => 'max:50|nullable'
+        ]);
+
+        $inputLoginDto = new InputLoginDto(
+            $data["account"],
+            $data["password"],
+        );
+
+        $outputAuthUserInfoDto = $this->loginService->login($inputLoginDto);
+        $userId = $outputAuthUserInfoDto->id;
+        $jwtToken = $this->jwtService->genJwtToken($userId, JwtType::JwtToken);
+        $refreshToken = $this->jwtService->genJwtToken($userId, JwtType::JwtRefreshToken);
+
+        //存入 login ip and time
+        $ip = $request->ip();
+        $this->jwtService->setUserIdToRequest($jwtToken, $request);
+        $this->loginService->setLoginInfo($userId, $ip);
+
+        //todo 有時間在做 驗證 captcha
+        $outputJwtDto = new OutputJwtDto($jwtToken, $refreshToken);
+        $outputLoginDto = new OutputLoginDto($outputAuthUserInfoDto, $outputJwtDto);
+
+        return $this->responseService->responseJson($outputLoginDto);
+    }
+
+    /**
+     * @OA\Post(
+     *  tags={"Login"},
+     *  path="/api/v1/login/captcha",
+     *  summary="使用者登入有驗證(User Login)",
+     *  security={{"Authorization":{}}},
+     *  @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/LoginWithCaptcha")),
+     *  @OA\Response(response=200,description="OK",@OA\JsonContent(examples={"myname":@OA\Schema(ref="#/components/examples/RefreshJwtToken", example="RefreshJwtToken")})),
+     *  @OA\Response(response=401,description="Unauthorized",@OA\JsonContent(ref="#/components/schemas/ResponseUnauthorized")),
+     *  @OA\Response(response=500,description="Server Error",@OA\JsonContent(ref="#/components/schemas/responseError")),
+     * )
+     */
+    public function loginWithCaptcha(Request $request)
+    {
+        //取得api data
+        $data = $request->all();
+
+        //驗證
+        $this->utilService->ColumnValidator($data, [
+            'account' => 'required|max:100|email:rfc,dns',
+            'password' => 'required|max:100',
+            'captchaId' => 'required|max:150',
+            'captcha' => 'required|max:50'
         ]);
 
         $inputLoginDto = new InputLoginDto(
@@ -83,15 +129,14 @@ class LoginController extends Controller
             $data["captchaId"] ?? "",
         );
 
+        Captcha::check_api($inputLoginDto->captcha, $inputLoginDto->captchaId);
+
         $outputAuthUserInfoDto = $this->loginService->login($inputLoginDto);
         $userId = $outputAuthUserInfoDto->id;
         $jwtToken = $this->jwtService->genJwtToken($userId, JwtType::JwtToken);
         $refreshToken = $this->jwtService->genJwtToken($userId, JwtType::JwtRefreshToken);
 
         //存入 login ip and time
-        //todo REMOTE_ADDR 拿到的是docker default gateway ip
-        // $request->getClientIp();
-        // $request->ip();
         $ip = $request->ip();
         $this->jwtService->setUserIdToRequest($jwtToken, $request);
         $this->loginService->setLoginInfo($userId, $ip);

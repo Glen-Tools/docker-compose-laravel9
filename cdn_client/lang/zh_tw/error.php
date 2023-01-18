@@ -29,6 +29,7 @@ return [
     "user_has_exsit"                 => "使用者已經存在",
     "validation_code"                => ":type 認證碼錯誤",
 
+    "login"                          => "登入",
     "register_in"                    => "註冊",
     "forgot_password"                => "重置密碼",
 
