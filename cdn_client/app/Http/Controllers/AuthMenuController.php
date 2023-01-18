@@ -25,7 +25,7 @@ class AuthMenuController extends Controller
 
     /**
      * @OA\Get(
-     *  tags={"Auth menu"},
+     *  tags={"Auth group"},
      *  path="/api/v1/auth/menu",
      *  summary="取得菜單權限",
      *  security={{"Authorization":{}}},
