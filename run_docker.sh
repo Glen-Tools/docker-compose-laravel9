@@ -19,4 +19,4 @@ cp cdn_client/.env.production laravel_env_volume/.env
 
 chown -R 1000:1000 cdn_client db/config laravel_env_volume nginx php redis 
 
-docker-compose up -d
+docker compose up -d
